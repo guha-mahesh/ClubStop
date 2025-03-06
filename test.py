@@ -1,3 +1,5 @@
 print("hello world")
 print("h9")
-print("hi")
+
+print("otto is retarded")
+
