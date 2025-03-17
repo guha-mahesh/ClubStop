@@ -8,7 +8,7 @@
 
 
 .oval{
-  background-color:white; /* Background color for the oval */
+  background-color:white; /* Background color for the import puffinImage from './assets/puffin.png'; */
   border-radius: 50%; /* Makes the shape oval by rounding the corners */
   display: flex; /* Enable flexbox */
   justify-content: center; /* Center horizontally */
@@ -18,8 +18,8 @@
 
 
 
-.oval-red {
-  background-color: #ff6060; /* Background color for the oval */
+.oval-selected {
+  background-color: #c44c32; /* Background color for the oval */
 }
 
 .oval-blue{
@@ -49,8 +49,8 @@
 
 }
 
-.h1-red{
-  background-color:#ff6060 ;
+.h1-selected{
+  background-color:#c44c32 ;
 }
 
 .h1-blue{
@@ -83,8 +83,8 @@ background-color: #add8e6;
 
 
 .oval-forButton{
-  width: 150px; 
-  height: 90px;
+  width: 130px; 
+  height: 75px;
 }
 .h1-forButton{
   font-size: 18px;
@@ -104,11 +104,15 @@ background-color: #add8e6;
   margin-top: 35px;
   gap: 10px;
   align-items: center;
+  background-color: #c44c32;
+  padding-left: 5px;
 }
 
 .icon{
   height: 30px;
   width: 30px;
+  background-color: #c44c32;
+  margin: 0px;
 }
 
 .textbox{
@@ -121,7 +125,7 @@ background-color: #add8e6;
   display: flex;
   justify-content: space-between;
   gap: 40px;
-  padding-left:350px;
+  padding-left:15px;
   padding-right: 150px;
 }
 
@@ -138,7 +142,7 @@ background-color: #add8e6;
 
 
 .Middle-Screen{
-  margin-top: 50px;
+  margin-top: 80px;
   margin-left: 150px;
   display: grid;
 

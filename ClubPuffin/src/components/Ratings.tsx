@@ -11,7 +11,7 @@ const Ratings = ({ rating, color, id, header = "white" }: Props) => {
     <div id={id} className="rating">
       <h1 className="Attribute">{header}</h1>
       <Oval
-        header="92"
+        header={rating}
         onPress={console.log}
         reason="forRating"
         color={color}

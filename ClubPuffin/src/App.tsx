@@ -10,7 +10,7 @@ function App() {
       <div className="Top-Screen">
         <div className="ovarian-goats">
           <Oval
-            color="red"
+            color="selected"
             header="Ratings"
             onPress={console.log}
             reason="forButton"
@@ -21,7 +21,6 @@ function App() {
             reason="forButton"
           ></Oval>
           <Oval
-            color="blue"
             header="Description"
             onPress={console.log}
             reason="forButton"
@@ -35,32 +34,32 @@ function App() {
         <Ratings
           id="Camraderie"
           header="Camraderie"
-          rating="92"
+          rating="81"
           color="navy"
         ></Ratings>
         <Ratings
           id="Ascendancy"
           header="Ascendancy"
-          rating="92"
+          rating="73"
           color="swamp"
         ></Ratings>
         <img id="Puffin" src={puffinImage} />
         <Ratings
           id="Prestige"
           header="Prestige"
-          rating="92"
+          rating="46"
           color="orange"
         ></Ratings>
         <Ratings
           id="Obligation"
           header="Obligation"
-          rating="92"
+          rating="94"
           color="green"
         ></Ratings>
         <Ratings
           id="Legacy"
           header="Legacy"
-          rating="92"
+          rating="100"
           color="pinkred"
         ></Ratings>
         <div className="Positive">
