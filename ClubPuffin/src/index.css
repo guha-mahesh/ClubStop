@@ -1,0 +1,48 @@
+* {
+  background-color: #333333;
+  font-family: 'Poppins', sans-serif;
+  
+  
+}
+
+
+.oval{
+  width: 150px;  /* Adjust width */
+  height: 90px; /* Adjust height */
+  background-color:white; /* Background color for the oval */
+  border-radius: 50%; /* Makes the shape oval by rounding the corners */
+  display: flex; /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin-top: 20px;
+}
+
+
+
+.oval-red {
+  background-color: #ff6060; /* Background color for the oval */
+}
+
+.oval-blue{
+  background-color: #add8e6;
+}
+
+.h1 {
+  background-color :white;
+  font-size: 15px;
+
+}
+
+.h1-red{
+  background-color:#ff6060 ;
+}
+
+.h1-blue{
+background-color: #add8e6;
+}
+
+.ovarian-goats{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
