@@ -1,6 +1,7 @@
 * {
   background-color: #333333;
   font-family: 'Josefin Sans', sans-serif;
+  /*outline: 2px solid red;*/
   
   
 }
@@ -91,11 +92,11 @@ background-color: #add8e6;
 
 
 .oval-forRating{
-  width: 120px; 
-  height: 90px;
+  width: 180px; 
+  height: 120px;
 }
 .h1-forRating{
-  font-size: 30px;
+  font-size: 60px;
 }
 
 .search{
@@ -113,29 +114,43 @@ background-color: #add8e6;
 .textbox{
   height: 50px;
   width: 450px;
-  background-color:#D7BA8E ;
+  background-color: white ;
   padding-left: 10px;
 }
 .Top-Screen{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 40px;
+  padding-left:350px;
+  padding-right: 150px;
 }
 
 .rating{
-  height: 10px;
-  width: 10px;
-  transform: rotate(-25deg);
+  height: 300px;
+  width: 400px;
+  align-items: center;
+  display:flex;
+  gap: 25px;
+  padding-bottom: 250px;
+
 }
 
 
 
 .Middle-Screen{
-  margin-top: 220px;
-  display: flex;
-  gap: 200px;
-  justify-content: center;
-  transform: rotate(25deg);
+  margin-top: 50px;
+  margin-left: 150px;
+  display: grid;
+
+  grid-template-rows: 90px 90px 90px 90px 90px;
+  grid-template-columns: 120px 120px 120px 120px 120px;
+  column-gap: 200px;
+  row-gap: 60px;
+
+  padding: 10px;
+  width: 1500px; /* Ensures it has a width */
+  height: auto; /* Adjusts based on content */
+
   /*outline: 2px solid red;*/
 }
 
@@ -144,4 +159,56 @@ background-color: #add8e6;
   font-size: 40px;
   left: 0px;
   font-style: italic;
+  margin-top: 20px;
+}
+#Camraderie{
+  grid-row: 1;
+  grid-column: 1;
+}
+
+#Ascendancy{
+  grid-row: 2;
+  grid-column: 2;
+}
+
+#Prestige{
+  grid-row: 3;
+  grid-column: 3;
+}
+#Obligation{
+  grid-row: 4;
+  grid-column: 4;
+}
+#Legacy{
+  grid-row: 5;
+  grid-column: 5;
+}
+
+.RatingText{
+  font-size:50px;
+  width: 600px;
+  height: 50px;
+  color:#9f9f9f;
+  font-style: italic;
+}
+.Positive{
+  grid-row: 1;
+  grid-column: 4;
+}
+.Negative{
+  grid-row: 4;
+  grid-column: 1;
+  padding-top: 50px;
+}
+.ReviewHeading{
+  color: white;
+  width: 800px;
+  font-size: 65px;
+}
+
+#Puffin{
+  grid-row: 5;
+  grid-column: 3;
+  padding-left: 20px;
+  padding-bottom: 40px;
 }

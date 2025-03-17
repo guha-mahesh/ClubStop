@@ -4,10 +4,11 @@ interface Props {
   rating: string;
   color?: string;
   header: string;
+  id: string;
 }
-const Ratings = ({ rating, color, header = "white" }: Props) => {
+const Ratings = ({ rating, color, id, header = "white" }: Props) => {
   return (
-    <div className="rating">
+    <div id={id} className="rating">
       <h1 className="Attribute">{header}</h1>
       <Oval
         header="92"
