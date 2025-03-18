@@ -2,7 +2,8 @@ import { useState } from "react";
 import Oval from "./components/Oval";
 import Search from "./components/Search";
 import Ratings from "./components/Ratings";
-import puffinImage from "./assets/puffin.png";
+import homeIcon from "./assets/home.png";
+import Puffin from "./components/Puffin";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         </div>
         <div className="SearchFlex">
           <Search placeholder="Search for Clubs, Orgs, etc"></Search>
+          <img className="home" src={homeIcon} />
         </div>
       </div>
       <div className="Middle-Screen">
@@ -43,7 +45,13 @@ function App() {
           rating="73"
           color="swamp"
         ></Ratings>
-        <img id="Puffin" src={puffinImage} />
+        <Puffin
+          getRandomInt={(min: number, max: number) => {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+          }}
+        />
         <Ratings
           id="Prestige"
           header="Prestige"
