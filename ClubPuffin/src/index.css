@@ -6,6 +6,7 @@
   padding: 0;
   
   
+  
 }
 html, body {
   margin: 0;
@@ -21,6 +22,8 @@ html, body {
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   margin-top: 17px;
+
+
 }
 
 

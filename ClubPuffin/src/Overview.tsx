@@ -1,7 +1,7 @@
 import ScreenHeader from "./components/ScreenHeader";
 import ScreenMiddle from "./components/ScreenMiddle";
 
-function App() {
+function Overview() {
   return (
     <div>
       <ScreenHeader></ScreenHeader>
@@ -10,4 +10,4 @@ function App() {
   );
 }
 
-export default App;
+export default Overview;
