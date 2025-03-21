@@ -1,19 +1,20 @@
 import React from "react";
 import Ratings from "./Ratings";
 import Puffin from "./Puffin";
+import Oval from "./Oval";
 
 const ScreenMiddle = () => {
   return (
     <div className="Middle-Screen">
       <Ratings
         id="Camraderie"
-        header="Camraderie"
+        header="Prestige"
         rating="81"
         color="navy"
       ></Ratings>
       <Ratings
         id="Ascendancy"
-        header="Ascendancy"
+        header="Prestige"
         rating="73"
         color="swamp"
       ></Ratings>
@@ -48,10 +49,13 @@ const ScreenMiddle = () => {
           ““The way they sucked my dick was EMPOWERING“”
         </p>
       </div>
-      <div className="Negative">
-        <h2 className="ReviewHeading">Bottom Review</h2>
-        <p className="RatingText">““The way they ignored my dick was MID“”</p>
-      </div>
+
+      <Oval
+        color="pinkred"
+        header="100"
+        reason="forAggregate"
+        onPress={console.log}
+      />
     </div>
   );
 };

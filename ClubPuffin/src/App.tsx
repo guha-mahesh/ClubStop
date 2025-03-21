@@ -1,13 +1,5 @@
-import ScreenHeader from "./components/ScreenHeader";
-import ScreenMiddle from "./components/ScreenMiddle";
-
 function App() {
-  return (
-    <div>
-      <ScreenHeader></ScreenHeader>
-      <ScreenMiddle></ScreenMiddle>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default App;

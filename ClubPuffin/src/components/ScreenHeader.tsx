@@ -6,7 +6,7 @@ import homeIcon from "../assets/home.png";
 const ScreenHeader = () => {
   return (
     <div className="Top-Screen">
-      <div className="ovarian-goats">
+      <div className="reviews-toolbar">
         <Oval
           color="selected"
           header="Ratings"
@@ -23,6 +23,7 @@ const ScreenHeader = () => {
           onPress={console.log}
           reason="forButton"
         ></Oval>
+        <Oval header="Reviews" onPress={console.log} reason="forButton"></Oval>
       </div>
       <div className="SearchFlex">
         <Search placeholder="Search for Clubs, Orgs, etc"></Search>
