@@ -4,11 +4,11 @@
     justify-content: center;
     gap: 10px;
   }
-
+ 
 
   .rating{
     height: 300px;
-    width: 400px;
+    width: 800px;
     align-items: center;
     display:flex;
     gap: 25px;
@@ -28,12 +28,12 @@
     grid-template-rows: 90px 90px 90px 90px 90px;
     grid-template-columns: 120px 120px 120px 120px 120px;
     column-gap: 200px;
-    row-gap: 60px;
+    row-gap: 100px;
   
     padding: 10px;
-    width: 1500px; /* Ensures it has a width */
-    height: auto; /* Adjusts based on content */
-  
+    width: 1500px; 
+    height: auto; 
+    background: transparent;
     /*outline: 2px solid red;*/
   }
 
@@ -88,3 +88,6 @@
     width: 800px;
     font-size: 65px;
   }
+
+
+  

@@ -1,9 +1,9 @@
 * {
   background-color: black;
-  font-family: 'Poppins', sans-serif;
-  /*outline: 2px solid red;*/
+  font-family: 'Josefin Sans', sans-serif;  
   margin: 0;
   padding: 0;
+  /*outline: 2px solid red;*/
   
   
   
@@ -230,7 +230,7 @@ background-color: #add8e6;
   
     grid-template-rows: 90px 90px 90px 90px 90px;
     grid-template-columns: 120px 120px 120px 120px 120px;
-    column-gap: 200px;
+    column-gap: 240px;
     row-gap: 60px;
   
     padding: 10px;

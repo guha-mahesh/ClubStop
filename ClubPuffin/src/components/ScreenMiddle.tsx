@@ -8,13 +8,13 @@ const ScreenMiddle = () => {
     <div className="Middle-Screen">
       <Ratings
         id="Camraderie"
-        header="Prestige"
+        header="Camraderie"
         rating="81"
         color="navy"
       ></Ratings>
       <Ratings
         id="Ascendancy"
-        header="Prestige"
+        header="Ascendancy"
         rating="73"
         color="swamp"
       ></Ratings>
@@ -49,13 +49,6 @@ const ScreenMiddle = () => {
           ““The way they sucked my dick was EMPOWERING“”
         </p>
       </div>
-
-      <Oval
-        color="pinkred"
-        header="100"
-        reason="forAggregate"
-        onPress={console.log}
-      />
     </div>
   );
 };
