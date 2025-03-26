@@ -1,5 +1,5 @@
-import ScreenHeader from "./components/ScreenHeader";
-import ScreenMiddle from "./components/ScreenMiddle";
+import ScreenHeader from "../components/ScreenHeader";
+import ScreenMiddle from "../components/ScreenMiddle";
 
 function Overview() {
   return (
