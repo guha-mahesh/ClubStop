@@ -8,7 +8,13 @@ interface Props {
 const Oval = ({ color = "", header, onPress, reason }: Props) => {
   return (
     <div className={"oval oval-" + reason + " oval-" + color}>
-      <h1 className={"h1 h1-" + reason + " h1-" + color}>{header}</h1>
+      <h1
+        className={
+          "ovalHeading ovalHeading-" + reason + " ovalHeading-" + color
+        }
+      >
+        {header}
+      </h1>
     </div>
   );
 };

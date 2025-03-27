@@ -8,10 +8,14 @@ const ScreenHeader = () => {
   return (
     <div className="Top-Screen">
       <img className="logoCP" src={logo} />
-      <div className="SearchFlex">
-        <Search placeholder="Search for Clubs, Orgs, etc"></Search>
-        <img className="home" src={homeIcon} />
+      <div className="navButtonRow">
+        <button className="navButton">Home</button>
+        <button className="navButton">Clubs</button>
+        <button className="navButton">Clubs</button>
+        <button className="navButton">Clubs</button>
       </div>
+
+      <Search placeholder="Search for Clubs, Orgs, etc"></Search>
     </div>
   );
 };
