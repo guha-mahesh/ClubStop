@@ -3,11 +3,13 @@ import Oval from "./Oval";
 import Search from "./Search";
 import homeIcon from "../assets/home.png";
 import logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 interface Props {
   searchy?: boolean;
 }
 
 const ScreenHeader = ({ searchy = false }: Props) => {
+  const navigate = useNavigate();
   return (
     <nav className="Top-Screen">
       <div className="nav-left">
@@ -21,10 +23,13 @@ const ScreenHeader = ({ searchy = false }: Props) => {
         <button className="navButton">Clubs</button>
       </div>
 
-      <Search placeholder="Search for Clubs, Orgs, etc"></Search>
+      <Search
+        onChange={() => console.log("hi")}
+        placeholder="Search for Clubs, Orgs, etc"
+      ></Search>
 
       <div className="nav-right">
-        <span>buy me a coffee lol if you want</span>
+        <button onClick={() => navigate("/Register")}>Sign Up!</button>
       </div>
     </nav>
   );

@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors"; 
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 
 dotenv.config({ path: "./config.env" });
 
@@ -45,17 +46,32 @@ export async function insertData(collectionName: string, data: Record<string, an
 
 
 
-
+// @ts-ignore
 app.post("/register", async (req, res) => {
   const { user, pwd } = req.body;
+
+  
 
 
   try {
     const database = client.db("Puffino");
     const collection = database.collection("Users");
 
+    const filterQuery = { username: user };
+    const document = await collection.findOne(filterQuery);
 
-    const result = await collection.insertOne({ username: user, password: pwd });
+    if (document) {
+    return res.status(409).json({ message: "Username Taken" });
+    } 
+
+  
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(pwd, salt);
+
+   
+
+    const result = await collection.insertOne({ username: user, password: hashedPassword });
     console.log("User registered with _id:", result.insertedId);
 
     res.status(200).json({ message: "Registration successful" });
