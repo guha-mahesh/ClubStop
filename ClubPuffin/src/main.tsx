@@ -7,7 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import "./pages/overview/Overview.css";
 import "./pages/home/Home.css";
-import "./components/Register/Register.css";
+import "./pages/Register/Register.css";
+import "./components/Profile.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

@@ -2,8 +2,10 @@ import React from "react";
 import Oval from "./Oval";
 import Search from "./Search";
 import homeIcon from "../assets/home.png";
+import Profile from "./Profile";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+
 interface Props {
   searchy?: boolean;
 }
@@ -30,10 +32,12 @@ const ScreenHeader = ({ searchy = false }: Props) => {
 
       <div className="nav-right">
         <button onClick={() => navigate("/Register")}>Sign Up!</button>
+        <Profile></Profile>
       </div>
     </nav>
   );
 };
+export default ScreenHeader;
 
 /*
         <nav>
@@ -48,5 +52,3 @@ const ScreenHeader = ({ searchy = false }: Props) => {
           </div>
         </nav>
 */
-
-export default ScreenHeader;

@@ -4,6 +4,7 @@ import cors from "cors";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"; 
 
 dotenv.config({ path: "./config.env" });
 
@@ -12,6 +13,7 @@ const client = new MongoClient(Db);
 const app = express();
 const port = process.env.PORT || 5000;
 
+const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 app.use(cors({
   origin: "http://localhost:5173",
@@ -50,9 +52,6 @@ export async function insertData(collectionName: string, data: Record<string, an
 app.post("/register", async (req, res) => {
   const { user, pwd } = req.body;
 
-  
-
-
   try {
     const database = client.db("Puffino");
     const collection = database.collection("Users");
@@ -78,6 +77,39 @@ app.post("/register", async (req, res) => {
   } catch (e) {
     console.error("Error registering user:", e);
     res.status(500).json({ message: "Registration failed" });
+  }
+});
+
+// @ts-ignore
+app.post("/Signin", async (req, res) => {
+  const { user, pwd } = req.body;
+
+  try {
+    const database = client.db("Puffino");
+    const collection = database.collection("Users");
+
+    const filterQuery = { username: user };
+const document = await collection.findOne(filterQuery);
+
+if (document) {
+  const isMatch = await bcrypt.compare(pwd, document.password)
+  if (isMatch) {
+    const token = jwt.sign({ username: document.username }, SECRET_KEY, { expiresIn: "1h" });
+    res.status(200).json({ message: user,
+      username: document.username,
+      token,
+     });
+  } else {
+    res.status(401).json({ 
+      message: "Invalid Password" });
+  }
+} else {
+  res.status(401).json({ message: "Invalid Username"});
+}
+
+  } catch (e) {
+    console.error("Error Signing In:", e);
+    res.status(500).json({ message: "Sign In failed" });
   }
 });
 

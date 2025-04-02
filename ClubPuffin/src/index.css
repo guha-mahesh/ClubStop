@@ -35,7 +35,7 @@ html, body {
 
 
 
- /* Control the space between the items */
+
 }
 
 .icon{
@@ -44,6 +44,132 @@ html, body {
   background-color: #c44c32;
 }
 
+
+
+.logoCP{
+  height: 40px;
+  width: auto;
+  background: transparent;
+}
+
+
+
+
+
+
+.Top-Screen {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  padding: 15px 30px;
+  border-bottom: 1px solid #c44c32;
+  background-color: #1e1e1e;
+  gap: 15vh;
+
+}
+
+.nav-left {
+
+color: white;
+text-decoration: none;
+margin-right: 0px;
+margin-left: 0px;
+font-size: 18px;
+
+}
+
+.nav-middle {
+display:flex;
+color: white;
+text-decoration: none;
+margin-right: 0px;
+margin-left: 40px;
+font-size: 18px;
+gap: 1%;
+
+
+
+
+}
+
+
+.nav-right{
+  display: flex;
+  position: relative;
+}
+
+.nav-right span {
+
+font-size: 18px;
+color: white;
+margin-right: 40px;
+
+}
+
+.reviews-toolbar {
+
+    display: flex;
+    justify-content: center;
+    gap: .25rem;
+  }
+
+
+
+
+
+
+  /*
+#Puffin{
+
+  display: block;
+  background: transparent;
+  height: 6rem;
+}
+*/
+
+
+
+
+/*
+
+.Puffin-1{
+  grid-row: 5;
+  grid-column: 3;
+}
+
+.Puffin-2{
+  grid-row: 3;
+  grid-column: 2;
+
+}
+.Puffin-3{
+  grid-row: 2;
+  grid-column: 1;
+  
+}
+.Puffin-4{
+  grid-row: 2;
+  grid-column: 5;
+  padding-top: 25px;
+}
+
+.Puffin-5{
+  grid-row: 1;
+  grid-column: 5;
+  padding-left: 285px;
+  padding-top: 30px;
+}*/
+
+/*.oval-forAggregate{
+  grid-row: 3 ;
+  grid-column: 1;
+  width: 400px; 
+  height: 230px;
+  margin-top: 150px;
+}*/
+
+/*nav bar*/
 
 /*
 .oval{
@@ -131,117 +257,3 @@ background-color: #add8e6;
   font-size: 1.2375rem;
 }
 */
-
-.logoCP{
-  height: 40px;
-  width: auto;
-  background: transparent;
-}
-
-
-
-/*
-#Puffin{
-
-  display: block;
-  background: transparent;
-  height: 6rem;
-}
-*/
-
-
-
-
-/*
-
-.Puffin-1{
-  grid-row: 5;
-  grid-column: 3;
-}
-
-.Puffin-2{
-  grid-row: 3;
-  grid-column: 2;
-
-}
-.Puffin-3{
-  grid-row: 2;
-  grid-column: 1;
-  
-}
-.Puffin-4{
-  grid-row: 2;
-  grid-column: 5;
-  padding-top: 25px;
-}
-
-.Puffin-5{
-  grid-row: 1;
-  grid-column: 5;
-  padding-left: 285px;
-  padding-top: 30px;
-}*/
-
-/*.oval-forAggregate{
-  grid-row: 3 ;
-  grid-column: 1;
-  width: 400px; 
-  height: 230px;
-  margin-top: 150px;
-}*/
-
-/*nav bar*/
-
-
-.Top-Screen {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  padding: 15px 30px;
-  border-bottom: 1px solid #c44c32;
-  background-color: #1e1e1e;
-
-}
-
-.nav-left {
-
-color: white;
-text-decoration: none;
-margin-right: 0px;
-margin-left: 0px;
-font-size: 18px;
-
-}
-
-.nav-middle {
-display:flex;
-color: white;
-text-decoration: none;
-margin-right: 0px;
-margin-left: 40px;
-font-size: 18px;
-gap: 1%;
-
-
-
-
-}
-
-.nav-right span {
-
-font-size: 18px;
-color: white;
-margin-right: 40px;
-
-}
-
-.reviews-toolbar {
-
-    display: flex;
-    justify-content: center;
-    gap: .25rem;
-  }
-
-
-
