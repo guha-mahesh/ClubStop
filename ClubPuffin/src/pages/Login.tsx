@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:5000";
 const SIGNIN_URL = "/Signin";
@@ -12,6 +13,13 @@ const Login = () => {
   const [pwd, setPwd] = useState<string>("");
   const [errMsg, setErrMsg] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (success) {
+      navigate("/");
+    }
+  }, [navigate, success]);
 
   useEffect(() => {
     if (userRef.current) {
@@ -23,10 +31,15 @@ const Login = () => {
     setErrMsg("");
   }, [user, pwd]);
 
+  interface SignInResponse {
+    message: string;
+    token: string;
+    username: string;
+  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const response = await axios.post<SignInResponse>(
         SIGNIN_URL,
         { user, pwd },
         {
@@ -35,18 +48,16 @@ const Login = () => {
         }
       );
 
-      if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        console.log(localStorage);
-
-        setSuccess(true);
-      } else if (response.status === 401) {
-        setErrMsg("Invalid Username or Password");
-        console.log(errMsg);
-      }
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", response.data.username);
+      setSuccess(true);
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");
+      } else if (err.response.status === 401) {
+        setErrMsg(err.response.data.message || "Invalid Username or Password");
+      } else {
+        setErrMsg("Login Failed");
       }
     }
   };

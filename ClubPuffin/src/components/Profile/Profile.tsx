@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Puffin from "../../assets/puffin.png";
 
 const Profile = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -8,13 +9,13 @@ const Profile = () => {
       {!open ? (
         <div className="Avatar">
           <button onClick={() => setOpen((prev) => !prev)}>
-            <img src="https://via.placeholder.com/150" />
+            <img className="tempPuff" src={Puffin} />
           </button>
         </div>
       ) : (
         <div className="Avatar">
           <button onClick={() => setOpen((prev) => !prev)}>
-            <img src="https://via.placeholder.com/150" />
+            <img className="tempPuff" src={Puffin} />
           </button>
           <div className="dropdown">
             <button className="dropdown-button"></button>

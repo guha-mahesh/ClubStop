@@ -12,7 +12,6 @@ const Db: string = process.env.ATLAS_URI || "";
 const client = new MongoClient(Db);
 const app = express();
 const port = process.env.PORT || 5000;
-
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 app.use(cors({
@@ -23,7 +22,6 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-
 export async function connectDB(): Promise<void> {
   try {
     await client.connect();
@@ -32,7 +30,6 @@ export async function connectDB(): Promise<void> {
     console.error("MongoDB connection error:", e);
   }
 }
-
 
 export async function insertData(collectionName: string, data: Record<string, any>): Promise<void> {
   try {
@@ -48,6 +45,11 @@ export async function insertData(collectionName: string, data: Record<string, an
 
 
 
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+  connectDB();
+});
+
 // @ts-ignore
 app.post("/register", async (req, res) => {
   const { user, pwd } = req.body;
@@ -60,15 +62,11 @@ app.post("/register", async (req, res) => {
     const document = await collection.findOne(filterQuery);
 
     if (document) {
-    return res.status(409).json({ message: "Username Taken" });
-    } 
-
-  
+      return res.status(409).json({ message: "Username Taken" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(pwd, salt);
-
-   
 
     const result = await collection.insertOne({ username: user, password: hashedPassword });
     console.log("User registered with _id:", result.insertedId);
@@ -80,7 +78,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// @ts-ignore
+
 app.post("/Signin", async (req, res) => {
   const { user, pwd } = req.body;
 
@@ -89,24 +87,23 @@ app.post("/Signin", async (req, res) => {
     const collection = database.collection("Users");
 
     const filterQuery = { username: user };
-const document = await collection.findOne(filterQuery);
+    const document = await collection.findOne(filterQuery);
 
-if (document) {
-  const isMatch = await bcrypt.compare(pwd, document.password)
-  if (isMatch) {
-    const token = jwt.sign({ username: document.username }, SECRET_KEY, { expiresIn: "1h" });
-    res.status(200).json({ message: user,
-      username: document.username,
-      token,
-     });
-  } else {
-    res.status(401).json({ 
-      message: "Invalid Password" });
-  }
-} else {
-  res.status(401).json({ message: "Invalid Username"});
-}
-
+    if (document) {
+      const isMatch = await bcrypt.compare(pwd, document.password);
+      if (isMatch) {
+        const token = jwt.sign({ username: document.username, id: document._id }, SECRET_KEY, { expiresIn: "3s" });
+        res.status(200).json({
+          message: "Login Successful",
+          token,
+          username: document.username,
+        });
+      } else {
+        res.status(401).json({ message: "Invalid Password" });
+      }
+    } else {
+      res.status(401).json({ message: "Invalid Username" });
+    }
   } catch (e) {
     console.error("Error Signing In:", e);
     res.status(500).json({ message: "Sign In failed" });
@@ -114,7 +111,75 @@ if (document) {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-  connectDB();
+app.get("/users", async (req, res) => {
+  try {
+    const database = client.db("Puffino");
+    const collection = database.collection("Users");
+
+    const { user } = req.query;
+
+    if (user) {
+      const userData = await collection.find({ username: user }).toArray();
+      if (userData.length > 0) {
+        res.status(200).json(userData[0]);
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } else {
+      const users = await collection.find({}).toArray();
+      res.status(200).json(users);
+    }
+  } catch (e) {
+    console.error("Error fetching users:", e);
+    res.status(500).json({ message: "Failed to retrieve users" });
+  }
+});
+
+// @ts-ignore
+app.post("/ClubCreate", async (req, res) => {
+  const { name, description, user } = req.body;
+
+  if (!name || !description || !user) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    const database = client.db("Puffino");
+    const clubsCollection = database.collection("clubs");
+    const usersCollection = database.collection("Users");
+
+    const filterQuery = { username: user };
+    const userDocument = await usersCollection.findOne(filterQuery);
+
+    if (!userDocument) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const clubResult = await clubsCollection.insertOne({
+      creator: user,
+      ClubName: name,
+      ClubDescription: description,
+    });
+
+    console.log("Club created with _id:", clubResult.insertedId);
+    const updateResult = await usersCollection.updateOne(
+      { username: user },
+      // @ts-ignore
+      { $push: { clubs: { clubId: clubResult.insertedId, clubName: name } } }
+    );
+
+    if (updateResult.modifiedCount > 0) {
+      res.status(200).json({ message: "Club created and added to user", clubId: clubResult.insertedId });
+    } else {
+      res.status(500).json({ message: "Failed to add club to user" });
+    }
+
+    return res.status(201).json({
+      message: "Club created successfully",
+      clubId: clubResult.insertedId,
+    });
+  } catch (e) {
+    console.error("Error Creating Club", e);
+    res.status(500).json({ message: "Creation failed" });
+  }
 });

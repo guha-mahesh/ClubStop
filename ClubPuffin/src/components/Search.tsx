@@ -16,6 +16,7 @@ const Search = ({ placeholder, onChange }: Props) => {
         className="textbox"
         placeholder={placeholder}
         onKeyDown={handleKeyDown}
+        onChange={() => console.log(localStorage)}
       />
     </div>
   );
