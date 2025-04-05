@@ -4,13 +4,12 @@ import { showAlert } from "../../backend/handleSearch";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Puffin from "../../assets/puffin.png";
-import { checkJwt } from "../../backend/CheckJWT";
+
 import { useGlobalContext } from "../../Global";
 
 interface UserData {
   username: string;
   password: string;
-  description?: string;
 }
 
 const Home = () => {
@@ -19,6 +18,12 @@ const Home = () => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
+    const storedSigned = localStorage.getItem("signed") === "true";
+    if (storedSigned === true) {
+      setSigned(true);
+    } else {
+      setSigned(false);
+    }
     if (user) {
       fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`)
         .then((response) => response.json())

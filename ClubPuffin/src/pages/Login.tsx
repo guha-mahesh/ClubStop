@@ -50,6 +50,7 @@ const Login = () => {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", response.data.username);
+      localStorage.setItem("signed", "true");
       setSuccess(true);
     } catch (err: any) {
       if (!err?.response) {

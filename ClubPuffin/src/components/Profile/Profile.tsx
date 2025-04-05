@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Puffin from "../../assets/puffin.png";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -18,8 +20,22 @@ const Profile = () => {
             <img className="tempPuff" src={Puffin} />
           </button>
           <div className="dropdown">
-            <button className="dropdown-button"></button>
-            <button className="dropdown-button"></button>
+            <button
+              onClick={() => {
+                navigate("/createClub");
+              }}
+              className="dropdown-button"
+            >
+              Create a Club
+            </button>
+            <button
+              onClick={() => {
+                navigate("/MyClubs");
+              }}
+              className="dropdown-button"
+            >
+              My Clubs
+            </button>
             <button className="dropdown-button"></button>
           </div>
         </div>

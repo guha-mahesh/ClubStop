@@ -5,6 +5,8 @@ import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"; 
+import { ObjectId } from "mongodb";
+
 
 dotenv.config({ path: "./config.env" });
 
@@ -92,7 +94,7 @@ app.post("/Signin", async (req, res) => {
     if (document) {
       const isMatch = await bcrypt.compare(pwd, document.password);
       if (isMatch) {
-        const token = jwt.sign({ username: document.username, id: document._id }, SECRET_KEY, { expiresIn: "3s" });
+        const token = jwt.sign({ username: document.username, id: document._id }, SECRET_KEY, { expiresIn: "12h" });
         res.status(200).json({
           message: "Login Successful",
           token,
@@ -162,6 +164,7 @@ app.post("/ClubCreate", async (req, res) => {
     });
 
     console.log("Club created with _id:", clubResult.insertedId);
+
     const updateResult = await usersCollection.updateOne(
       { username: user },
       // @ts-ignore
@@ -173,13 +176,36 @@ app.post("/ClubCreate", async (req, res) => {
     } else {
       res.status(500).json({ message: "Failed to add club to user" });
     }
-
-    return res.status(201).json({
-      message: "Club created successfully",
-      clubId: clubResult.insertedId,
-    });
   } catch (e) {
     console.error("Error Creating Club", e);
     res.status(500).json({ message: "Creation failed" });
+  }
+});
+
+
+app.get("/clubs", async (req, res) => {
+
+  try {
+    const database = client.db("Puffino");
+    const collection = database.collection("clubs");
+
+    const { club } = req.query;
+
+    if (club) {
+      console.log(club)
+      // @ts-ignore
+      const Clubwithid = await collection.findOne({_id: new ObjectId(club) });
+      if (Clubwithid) {
+        res.status(200).json(Clubwithid);
+      } else {
+        res.status(404).json({ message: "Club not found" });
+      }
+    } else {
+      const clubs = await collection.find({}).toArray();
+      res.status(200).json(clubs);
+    }
+  } catch (e) {
+    console.error("Error fetching club:", e);
+    res.status(500).json({ message: "Failed to retrieve club" });
   }
 });
