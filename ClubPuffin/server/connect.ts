@@ -1,12 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
-import cors from "cors"; 
-import { MongoClient } from "mongodb";
+import cors from "cors";
+import { MongoClient, ObjectId } from "mongodb"; // Import ObjectId correctly
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"; 
-import { ObjectId } from "mongodb";
-
+import jwt from "jsonwebtoken";
 
 dotenv.config({ path: "./config.env" });
 
@@ -43,9 +41,6 @@ export async function insertData(collectionName: string, data: Record<string, an
     console.error("Error inserting data:", e);
   }
 }
-
-
-
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -167,7 +162,7 @@ app.post("/ClubCreate", async (req, res) => {
 
     const updateResult = await usersCollection.updateOne(
       { username: user },
-      // @ts-ignore
+      //@ts-ignore
       { $push: { clubs: { clubId: clubResult.insertedId, clubName: name } } }
     );
 
@@ -184,19 +179,25 @@ app.post("/ClubCreate", async (req, res) => {
 
 
 app.get("/clubs", async (req, res) => {
-
   try {
     const database = client.db("Puffino");
     const collection = database.collection("clubs");
 
-    const { club } = req.query;
+    const { club, name } = req.query;
+
+    let query = {};
 
     if (club) {
-      console.log(club)
-      // @ts-ignore
-      const Clubwithid = await collection.findOne({_id: new ObjectId(club) });
-      if (Clubwithid) {
-        res.status(200).json(Clubwithid);
+      //@ts-ignore
+      query = { _id: ObjectId.createFromHexString(club) }; 
+    } else if (name) {
+      query = { name: name };
+    }
+
+    if (Object.keys(query).length > 0) {
+      const clubData = await collection.findOne(query);
+      if (clubData) {
+        res.status(200).json(clubData);
       } else {
         res.status(404).json({ message: "Club not found" });
       }
@@ -207,5 +208,77 @@ app.get("/clubs", async (req, res) => {
   } catch (e) {
     console.error("Error fetching club:", e);
     res.status(500).json({ message: "Failed to retrieve club" });
+  }
+});
+// @ts-ignore
+app.post("/ClubRate", async (req, res) => {
+  const { name, clubID, ascendancy, camaraderie, legacy, prestige, obligation, total, clubName } = req.body;
+
+  if (!name || !total || !clubID || !ascendancy || !camaraderie || !prestige || !obligation || !legacy || !clubName) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    const database = client.db("Puffino");
+    const clubsCollection = database.collection("clubs");
+    const usersCollection = database.collection("Users");
+
+    const filterQuery = { username: name };
+    const filterQuery2 = { _id: ObjectId.createFromHexString(clubID) };
+    const userDocument = await usersCollection.findOne(filterQuery);
+    const clubDocument = await clubsCollection.findOne(filterQuery2);
+
+    if (!userDocument) {
+      return res.status(404).json({ message: "User not found" });
+    } else if (!clubDocument) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    // If Ratings is not an array, we need to replace it with an empty array
+    if (!Array.isArray(clubDocument.Ratings)) {
+      await clubsCollection.updateOne(
+        { _id: ObjectId.createFromHexString(clubID) },
+        {
+          $set: {
+            Ratings: []  // Initialize Ratings as an array if it is not already an array
+          }
+        }
+      );
+    }
+
+    // Now push the new rating into the Ratings array
+    const clubRateResult = await clubsCollection.updateOne(
+      { _id: ObjectId.createFromHexString(clubID) },
+      {
+        // @ts-ignore
+        $push: {
+          Ratings: {
+            camaraderie: parseFloat(camaraderie),
+            ascendancy: parseFloat(ascendancy),
+            prestige: parseFloat(prestige),
+            obligation: parseFloat(obligation),
+            legacy: parseFloat(legacy),
+            total: parseFloat(total),
+          },
+        },
+      }
+    );
+
+    console.log("Club rated with _id:", clubRateResult.modifiedCount);
+
+    const updateRateResult = await usersCollection.updateOne(
+      { username: name },
+      // @ts-ignore
+      { $push: { Ratedclubs: { clubName: clubName, clubID: clubID } } }
+    );
+
+    if (updateRateResult.modifiedCount > 0) {
+      res.status(200).json({ message: "Club rated and added to user", clubId: clubID });
+    } else {
+      res.status(500).json({ message: "Failed to add club to user" });
+    }
+  } catch (e) {
+    console.error("Error Creating Club", e);
+    res.status(500).json({ message: "Creation failed" });
   }
 });

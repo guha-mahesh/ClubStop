@@ -1,6 +1,6 @@
 import ScreenHeader from "../../components/ScreenHeader";
 import Search from "../../components/Search";
-import { showAlert } from "../../backend/handleSearch";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Puffin from "../../assets/puffin.png";
@@ -47,7 +47,12 @@ const Home = () => {
             </h1>
             <p>Search for what you're interested in:</p>
 
-            <Search onChange={showAlert} placeholder="Computer Science" />
+            <Search
+              onChange={() => {
+                console.log("hi");
+              }}
+              placeholder="Computer Science"
+            />
 
             {!signed ? (
               <button onClick={() => console.log(signed)} className="login-btn">

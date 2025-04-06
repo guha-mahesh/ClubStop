@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../Global";
-import Clubs from "../clubs/Clubs";
+import Clubs from "../clubs/ClubCard";
+import ScreenHeader from "../components/ScreenHeader";
 
 interface Club {
   clubId: string;
@@ -35,6 +36,7 @@ const MyClubs = () => {
 
   return (
     <div>
+      <ScreenHeader></ScreenHeader>
       {userData ? (
         <div>
           <p>Username: {userData.username}</p>
@@ -50,7 +52,7 @@ const MyClubs = () => {
           </div>
         </div>
       ) : (
-        <div>Loading...</div> // Changed to a more descriptive loading state
+        <div>Loading...</div>
       )}
     </div>
   );

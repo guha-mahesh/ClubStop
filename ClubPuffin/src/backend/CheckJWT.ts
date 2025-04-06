@@ -1,11 +1,13 @@
+
 import { useGlobalContext } from "../Global";
 import { jwtDecode } from "jwt-decode";
-
-const { signed, setSigned } = useGlobalContext();
-
-const token = localStorage.getItem("token");
+import { useNavigate } from "react-router-dom";
 
 export const checkJwt = () => {
+  const navigate = useNavigate();
+  const { signed, setSigned } = useGlobalContext();
+  const token = localStorage.getItem("token");
+
   if (token) {
     const decode = jwtDecode(token) as { exp: number };
     console.log(signed);
@@ -15,7 +17,7 @@ export const checkJwt = () => {
     if (decode.exp < time) {
       localStorage.clear();
       setSigned(false);
-      window.location.reload();
+      navigate('/Login')
     }
   }
 };

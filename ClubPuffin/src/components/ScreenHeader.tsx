@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 import Search from "./Search";
 import Profile from "./Profile/Profile";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useGlobalContext } from "../Global";
 
@@ -32,7 +32,9 @@ const ScreenHeader = ({ searchy = false }: Props) => {
   return (
     <nav className="Top-Screen">
       <div className="nav-left">
-        <img className="logoCP" src={logo} />
+        <a href="/">
+          <img className="logoCP" src={logo} alt="Logo" />
+        </a>
       </div>
 
       <div className="nav-middle">
@@ -61,13 +63,15 @@ const ScreenHeader = ({ searchy = false }: Props) => {
             onClick={() => {
               setSigned(false);
               localStorage.clear();
+              navigate("/");
               window.location.reload();
             }}
           >
             Sign Out
           </button>
         )}
-        <Profile />
+
+        {signed ? <Profile /> : null}
       </div>
     </nav>
   );

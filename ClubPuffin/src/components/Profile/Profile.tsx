@@ -1,10 +1,27 @@
 import { useState } from "react";
 import Puffin from "../../assets/puffin.png";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../Global";
+import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
+  const { signed, setSigned } = useGlobalContext();
+
+  const checkJwt = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decode = jwtDecode(token) as { exp: number };
+      const time = Date.now() / 1000;
+
+      if (decode.exp < time) {
+        localStorage.clear();
+        setSigned(false);
+        window.location.reload();
+      }
+    }
+  };
 
   return (
     <div>
@@ -23,6 +40,7 @@ const Profile = () => {
             <button
               onClick={() => {
                 navigate("/createClub");
+                checkJwt();
               }}
               className="dropdown-button"
             >
@@ -31,12 +49,13 @@ const Profile = () => {
             <button
               onClick={() => {
                 navigate("/MyClubs");
+                checkJwt();
               }}
               className="dropdown-button"
             >
               My Clubs
             </button>
-            <button className="dropdown-button"></button>
+            <button className="dropdown-button">Check JWT</button>
           </div>
         </div>
       )}

@@ -37,6 +37,7 @@ function Clubs({ id = "" }: Props) {
               ? clubData.ClubDescription
               : "No description available"}
           </div>
+          <a href={`/club/${id}`}>Go to Club!</a>
         </section>
       ) : (
         <div>Loading...</div>

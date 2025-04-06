@@ -6,6 +6,8 @@ import Register from "./pages/Register/Register";
 import Login from "./pages/Login";
 import CreateAClub from "./pages/CreateAClub";
 import MyClubs from "./pages/MyClubs";
+import ClubPage from "./pages/ClubPage";
+
 function App() {
   return (
     <GlobalProvider>
@@ -13,9 +15,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Register" element={<Register />} />
-          <Route path="/Login" element={<Login></Login>} />
-          <Route path="/CreateClub" element={<CreateAClub></CreateAClub>} />
-          <Route path="/MyClubs" element={<MyClubs></MyClubs>} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/CreateClub" element={<CreateAClub />} />
+          <Route path="/MyClubs" element={<MyClubs />} />
+          <Route path="/club/:clubID" element={<ClubPage />} />
         </Routes>
       </Router>
     </GlobalProvider>
