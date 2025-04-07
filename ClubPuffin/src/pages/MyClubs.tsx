@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../Global";
 import Clubs from "../clubs/ClubCard";
 import ScreenHeader from "../components/ScreenHeader";
+import { useNavigate } from "react-router-dom";
 
 interface Club {
   clubId: string;
@@ -15,39 +16,51 @@ interface UserData {
 }
 
 const MyClubs = () => {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState<UserData | null>({
+    username: "",
+    password: "",
+    clubs: [],
+  }); // Initializing userData with an empty clubs array
   const { signed, setSigned } = useGlobalContext();
 
   useEffect(() => {
     const storedSigned = localStorage.getItem("signed") === "true";
     setSigned(storedSigned);
 
-    const user = localStorage.getItem("user"); // Get only the username or user identifier
+    const user = localStorage.getItem("user");
 
     if (storedSigned && user) {
       fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`)
         .then((response) => response.json())
         .then((data) => {
+          console.log(data); // Inspect the data here
           setUserData(data);
         })
         .catch((error) => console.error("Error:", error));
+    } else {
+      navigate("/Login");
     }
-  }, [signed, setSigned]);
+  }, [signed, setSigned, navigate]);
 
   return (
     <div>
-      <ScreenHeader></ScreenHeader>
+      <ScreenHeader />
       {userData ? (
         <div>
           <p>Username: {userData.username}</p>
           <div>
             <h3>Clubs:</h3>
             <ul>
-              {userData.clubs.map((club) => (
-                <li key={club.clubId}>
-                  <Clubs id={club.clubId} />
-                </li>
-              ))}
+              {userData.clubs?.map(
+                (
+                  club // Use optional chaining
+                ) => (
+                  <li key={club.clubId}>
+                    <Clubs id={club.clubId} />
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>

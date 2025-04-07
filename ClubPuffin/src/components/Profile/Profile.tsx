@@ -55,7 +55,15 @@ const Profile = () => {
             >
               My Clubs
             </button>
-            <button className="dropdown-button">Check JWT</button>
+            <button
+              onClick={() => {
+                navigate("/deleteUser");
+                checkJwt();
+              }}
+              className="dropdown-button"
+            >
+              delete user
+            </button>
           </div>
         </div>
       )}

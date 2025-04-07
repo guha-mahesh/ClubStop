@@ -6,6 +6,7 @@ import { useGlobalContext } from "../Global";
 
 axios.defaults.baseURL = "http://localhost:5000";
 const clubUrl = "/ClubRate";
+const joinClub = "/joinClub";
 
 interface Ratings {
   camaraderie: number;
@@ -25,10 +26,14 @@ interface RatedClubs {
   clubName: string;
   clubID: string;
 }
+interface JoinedClubs {
+  clubName: string;
+}
 interface UserData {
   username: string;
   password: string;
   Ratedclubs: RatedClubs[];
+  joinedClubs: JoinedClubs[];
 }
 interface ClubRate {
   name: string;
@@ -40,6 +45,9 @@ interface ClubRate {
   total: number;
   clubID: string;
   clubName: string;
+}
+interface Response {
+  message: string;
 }
 
 const ClubPage = () => {
@@ -54,6 +62,7 @@ const ClubPage = () => {
   const [obligation, setObligation] = useState<string>("");
   const [legacy, setLegacy] = useState<string>("");
   const [ratingError, setRatingError] = useState<string>("");
+  const [member, setMember] = useState<boolean>(false);
 
   useEffect(() => {
     if (clubID) {
@@ -79,6 +88,17 @@ const ClubPage = () => {
         .catch((error) => console.error("Error:", error));
     }
   }, []);
+  useEffect(() => {
+    if (userData && clubData) {
+      if (
+        userData.joinedClubs.some((club) => club.clubName === clubData.ClubName)
+      ) {
+        setMember(true);
+      } else {
+        setMember(false);
+      }
+    }
+  }, [userData, clubData]);
 
   const hasRatedClub = (clubID: string, userData: UserData | null): boolean => {
     if (userData && userData.Ratedclubs) {
@@ -164,13 +184,54 @@ const ClubPage = () => {
   const avgLegacy = calculateAverageTrait(clubData, "legacy");
   const avgTotal = calculateAverageTrait(clubData, "total");
 
+  const handleJoin = async () => {
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      console.error("User not found in localStorage.");
+      return;
+    }
+
+    try {
+      const response = await axios.post<Response>(
+        joinClub,
+        {
+          name: user,
+          ClubID: clubID,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Club Joined:", response.data);
+        setMember(true);
+        window.location.reload();
+      } else {
+        console.error(
+          "Failed to join club:",
+          response.data.message || "Unknown error."
+        );
+      }
+    } catch (res) {
+      // @ts-ignore
+      if (response.status === 400) {
+        console.log("Already a member");
+      }
+    }
+  };
+
   return (
     <>
       <ScreenHeader />
       {!rate ? (
         <div>
-          <h1>{clubData.ClubName}</h1>
-
+          <div className="clubNameHeader">
+            <h1>{clubData.ClubName}</h1>
+            {member ? <h1>Member :)</h1> : null}
+          </div>
           <button
             onClick={() => {
               if (clubID && userData) {
@@ -207,6 +268,9 @@ const ClubPage = () => {
               <br />
               {`Total: ${avgTotal}`}
             </div>
+          ) : null}
+          {!member ? (
+            <button onClick={handleJoin}>Join this Club</button>
           ) : null}
         </div>
       ) : (

@@ -234,19 +234,19 @@ app.post("/ClubRate", async (req, res) => {
       return res.status(404).json({ message: "Club not found" });
     }
 
-    // If Ratings is not an array, we need to replace it with an empty array
+
     if (!Array.isArray(clubDocument.Ratings)) {
       await clubsCollection.updateOne(
         { _id: ObjectId.createFromHexString(clubID) },
         {
           $set: {
-            Ratings: []  // Initialize Ratings as an array if it is not already an array
+            Ratings: []  
           }
         }
       );
     }
 
-    // Now push the new rating into the Ratings array
+
     const clubRateResult = await clubsCollection.updateOne(
       { _id: ObjectId.createFromHexString(clubID) },
       {
@@ -280,5 +280,89 @@ app.post("/ClubRate", async (req, res) => {
   } catch (e) {
     console.error("Error Creating Club", e);
     res.status(500).json({ message: "Creation failed" });
+  }
+});
+
+// @ts-ignore
+app.post("/delete", async (req, res) => {
+  const { collect, field, username } = req.query;
+
+  if (!username || !collect) {
+    console.error("Not all fields provided");
+    return res.status(400).json({ message: "Bad Request: Missing username or collection" });
+  }
+
+  if (collect && typeof collect === 'string' && typeof username === 'string') {
+    try {
+      const database = client.db('Puffino');
+      const collection = database.collection(collect);
+
+      if (!field) {
+        const result = await collection.deleteOne({ username: username });
+        
+        if (result.deletedCount === 0) {
+          return res.status(404).json({ message: "Username not found for deletion" });
+        }
+
+        return res.status(200).json({ message: "Deletion successful" });
+      } else {
+        const updateResult = await collection.updateOne(
+          { username: username },
+          { $unset: { field: "" } }
+        );
+
+        if (updateResult.modifiedCount === 0) {
+          return res.status(404).json({ message: "Field not found or no modification done" });
+        }
+
+        return res.status(200).json({ message: "Field unset successful" });
+      }
+    } catch (error) {
+      console.error("Error during deletion or update:", error);
+      return res.status(500).json({ message: "Internal Server Error: Deletion or update failed" });
+    }
+  } else {
+    return res.status(400).json({ message: "Bad Request: Invalid data type for 'collect' or 'username'" });
+  }
+});
+
+// @ts-ignore
+app.post("/joinClub", async (req, res) => {
+  const { name, ClubID } = req.body;
+
+  try {
+    const database = client.db("Puffino");
+    const collection = database.collection("clubs");
+    const userCollection = database.collection('Users');
+    console.log(ClubID);
+    const filterQuery = { _id: ObjectId.createFromHexString(ClubID) };
+    const filterQuery2 = { username: name };
+    const clubDocument = await collection.findOne(filterQuery);
+    const userDocument = await userCollection.findOne(filterQuery2);
+
+    if (!clubDocument) {
+      return res.status(404).json({ message: "Club not found." });
+    }
+    if (!userDocument) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    if (userDocument.joinedClubs && userDocument.joinedClubs.includes(clubDocument.ClubName)) {
+      return res.status(400).json({ message: "User is already a member of this club." });
+    }
+    const result = await userCollection.updateOne(
+      { username: name },
+      //@ts-ignore
+      { $push: { joinedClubs: {clubName: clubDocument.ClubName} } }
+    );
+
+    if (result.modifiedCount > 0) {
+      return res.status(200).json({ message: `Successfully joined the ${clubDocument.ClubName} club.` });
+    } else {
+      return res.status(500).json({ message: "Failed to join the club." });
+    }
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 });

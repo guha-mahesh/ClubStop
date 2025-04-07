@@ -55,7 +55,7 @@ const Home = () => {
             />
 
             {!signed ? (
-              <button onClick={() => console.log(signed)} className="login-btn">
+              <button onClick={() => navigate("/Login")} className="login-btn">
                 Or log in to join bruh →
               </button>
             ) : null}

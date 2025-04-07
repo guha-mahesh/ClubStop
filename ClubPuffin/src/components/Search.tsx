@@ -7,6 +7,7 @@ interface Props {
 }
 
 interface ClubData {
+  _id: string;
   creator: string;
   ClubName: string;
   ClubDescription?: string;
@@ -48,9 +49,14 @@ const Search = ({ placeholder, onChange }: Props) => {
       />
       {suggestion.length > 0 && (
         <div className="suggestions">
-          {suggestion.map((name, idx) => (
-            <div key={idx}>{name}</div>
-          ))}
+          {suggestion.map((name, idx) => {
+            const club = clubData.find((club) => club.ClubName === name);
+            return (
+              <a key={idx} href={`/club/${club?._id}`}>
+                {name}
+              </a>
+            );
+          })}
         </div>
       )}
     </div>

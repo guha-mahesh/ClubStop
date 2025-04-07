@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import CreateAClub from "./pages/CreateAClub";
 import MyClubs from "./pages/MyClubs";
 import ClubPage from "./pages/ClubPage";
+import Delete from "./pages/Delete";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/CreateClub" element={<CreateAClub />} />
           <Route path="/MyClubs" element={<MyClubs />} />
           <Route path="/club/:clubID" element={<ClubPage />} />
+          <Route path="/deleteUser" element={<Delete></Delete>} />
         </Routes>
       </Router>
     </GlobalProvider>
