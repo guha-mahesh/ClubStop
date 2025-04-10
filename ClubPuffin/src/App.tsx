@@ -8,6 +8,7 @@ import CreateAClub from "./pages/CreateAClub";
 import MyClubs from "./pages/MyClubs";
 import ClubPage from "./pages/ClubPage";
 import Delete from "./pages/Delete";
+import ConfigureProfile from "./components/ConfigureProfile";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Route path="/MyClubs" element={<MyClubs />} />
           <Route path="/club/:clubID" element={<ClubPage />} />
           <Route path="/deleteUser" element={<Delete></Delete>} />
+          <Route
+            path="/configureProfile"
+            element={<ConfigureProfile></ConfigureProfile>}
+          />
         </Routes>
       </Router>
     </GlobalProvider>

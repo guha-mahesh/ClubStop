@@ -89,7 +89,7 @@ const ClubPage = () => {
     }
   }, []);
   useEffect(() => {
-    if (userData && clubData) {
+    if (userData && clubData && userData.joinedClubs) {
       if (
         userData.joinedClubs.some((club) => club.clubName === clubData.ClubName)
       ) {
