@@ -1,6 +1,8 @@
+//the page that a user can view all their joined and created clubs, probably needs clubCard.tsx as components
+
 import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../Global";
-import Clubs from "../clubs/ClubCard";
+import Clubs from "../components/clubs/ClubCard";
 import ScreenHeader from "../components/ScreenHeader";
 import { useNavigate } from "react-router-dom";
 

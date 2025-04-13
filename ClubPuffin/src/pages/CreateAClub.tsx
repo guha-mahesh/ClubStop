@@ -1,3 +1,5 @@
+//This is a page that lets you create a club
+
 import React, { useState, useRef, useEffect } from "react";
 import { useGlobalContext } from "../Global";
 import axios from "axios";

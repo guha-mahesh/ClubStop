@@ -1,3 +1,5 @@
+//creates global Signed and Setsigned usestate accesable in alllll files
+
 import { createContext, useState, ReactNode, useContext } from "react";
 import React from "react";
 

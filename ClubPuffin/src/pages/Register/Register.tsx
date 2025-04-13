@@ -1,3 +1,5 @@
+//the register page
+
 import { useRef, useState, useEffect } from "react";
 import {
   faCheck,
@@ -6,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 axios.defaults.baseURL = "http://localhost:5000";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -13,6 +16,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/register";
 
 const Register = () => {
+  const navigate = useNavigate();
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -80,9 +84,12 @@ const Register = () => {
 
       console.log(response.data);
       setSuccess(true);
+      localStorage.setItem("user", user);
+      localStorage.setItem("signed", "true");
       setUser("");
       setPwd("");
       setMatchPwd("");
+      navigate("/");
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");

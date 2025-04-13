@@ -1,4 +1,5 @@
-import React from "react";
+//just an oval
+
 interface Props {
   color?: string;
   header: string;

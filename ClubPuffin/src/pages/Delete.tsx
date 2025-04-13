@@ -1,3 +1,5 @@
+//This will prob not exist for long, but it's essentially just deleting the user then logging them out
+
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

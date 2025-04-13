@@ -1,3 +1,4 @@
+//just the top header
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Search from "./Search";

@@ -1,3 +1,5 @@
+//THIS is a clubPage, we can prob make a lot of this stuff components but we need to be careful w the backend,,,
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ScreenHeader from "../components/ScreenHeader";

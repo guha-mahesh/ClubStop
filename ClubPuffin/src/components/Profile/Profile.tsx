@@ -1,3 +1,5 @@
+// this is the icon at the top right of the home page where the user can view their stuff
+
 import { useState } from "react";
 import Puffin from "../../assets/puffin.png";
 import { useNavigate } from "react-router-dom";

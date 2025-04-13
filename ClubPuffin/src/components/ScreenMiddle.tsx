@@ -1,3 +1,5 @@
+//middle of page, dont bother with this ngl
+
 import React from "react";
 import Ratings from "./Ratings";
 import Puffin from "./Puffin";

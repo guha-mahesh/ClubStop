@@ -1,3 +1,5 @@
+//the puffin, the random number dictates the CSS class and thusly the location of the puffin on the page :3
+
 import React from "react";
 import puffinImage from "../assets/puffin.png";
 

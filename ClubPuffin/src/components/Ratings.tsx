@@ -1,4 +1,4 @@
-import React from "react";
+//css for a rating oval, probably not worth it to keep but just here
 import Oval from "./Oval";
 interface Props {
   rating: string;

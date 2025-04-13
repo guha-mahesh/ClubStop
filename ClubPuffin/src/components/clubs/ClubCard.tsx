@@ -1,3 +1,6 @@
+//this is NOT the page. This is for when the club shows up as a card that links to the page.
+//it would be like what shows up when a user goes to "my clubs" or what shows up when you search up computer science clubs
+
 import { useEffect, useState } from "react";
 
 interface Props {

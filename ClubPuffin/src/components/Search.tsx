@@ -1,5 +1,6 @@
+//the search bar with it's functionss
+
 import React, { useEffect, useState } from "react";
-import searchIcon from "../assets/search.png";
 
 interface Props {
   placeholder: string;

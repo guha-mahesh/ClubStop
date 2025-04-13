@@ -336,6 +336,8 @@ app.post("/delete", async (req, res) => {
 app.post("/joinClub", async (req, res) => {
   const { name, ClubID } = req.body;
 
+
+  
   try {
     const database = client.db("Puffino");
     const collection = database.collection("clubs");
@@ -372,3 +374,5 @@ app.post("/joinClub", async (req, res) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 });
+
+
