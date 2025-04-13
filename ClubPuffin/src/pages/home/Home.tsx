@@ -1,7 +1,7 @@
 //the home page,
 
 import ScreenHeader from "../../components/ScreenHeader";
-import Search from "../../components/Search";
+import Search from "../../components/Search/Search";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Puffin from "../../assets/puffin.png";

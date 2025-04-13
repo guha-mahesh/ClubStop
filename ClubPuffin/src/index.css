@@ -23,20 +23,9 @@ html, body {
 
 
 
-.textbox {
-  width: 100%;
-  background-color: white ;
-  padding-left: 2%;
-}
-
-.search {
-  display: flex;
-  align-items: center;
 
 
 
-
-}
 
 .icon{
   height: 50px;

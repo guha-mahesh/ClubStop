@@ -18,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (success) {
+    if (success || localStorage.getItem("signed") === "true") {
       navigate("/");
     }
   }, [navigate, success]);

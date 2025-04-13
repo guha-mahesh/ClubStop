@@ -1,7 +1,6 @@
 //just the top header
-import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-import Search from "./Search";
+import React, { useEffect } from "react";
+import Search from "./Search/Search";
 import Profile from "./Profile/Profile";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";

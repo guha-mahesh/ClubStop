@@ -5,6 +5,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import axios from "axios";
 
 
 
@@ -19,6 +20,7 @@ const client = new MongoClient(Db);
 const app = express();
 const port = process.env.PORT || 5000;
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
+
 
 app.use(cors({
   origin: "http://localhost:5173",
