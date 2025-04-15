@@ -2,6 +2,7 @@
 //it would be like what shows up when a user goes to "my clubs" or what shows up when you search up computer science clubs
 
 import { useEffect, useState } from "react";
+import home from "../../assets/react.svg";
 
 interface Props {
   id?: string;
@@ -11,6 +12,7 @@ interface ClubData {
   creator: string;
   ClubName: string;
   ClubDescription?: string;
+  _id: string;
 }
 
 function Clubs({ id = "" }: Props) {
@@ -29,19 +31,26 @@ function Clubs({ id = "" }: Props) {
   return (
     <div>
       {clubData ? (
-        <section>
-          <div className="title">
-            {clubData.ClubName}
-            <br />
-            <span>By: {clubData.creator}</span>
-          </div>
-          <div className="description">
-            {clubData.ClubDescription
-              ? clubData.ClubDescription
-              : "No description available"}
-          </div>
-          <a href={`/club/${id}`}>Go to Club!</a>
-        </section>
+        <a className="clubLink" href={`/club/${id}`}>
+          <section className="clubCard">
+            <div className="clubTop">
+              <div className="clubTitle">
+                {clubData.ClubName}
+                <br />
+                <div className="clubAuthor">By: {clubData.creator}</div>
+              </div>
+
+              <div className="clubDescription">
+                {clubData.ClubDescription
+                  ? clubData.ClubDescription
+                  : "No description available"}
+              </div>
+            </div>
+            <div className="clubPhotoContainer">
+              <img className="clubPhoto" src={home}></img>
+            </div>
+          </section>
+        </a>
       ) : (
         <div>Loading...</div>
       )}

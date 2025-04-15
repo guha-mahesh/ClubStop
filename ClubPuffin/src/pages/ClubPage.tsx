@@ -18,11 +18,16 @@ interface Ratings {
   legacy: number;
   total: number;
 }
+interface Club {
+  clubID: string;
+  clubName: string;
+}
 interface ClubData {
   creator: string;
   ClubName: string;
   ClubDescription?: string;
   Ratings?: Ratings[];
+  _id: string;
 }
 interface RatedClubs {
   clubName: string;
@@ -30,12 +35,15 @@ interface RatedClubs {
 }
 interface JoinedClubs {
   clubName: string;
+  clubID: string;
 }
 interface UserData {
   username: string;
   password: string;
+  clubs: Club[];
   Ratedclubs: RatedClubs[];
   joinedClubs: JoinedClubs[];
+  _id: string;
 }
 interface ClubRate {
   name: string;
@@ -92,9 +100,7 @@ const ClubPage = () => {
   }, []);
   useEffect(() => {
     if (userData && clubData && userData.joinedClubs) {
-      if (
-        userData.joinedClubs.some((club) => club.clubName === clubData.ClubName)
-      ) {
+      if (userData.joinedClubs.some((club) => club.clubID === clubData._id)) {
         setMember(true);
       } else {
         setMember(false);
@@ -176,7 +182,7 @@ const ClubPage = () => {
   }
 
   if (!clubData) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   const avgAscendancy = calculateAverageTrait(clubData, "ascendancy");

@@ -20,16 +20,37 @@ const Home = () => {
   useEffect(() => {
     const user = localStorage.getItem("user");
     const storedSigned = localStorage.getItem("signed") === "true";
+    const token = localStorage.getItem("token"); // Retrieve JWT token from localStorage
+
     if (storedSigned === true) {
       setSigned(true);
     } else {
       setSigned(false);
     }
-    if (user) {
-      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`)
-        .then((response) => response.json())
+
+    if (user && token) {
+      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the JWT token in Authorization header
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((data) => {
+              throw new Error(data.message || "Error occurred");
+            });
+          }
+          return response.json(); // Continue if the response is OK (2xx)
+        })
         .then((data) => setUserData(data))
-        .catch((error) => console.error("Error:", error));
+        .catch((error) => {
+          console.error("Error:", error);
+          setUserData(null); // Set userData to null if an error occurs
+          localStorage.clear();
+          setSigned(false);
+          navigate("/");
+        });
     }
   }, []);
 

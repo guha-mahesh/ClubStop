@@ -2,6 +2,62 @@
     color: red;
     margin-top: 0.5rem;
     font-weight: 500;
-
   }
   
+
+.clubTitle{
+  font-size: 3.8vh;
+  font-family: 'Shrikhand';
+  margin-bottom: 1vh;
+
+}
+.clubAuthor{
+  font-style: italic;
+  font-size: 3.5vh;
+  margin-bottom: 1.8vh;
+  padding-bottom: 1vh;
+  border-bottom: 2px dashed black;
+  width: 100%;
+
+}
+
+.clubTop{
+  margin-bottom: 3vh;
+}
+.clubCard{
+    width: 40vh;
+    height: 25vh;
+    border-radius: 25px; 
+    padding: 2vh;
+    color: white;
+    font-size: 18px;
+    margin: 20px;
+    background-color: #c44c32;
+
+  
+}
+.clubLink{
+
+
+  text-decoration: none;
+
+}
+.clubPhotoContainer{
+  display: flex;
+  justify-content: center;
+  height: 10vh;
+  align-items: center;
+  padding-top: 2vh;
+ 
+}
+
+.clubPhoto{
+  height: 15vh;
+  width: auto;
+
+}
+
+.clubDescription{
+  font-size: 1.75vh;
+  font-style: italic;
+}

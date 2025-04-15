@@ -8,6 +8,7 @@ import "./pages/Register/Register.css";
 import "./components/Profile/Profile.css";
 import "./components/clubs/Clubs.css";
 import "./components/Search/Search.css";
+import "./pages/MyClubs/MyClubs.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

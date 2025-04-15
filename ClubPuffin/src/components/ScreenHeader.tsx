@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Search from "./Search/Search";
 import Profile from "./Profile/Profile";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/ClubStop.png";
 import { useGlobalContext } from "../Global";
 
 interface Props {

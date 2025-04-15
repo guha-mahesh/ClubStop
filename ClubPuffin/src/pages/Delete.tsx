@@ -15,6 +15,7 @@ const Delete = () => {
 
   const handleDeletion = async () => {
     const username = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (!username) {
       alert("No user logged in");
@@ -23,6 +24,9 @@ const Delete = () => {
 
     try {
       const response = await axios.post<DeleteResponse>("/delete", null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: {
           collect: "Users",
           username: username,

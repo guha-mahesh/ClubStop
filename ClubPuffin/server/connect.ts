@@ -5,7 +5,10 @@ import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import axios from "axios";
+
+
+
+
 
 
 
@@ -54,6 +57,26 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
   connectDB();
 });
+function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: No token provided. Please login to proceed." });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ 
+      error: "Authentication failed", 
+      message: "The provided token is invalid or has expired. Please login again."
+    });
+  }
+}
 
 // @ts-ignore
 app.post("/register", async (req, res) => {
@@ -115,13 +138,18 @@ app.post("/Signin", async (req, res) => {
   }
 });
 
-
-app.get("/users", async (req, res) => {
+//@ts-ignore
+app.get("/users", verifyToken, async (req, res) => {
   try {
     const database = client.db("Puffino");
     const collection = database.collection("Users");
 
     const { user } = req.query;
+
+    //@ts-ignore
+    if (user && req.user.username !== user) {
+      return res.status(403).json({ message: "Username does not match token" });
+    }
 
     if (user) {
       const userData = await collection.find({ username: user }).toArray();
@@ -139,10 +167,14 @@ app.get("/users", async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve users" });
   }
 });
-
 // @ts-ignore
-app.post("/ClubCreate", async (req, res) => {
+app.post("/ClubCreate",verifyToken, async (req, res) => {
   const { name, description, user } = req.body;
+
+  //@ts-ignore
+  if (user && req.user.username !== user) {
+    return res.status(403).json({ message: "Username does not match token" });
+  }
 
   if (!name || !description || !user) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -169,13 +201,18 @@ app.post("/ClubCreate", async (req, res) => {
     console.log("Club created with _id:", clubResult.insertedId);
 
     const updateResult = await usersCollection.updateOne(
-      { username: user },
-      //@ts-ignore
-      { $push: { clubs: { clubId: clubResult.insertedId, clubName: name } } }
-    );
+  { username: user },
+  {
+    //@ts-ignore
+    $push: {
+      clubs: { clubID: clubResult.insertedId, clubName: name },
+      joinedClubs: { clubID: clubResult.insertedId, clubName: name }
+    }
+  }
+);
 
     if (updateResult.modifiedCount > 0) {
-      res.status(200).json({ message: "Club created and added to user", clubId: clubResult.insertedId });
+      res.status(200).json({ message: "Club created and added to user", clubID: clubResult.insertedId });
     } else {
       res.status(500).json({ message: "Failed to add club to user" });
     }
@@ -219,8 +256,13 @@ app.get("/clubs", async (req, res) => {
   }
 });
 // @ts-ignore
-app.post("/ClubRate", async (req, res) => {
+app.post("/ClubRate",verifyToken, async (req, res) => {
   const { name, clubID, ascendancy, camaraderie, legacy, prestige, obligation, total, clubName } = req.body;
+
+  //@ts-ignore
+  if (user && req.user.username !== user) {
+    return res.status(403).json({ message: "Username does not match token" });
+  }
 
   if (!name || !total || !clubID || !ascendancy || !camaraderie || !prestige || !obligation || !legacy || !clubName) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -292,9 +334,14 @@ app.post("/ClubRate", async (req, res) => {
 });
 
 // @ts-ignore
-app.post("/delete", async (req, res) => {
+app.post("/delete",verifyToken, async (req, res) => {
   const { collect, field, username } = req.query;
 
+
+  //@ts-ignore
+  if (req.user && req.user.username !== username) {
+    return res.status(403).json({ message: "Username does not match token" });
+  }
   if (!username || !collect) {
     console.error("Not all fields provided");
     return res.status(400).json({ message: "Bad Request: Missing username or collection" });
@@ -335,11 +382,14 @@ app.post("/delete", async (req, res) => {
 });
 
 // @ts-ignore
-app.post("/joinClub", async (req, res) => {
+app.post("/joinClub",verifyToken, async (req, res) => {
   const { name, ClubID } = req.body;
 
 
-  
+  //@ts-ignore
+  if (user && req.user.username !== user) {
+    return res.status(403).json({ message: "Username does not match token" });
+  }
   try {
     const database = client.db("Puffino");
     const collection = database.collection("clubs");
@@ -362,7 +412,7 @@ app.post("/joinClub", async (req, res) => {
     const result = await userCollection.updateOne(
       { username: name },
       //@ts-ignore
-      { $push: { joinedClubs: {clubName: clubDocument.ClubName} } }
+      { $push: { joinedClubs: {clubName: clubDocument.ClubName, clubID: ClubID} } }
     );
 
     if (result.modifiedCount > 0) {

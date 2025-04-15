@@ -75,6 +75,7 @@ const CreateAClub: React.FC = () => {
               <input
                 ref={userRef}
                 id="clubName"
+                maxLength={20}
                 required
                 type="text"
                 value={clubName}

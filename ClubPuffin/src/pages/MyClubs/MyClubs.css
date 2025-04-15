@@ -1,0 +1,26 @@
+
+
+.allClubs{
+    display: flex;
+    gap: 50vh;
+    justify-content: center;
+    margin: 3vh;
+
+    
+}
+ul {
+    list-style-type: none; }
+
+
+.allClubs span {
+
+
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: 'Shrikhand';
+    text-align: center;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
