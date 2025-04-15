@@ -57,6 +57,7 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
   connectDB();
 });
+
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -168,13 +169,14 @@ app.get("/users", verifyToken, async (req, res) => {
   }
 });
 // @ts-ignore
-app.post("/ClubCreate",verifyToken, async (req, res) => {
+app.post("/ClubCreate", async (req, res) => {
   const { name, description, user } = req.body;
 
-  //@ts-ignore
-  if (user && req.user.username !== user) {
-    return res.status(403).json({ message: "Username does not match token" });
-  }
+  /*
+    //@ts-ignore
+    if (user && req.user.username !== user) {
+      return res.status(403).json({ message: "Username does not match token" });
+    }*/
 
   if (!name || !description || !user) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -260,7 +262,7 @@ app.post("/ClubRate",verifyToken, async (req, res) => {
   const { name, clubID, ascendancy, camaraderie, legacy, prestige, obligation, total, clubName } = req.body;
 
   //@ts-ignore
-  if (user && req.user.username !== user) {
+  if (name && req.user.username !== name) {
     return res.status(403).json({ message: "Username does not match token" });
   }
 
@@ -387,7 +389,7 @@ app.post("/joinClub",verifyToken, async (req, res) => {
 
 
   //@ts-ignore
-  if (user && req.user.username !== user) {
+  if (req.user && req.user?.username !== name) {
     return res.status(403).json({ message: "Username does not match token" });
   }
   try {

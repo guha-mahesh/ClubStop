@@ -84,12 +84,11 @@ const Register = () => {
 
       console.log(response.data);
       setSuccess(true);
-      localStorage.setItem("user", user);
-      localStorage.setItem("signed", "true");
+
       setUser("");
       setPwd("");
       setMatchPwd("");
-      navigate("/");
+      navigate("/login");
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");

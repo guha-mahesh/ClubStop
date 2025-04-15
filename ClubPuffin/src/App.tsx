@@ -6,7 +6,7 @@ import Register from "./pages/Register/Register";
 import Login from "./pages/Login";
 import CreateAClub from "./pages/CreateAClub";
 import MyClubs from "./pages/MyClubs/MyClubs";
-import ClubPage from "./pages/ClubPage";
+import ClubPage from "./pages/ClubPage/ClubPage";
 import Delete from "./pages/Delete";
 import ConfigureProfile from "./components/ConfigureProfile";
 

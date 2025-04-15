@@ -76,7 +76,6 @@ const MyClubs = () => {
       navigate("/Login");
     }
   }, [signed, setSigned, navigate]);
-
   return (
     <div>
       <ScreenHeader />

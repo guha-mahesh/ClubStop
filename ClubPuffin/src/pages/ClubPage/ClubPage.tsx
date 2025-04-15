@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ScreenHeader from "../components/ScreenHeader";
+import ScreenHeader from "../../components/ScreenHeader";
 import axios from "axios";
-import { useGlobalContext } from "../Global";
+import { useGlobalContext } from "../../Global";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:5000";
 const clubUrl = "/ClubRate";
@@ -61,6 +62,7 @@ interface Response {
 }
 
 const ClubPage = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData | null>(null);
   const { signed, setSigned } = useGlobalContext();
   const { clubID } = useParams<{ clubID: string }>();
@@ -85,6 +87,7 @@ const ClubPage = () => {
   }, [clubID]);
   useEffect(() => {
     const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
     const storedSigned = localStorage.getItem("signed") === "true";
     if (storedSigned === true) {
       setSigned(true);
@@ -92,10 +95,28 @@ const ClubPage = () => {
       setSigned(false);
     }
     if (user) {
-      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`)
-        .then((response) => response.json())
+      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((data) => {
+              throw new Error(data.message || "Error occurred");
+            });
+          }
+          return response.json();
+        })
         .then((data) => setUserData(data))
-        .catch((error) => console.error("Error:", error));
+        .catch((error) => {
+          console.error("Error:", error);
+          setUserData(null); // Set userData to null if an error occurs
+          localStorage.clear();
+          setSigned(false);
+          navigate("/");
+        });
     }
   }, []);
   useEffect(() => {
@@ -123,6 +144,7 @@ const ClubPage = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     e.preventDefault();
 
@@ -153,7 +175,10 @@ const ClubPage = () => {
           clubName: clubData.ClubName,
         },
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -194,6 +219,7 @@ const ClubPage = () => {
 
   const handleJoin = async () => {
     const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (!user) {
       console.error("User not found in localStorage.");
@@ -208,7 +234,10 @@ const ClubPage = () => {
           ClubID: clubID,
         },
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -234,106 +263,51 @@ const ClubPage = () => {
   return (
     <>
       <ScreenHeader />
-      {!rate ? (
-        <div>
-          <div className="clubNameHeader">
-            <h1>{clubData.ClubName}</h1>
-            {member ? <h1>Member :)</h1> : null}
-          </div>
-          <button
-            onClick={() => {
-              if (clubID && userData) {
-                if (hasRatedClub(clubID, userData)) {
-                  setRatingError("You have already rated this club.");
-                } else {
-                  setRate(true);
-                }
-              }
-            }}
-          >
-            Rate Club
-          </button>
 
-          {ratingError && <p className="error-message">{ratingError}</p>}
-          <p>
-            <strong>Creator:</strong> {clubData.creator}
-          </p>
-          <p>
-            <strong>Description:</strong>{" "}
-            {clubData.ClubDescription || "No description available."}
-          </p>
-          {clubData.Ratings ? (
-            <div className="ratings">
-              {`Ascendancy: ${avgAscendancy}`}
-              <br />
-              {`Camaraderie: ${avgCamaraderie}`}
-              <br />
-              {`Prestige: ${avgPrestige}`}
-              <br />
-              {`Obligation: ${avgObligation}`}
-              <br />
-              {`Legacy: ${avgLegacy}`}
-              <br />
-              {`Total: ${avgTotal}`}
-            </div>
-          ) : null}
-          {!member ? (
-            <button onClick={handleJoin}>Join this Club</button>
-          ) : null}
+      <div>
+        <div className="clubNameHeader">
+          <h1>{clubData.ClubName}</h1>
+          {member ? <h1>Member :)</h1> : null}
         </div>
-      ) : (
-        <div>
-          <button onClick={() => setRate(false)}>Back</button>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="camaraderie">Camaraderie</label>
-            <input
-              id="camaraderie"
-              type="text"
-              autoComplete="off"
-              value={camaraderie}
-              onChange={(e) => setCamaraderie(e.target.value)}
-              required
-            ></input>
-            <label htmlFor="ascendancy">Ascendancy</label>
-            <input
-              id="ascendancy"
-              type="text"
-              autoComplete="off"
-              value={ascendancy}
-              onChange={(e) => setAscendancy(e.target.value)}
-              required
-            ></input>
-            <label htmlFor="prestige">Prestige</label>
-            <input
-              id="prestige"
-              type="text"
-              autoComplete="off"
-              value={prestige}
-              onChange={(e) => setPrestige(e.target.value)}
-              required
-            ></input>
-            <label htmlFor="obligation">Obligation</label>
-            <input
-              id="obligation"
-              type="text"
-              autoComplete="off"
-              value={obligation}
-              onChange={(e) => setObligation(e.target.value)}
-              required
-            ></input>
-            <label htmlFor="legacy">Legacy</label>
-            <input
-              id="legacy"
-              type="text"
-              autoComplete="off"
-              value={legacy}
-              onChange={(e) => setLegacy(e.target.value)}
-              required
-            ></input>
-            <button>submit</button>
-          </form>
-        </div>
-      )}
+        <button
+          onClick={() => {
+            if (clubID && userData) {
+              if (hasRatedClub(clubID, userData)) {
+                setRatingError("You have already rated this club.");
+              } else {
+                setRate(true);
+              }
+            }
+          }}
+        >
+          Rate Club
+        </button>
+
+        {ratingError && <p className="error-message">{ratingError}</p>}
+        <p>
+          <strong>Creator:</strong> {clubData.creator}
+        </p>
+        <p>
+          <strong>Description:</strong>{" "}
+          {clubData.ClubDescription || "No description available."}
+        </p>
+        {clubData.Ratings ? (
+          <div className="ratings">
+            {`Ascendancy: ${avgAscendancy}`}
+            <br />
+            {`Camaraderie: ${avgCamaraderie}`}
+            <br />
+            {`Prestige: ${avgPrestige}`}
+            <br />
+            {`Obligation: ${avgObligation}`}
+            <br />
+            {`Legacy: ${avgLegacy}`}
+            <br />
+            {`Total: ${avgTotal}`}
+          </div>
+        ) : null}
+        {!member ? <button onClick={handleJoin}>Join this Club</button> : null}
+      </div>
     </>
   );
 };
