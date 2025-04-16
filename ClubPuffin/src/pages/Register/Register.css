@@ -1,13 +1,15 @@
 
 section {
+    margin-top: 10vh;
     width: 100%;
     max-width: 420px;
-    min-height: 400px;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 1rem;
+    padding: 2rem;
     background-color: rgba(0,0,0,0.4);
+    border-radius: 38px;
 }
 
 form {
@@ -16,6 +18,7 @@ form {
     justify-content: space-evenly;
     flex-grow: 1;
     padding-bottom: 1rem;
+
 }
 
 a, a:visited {
@@ -84,4 +87,42 @@ button {
 
 .line {
     display: inline-block;
+}
+
+.allRegister{
+    background-color: #423e3b;
+
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20vh;
+}
+
+.featherIcon{
+    background: transparent;
+    height: 23vh;
+    width: auto;
+    margin-top: 10vh;
+
+}
+
+#featherIcon2{
+    margin-top: 65vh;
+}
+
+.registerHeading{
+    text-align: center;
+    font-family: 'Shrikhand';
+}
+
+.logInFeather{
+    background: transparent;
+    height: 23vh;
+    width: auto;
+    margin-top: 10vh
+
+}
+#logInfeather2{
+    margin-top: 65vh;
 }

@@ -5,6 +5,7 @@ import Profile from "./Profile/Profile";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/ClubStop.png";
 import { useGlobalContext } from "../Global";
+import axios from "axios";
 
 interface Props {
   searchy?: boolean;
@@ -14,6 +15,23 @@ const ScreenHeader = ({ searchy = false }: Props) => {
   const { signed, setSigned } = useGlobalContext();
 
   const navigate = useNavigate();
+
+  const RandomClub = () => {
+    fetch("http://localhost:5000/randomClub")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch random club");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const id = data._id;
+        navigate(`/club/${id}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching random club:", error);
+      });
+  };
 
   const checkSign = () => {
     console.log(localStorage);
@@ -31,27 +49,29 @@ const ScreenHeader = ({ searchy = false }: Props) => {
 
   return (
     <nav className="Top-Screen">
-      <div className="nav-left">
-        <a href="/">
-          <img className="logoCP" src={logo} alt="Logo" />
-        </a>
-      </div>
+      <div className="topLeft">
+        <div className="nav-left">
+          <a href="/">
+            <img className="logoCP" src={logo} alt="Logo" />
+          </a>
+        </div>
 
-      <div className="nav-middle">
-        <button className="navButton">Home</button>
-        <button className="navButton">bruh</button>
-        <button className="navButton">trigger</button>
-        <button className="navButton">bruh</button>
+        <div className="nav-middle">
+          <button className="navButton">IdeaBoard</button>
+          <button onClick={RandomClub} className="navButton">
+            RandomClub
+          </button>
+        </div>
       </div>
-
       <Search
         onChange={() => console.log("hi")}
-        placeholder="Search for Bruhs, Bruhs, etc"
+        placeholder="Search for Clubs"
       />
 
       <div className="nav-right">
         {!signed ? (
           <button
+            className="navButton"
             onClick={() => {
               navigate("/Login");
             }}
@@ -60,6 +80,7 @@ const ScreenHeader = ({ searchy = false }: Props) => {
           </button>
         ) : (
           <button
+            className="navButton"
             onClick={() => {
               setSigned(false);
               localStorage.clear();

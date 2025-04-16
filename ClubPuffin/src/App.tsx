@@ -4,7 +4,7 @@ import { GlobalProvider } from "./Global";
 import Home from "./pages/home/Home";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login";
-import CreateAClub from "./pages/CreateAClub";
+import CreateAClub from "./pages/CreateAClub/CreateAClub";
 import MyClubs from "./pages/MyClubs/MyClubs";
 import ClubPage from "./pages/ClubPage/ClubPage";
 import Delete from "./pages/Delete";

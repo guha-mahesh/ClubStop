@@ -1,7 +1,7 @@
 //This is a page that lets you create a club
 
 import React, { useState, useRef, useEffect } from "react";
-import { useGlobalContext } from "../Global";
+import { useGlobalContext } from "../../Global";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -67,11 +67,13 @@ const CreateAClub: React.FC = () => {
 
   return (
     <>
-      <div>
+      <div className="container">
         {signed ? (
           !success ? (
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="clubName">Club Name</label>
+            <form onSubmit={handleSubmit} className="club-form">
+              <label htmlFor="clubName" className="label">
+                Club Name
+              </label>
               <input
                 ref={userRef}
                 id="clubName"
@@ -82,32 +84,38 @@ const CreateAClub: React.FC = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setClubName(e.target.value)
                 }
+                className="input-field"
               />
 
-              <label htmlFor="clubDesc">Club Description</label>
-              <input
+              <label htmlFor="clubDesc" className="label">
+                Club Description
+              </label>
+              <textarea
                 id="clubDesc"
                 required
-                type="text"
                 value={clubDesc}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                   setClubDesc(e.target.value)
                 }
+                className="textarea-field"
               />
 
-              <button type="submit">Submit</button>
+              <button type="submit" className="submit-btn">
+                Submit
+              </button>
             </form>
           ) : (
-            <section>
+            <section className="success-message">
               <h1>Club Created Successfully!</h1>
-              <br />
               <p>
-                <a href="/">Go • to • Home</a>
+                <a href="/" className="home-link">
+                  Go • to • Home
+                </a>
               </p>
             </section>
           )
         ) : (
-          <div>Log in</div>
+          <div className="login-prompt">Log in</div>
         )}
       </div>
     </>

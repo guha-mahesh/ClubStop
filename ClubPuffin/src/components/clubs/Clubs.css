@@ -2,6 +2,7 @@
     color: red;
     margin-top: 0.5rem;
     font-weight: 500;
+    position:  absolute;
   }
   
 
@@ -26,7 +27,7 @@
 }
 .clubCard{
     width: 40vh;
-    height: 25vh;
+    height: 40vh;
     border-radius: 25px; 
     padding: 2vh;
     color: white;
@@ -35,6 +36,12 @@
     background-color: #c44c32;
 
   
+}
+
+.clubCard:hover{
+  background-color:#a53b26;
+  font-weight: 300;
+
 }
 .clubLink{
 
@@ -47,7 +54,7 @@
   justify-content: center;
   height: 10vh;
   align-items: center;
-  padding-top: 2vh;
+  padding-top: 2.8vh;
  
 }
 
@@ -56,12 +63,14 @@
   width: auto;
 
 }
-
-.clubDescription{
+.clubDescription {
   font-size: 1.75vh;
   font-style: italic;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  width: 36vh; 
 }
-
 .clubNameHeader{
   font-family: 'Shrikhand';
 

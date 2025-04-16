@@ -38,7 +38,7 @@ const Profile = () => {
           <button onClick={() => setOpen((prev) => !prev)}>
             <img className="tempPuff" src={Puffin} />
           </button>
-          <div className="dropdown">
+          <div className="profileDrop">
             <button
               onClick={() => {
                 navigate("/createClub");

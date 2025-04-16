@@ -430,3 +430,24 @@ app.post("/joinClub",verifyToken, async (req, res) => {
 });
 
 
+
+
+app.get("/randomClub", async (req, res) => {
+  try {
+    const database = client.db("Puffino");
+    const collection = database.collection("clubs");
+
+    const randomClub = await collection.aggregate([
+      { $sample: { size: 1 } }
+    ]).toArray();
+
+    if (randomClub.length > 0) {
+      res.status(200).json({ _id: randomClub[0]._id });
+    } else {
+      res.status(404).json({ message: "No clubs found" });
+    }
+  } catch (e) {
+    console.error("Error fetching random club:", e);
+    res.status(500).json({ message: "Failed to retrieve random club" });
+  }
+});

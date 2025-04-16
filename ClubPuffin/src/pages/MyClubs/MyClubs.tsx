@@ -84,21 +84,29 @@ const MyClubs = () => {
           <div>
             <span>Clubs You've Created:</span>
             <ul>
-              {userData.clubs?.map((club) => (
-                <li key={club.clubID}>
-                  <Clubs id={club.clubID} />
-                </li>
-              ))}
+              {userData.clubs ? (
+                userData.clubs.map((club) => (
+                  <li key={club.clubID}>
+                    <Clubs id={club.clubID} />
+                  </li>
+                ))
+              ) : (
+                <div>Create Some Clubs</div>
+              )}
             </ul>
           </div>
           <div>
             <span>Clubs You've Joined:</span>
             <ul>
-              {userData.joinedClubs?.map((club) => (
-                <li key={club.clubID}>
-                  <Clubs id={club.clubID} />
-                </li>
-              ))}
+              {userData.joinedClubs ? (
+                userData.joinedClubs.map((club) => (
+                  <li key={club.clubID}>
+                    <Clubs id={club.clubID} />
+                  </li>
+                ))
+              ) : (
+                <div> Join Some Clubs</div>
+              )}
             </ul>
           </div>
         </div>

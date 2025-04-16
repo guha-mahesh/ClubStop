@@ -1,0 +1,87 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .club-form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .input-field,
+  .textarea-field {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    resize: none;
+  }
+  
+  .textarea-field {
+    height: 300px; /* Fixed height */
+    padding: 15px;
+    overflow-y: auto; /* Allow scrolling if the content exceeds the height */
+  }
+  
+  .input-field:focus,
+  .textarea-field:focus {
+    outline-color: #c44c32;
+  }
+  
+  .submit-btn {
+    background-color: #c44c32;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #800000;
+  }
+  
+  .success-message {
+    text-align: center;
+    font-size: 18px;
+    color: #4caf50;
+  }
+  
+  .home-link {
+    color: #6c5ce7;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .home-link:hover {
+    text-decoration: underline;
+  }
+  
+  .login-prompt {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+  }
+  

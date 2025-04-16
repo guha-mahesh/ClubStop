@@ -1,0 +1,285 @@
+
+.ratingBox {
+  font-size: 5vh;
+  font-style: italic;
+ 
+}
+
+.clubNameHeader {
+  text-align: center;
+  padding: 0;
+  
+
+
+}
+
+
+.clubNameText{
+  font-family: 'Shrikhand';
+  font-size: 3em;
+  
+}
+
+strong{
+  text-align: center;
+
+}
+
+.topPart{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vh;
+  position: relative;
+
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  font-style: italic;
+  z-index: 1;
+  top: -10px; 
+
+  transform: translateY(-50%) translateX(10%); 
+}
+
+.iconic:hover .tooltip {
+  visibility: visible;
+}
+
+.membIcon{
+
+      height: 3.5vh;
+      background-color: black;
+      padding: 1vh;
+      border-radius: 50%;
+  
+}
+
+.iconic{
+  display: flex;
+}
+.ratings {
+
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.ratingBox {
+  background-color: #786236;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  width: 28vh;
+  transition: transform 0.2s ease-in-out;
+}
+
+.ratingBox:hover {
+  transform: translateY(-5px);
+}
+
+
+
+.ratingBox1{
+  background-color: #9d3a3a;
+}
+
+.ratingBox2{
+  background-color: #6c7d47;
+}
+
+.ratingBox3{
+  background-color: #ff5c00;
+}
+
+.ratingBox4{
+  background-color: #0b4164;
+}
+.ratingBox5{
+  background-color: #43942b;
+}
+.ClubContent{
+  display:flex;
+  justify-content: flex-start;
+  gap: 6%;
+  margin-top: 1vh;
+}
+
+
+
+
+
+.clubPageBtn {
+  border: none;
+  padding: 1vh 2vh;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 30px;
+  background-color: #3e8e41;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  height: 6vh;
+
+
+}
+
+.clubPageBtn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.clubPageBtn:active {
+  background-color: #388e3c;
+  transform: scale(1);
+}
+
+.description {
+  font-size: 1.15rem;
+  color: #333; 
+
+  margin: 15vh 0px; 
+  padding: 5% 20px; 
+  background-color: #c44c32;
+  border-radius: 40%; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+  height: 40vh;
+  width: 40vh;
+  text-align: center;
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+
+
+
+
+}
+
+.description p {
+  margin: 0; 
+  padding: 0; 
+}
+
+.featherIconClubPage{
+  padding:0;
+  height: 10vh;
+  width: auto;
+}
+
+.ratings span{
+  color: white;
+  font-size: 3vh;
+  font-family: 'Josefin Sans', sans-serif;
+  padding-top: .1vh;
+}
+#featherIcon2clubpage{
+  margin-top: 30%;
+}
+
+.rightScreen{
+  display: flex;
+  flex-direction: column;
+
+}
+
+.rating-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 2rem;
+
+  font-family: sans-serif;
+}
+
+.back-button {
+  align-self: flex-start;
+  margin-bottom: 1rem;
+
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.rating-form-body {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rating-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rating-label {
+  font-weight: bold;
+  font-size: 1.1rem;
+color: white;
+
+}
+
+
+.rating-slider {
+  width: 100%;
+  cursor: pointer;
+  color:#c44c32;
+  
+}
+
+.rating-number {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+
+  outline: none;
+}
+
+
+.rating-number::-webkit-outer-spin-button,
+.rating-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.rating-number {
+  -moz-appearance: textfield; 
+}
+
+
+.submit-rating-button {
+  margin-top: 2rem;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  background-color: #123524;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-rating-button:hover {
+  background-color: #0056b3;
+}

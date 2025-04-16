@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 interface Props {
   placeholder: string;
   onChange: (value: string) => void;
+  reason?: string;
 }
 
 interface ClubData {
@@ -14,7 +15,7 @@ interface ClubData {
   ClubDescription?: string;
 }
 
-const Search = ({ placeholder, onChange }: Props) => {
+const Search = ({ placeholder, onChange, reason = "" }: Props) => {
   const [clubData, setClubData] = useState<ClubData[]>([]);
   const [filteredClubs, setFilteredClubs] = useState<ClubData[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -54,21 +55,24 @@ const Search = ({ placeholder, onChange }: Props) => {
   return (
     <div className="searchbar">
       <input
-        className="textboxbar"
+        className={`textboxbar textboxbar-${reason}`}
         placeholder={placeholder}
         value={inputValue}
         onChange={handleSearch}
       />
 
       {filteredClubs.length > 0 && (
-        <select onChange={handleSelect} className="dropdown">
-          <option value="">Select a club</option>
+        <ul className={`dropdown dropdown-${reason}`}>
           {filteredClubs.map((club) => (
-            <option key={club._id} value={club._id}>
+            <li
+              key={club._id}
+              className="dropdown-item"
+              onClick={() => (window.location.href = `/club/${club._id}`)}
+            >
               {club.ClubName}
-            </option>
+            </li>
           ))}
-        </select>
+        </ul>
       )}
     </div>
   );

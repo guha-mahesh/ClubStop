@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import feather from "../../src/assets/FeatherIcon.png";
 
 axios.defaults.baseURL = "http://localhost:5000";
 const SIGNIN_URL = "/Signin";
@@ -67,52 +68,56 @@ const Login = () => {
 
   return (
     <>
-      {success ? (
-        <section>
-          <h1>You are logged in!</h1>
-          <br />
-          <p>
-            <a href="/">Go • to • Home</a>
-          </p>
-        </section>
-      ) : (
-        <section>
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>
-            {errMsg}
-          </p>
-          <h1>Sign In</h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-            />
-
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
-              required
-            />
-
-            <button type="submit">Sign In</button>
-          </form>
-          <p>
-            Need an Account?
+      <div className="allRegister">
+        <img className="logInFeather" src={feather} />
+        {success ? (
+          <section>
+            <h1>You are logged in!</h1>
             <br />
-            <span className="line">
-              <a href="/Register">Sign Up</a>
-            </span>
-          </p>
-        </section>
-      )}
+            <p>
+              <a href="/">Go • to • Home</a>
+            </p>
+          </section>
+        ) : (
+          <section>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>
+              {errMsg}
+            </p>
+            <h1 className="registerHeading">Sign In</h1>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                ref={userRef}
+                autoComplete="off"
+                onChange={(e) => setUser(e.target.value)}
+                value={user}
+                required
+              />
+
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                onChange={(e) => setPwd(e.target.value)}
+                value={pwd}
+                required
+              />
+
+              <button type="submit">Sign In</button>
+            </form>
+            <p>
+              Need an Account?
+              <br />
+              <span className="line">
+                <a href="/Register">Sign Up</a>
+              </span>
+            </p>
+          </section>
+        )}
+        <img className="logInFeather" id="logInfeather2" src={feather} />
+      </div>
     </>
   );
 };

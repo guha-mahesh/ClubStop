@@ -64,21 +64,21 @@ const Home = () => {
         <div className="content-app">
           <div className="left-section">
             <h1>
-              Hey {userData ? userData.username : "Guest"}! Looking for a bruh
+              Hey {userData ? userData.username : "Guest"}! Looking for a Club
               at <br /> <span>Northeastern?</span>
             </h1>
-            <p>Search for what you're interested in:</p>
 
             <Search
               onChange={() => {
                 console.log("hi");
               }}
-              placeholder="Computer Science"
+              reason="homePage"
+              placeholder="Search for what you're interested in (Computer Science, Football, etc"
             />
 
             {!signed ? (
               <button onClick={() => navigate("/Login")} className="login-btn">
-                Or log in to join bruh →
+                Or log in to join Club →
               </button>
             ) : null}
 
@@ -88,27 +88,27 @@ const Home = () => {
           </div>
 
           <div className="right-section">
-            <h2>Popular bruh</h2>
+            <h2>Popular Club</h2>
 
             <div className="club-list">
               <div className="club">
                 <img src="club-placeholder.png" alt="Club Icon" />
-                <span>bruh</span>
+                <span>Club</span>
               </div>
 
               <div className="club">
                 <img src="club-placeholder.png" alt="Club Icon" />
-                <span>bruh</span>
+                <span>Club</span>
               </div>
 
               <div className="club">
                 <img src="club-placeholder.png" alt="Club Icon" />
-                <span>bruh</span>
+                <span>Club</span>
               </div>
 
               <div className="club">
                 <img src="club-placeholder.png" alt="Club Icon" />
-                <span>bruh</span>
+                <span>Club</span>
               </div>
             </div>
           </div>

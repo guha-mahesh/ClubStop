@@ -1,24 +1,42 @@
-.dropdown{
-    display: flex;
-    flex-direction: column;
-    gap :  0px;
-    justify-content: flex-start;
-    position: absolute;
-    top: 15;
-    right: 0;
+.profileDrop {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+  justify-content: flex-start;
+  position: absolute;
+  top: 85px;
+  right: 10px; 
+  background-color: white;
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  padding: 10px; 
+  z-index: 100; 
 }
 
+.dropdown-button {
+  margin: 0;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+  font-size: .75vh;
+}
 
-.dropdown-button{
-    margin: 0;
-    padding: 0;
-    width: 50px;  
-    height: 50px; 
-    background-color: #ccc;
-  }
+.dropdown-button:hover {
+  background-color: #aaa; 
+}
 
-  .tempPuff{
-    height: 10vh;
-    width: auto;
-    
-  }
+.tempPuff {
+  height: 6vh;
+  width: auto;
+  max-width: 100%; 
+  border-radius: 8px; 
+  object-fit: cover; 
+}
