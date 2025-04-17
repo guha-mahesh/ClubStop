@@ -24,7 +24,7 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 
 app.use(cors({
-  origin: ["https://club-puffin-wyst.vercel.app"],
+  origin: ["https://club-puffin.onrender.com"],
   methods: "GET,POST",
   credentials: true,
 }));
