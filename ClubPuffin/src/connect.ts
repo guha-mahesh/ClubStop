@@ -26,7 +26,7 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 
 app.use(cors({
-  origin: ["http://localhost:5173","https://club-puffin-wyst.vercel.app/"],
+  origin: ["http://localhost:5173","https://club-puffin-wyst.vercel.app"],
   methods: "GET,POST",
   credentials: true,
 }));
