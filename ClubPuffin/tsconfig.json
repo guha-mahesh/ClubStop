@@ -13,10 +13,11 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,  // Set to false to allow emitting files
+    "noEmit": false,
+    "declaration": true,  // Added to generate declaration files
     "jsx": "react-jsx",
-    "outDir": "./dist"  // Specify output directory
+    "outDir": "./dist"
   },
-  "include": ["src/**/*"],  // Include all files in src folder
+  "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
