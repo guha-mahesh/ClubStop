@@ -13,7 +13,9 @@
     "baseUrl": "./",        // Base directory for resolving non-relative modules
     "paths": {
       "@/*": ["src/*"]      // Alias for cleaner imports (optional)
-    }
+    },
+    "declaration": true,   // Ensure .d.ts files are generated
+    "outDir": "./dist"     // Output directory for compiled files
   },
   "include": [
     "src/**/*.ts",        // Include all TypeScript files in 'src' folder
