@@ -26,7 +26,7 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 
 app.use(cors({
-  origin: "https://club-puffin-wyst.vercel.app/",
+  origin: "*",
   methods: "GET,POST",
   credentials: true,
 }));
@@ -58,6 +58,7 @@ app.listen(port, () => {
   connectDB();
 });
 
+//@ts-ignore
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
 
