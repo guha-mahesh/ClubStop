@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node custom-build.js",
+    "build": "vite build",
+    "postbuild": "npx ts-node connect.ts",
     "preview": "vite preview"
   },
   "dependencies": {

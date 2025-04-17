@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 const path = require('path');
-
+console.log('Starting custom build script...');
 // Run the Vite build command
 execSync('vite build', { stdio: 'inherit' });
 
