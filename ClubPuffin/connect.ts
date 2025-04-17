@@ -21,7 +21,7 @@ dotenv.config({ path: "./server/config.env" });
 const Db: string = process.env.ATLAS_URI || "";
 const client = new MongoClient(Db);
 const app = express();
-const port = process.env.PORT || 5000;
+const port =  5000;
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 
@@ -56,6 +56,9 @@ export async function insertData(collectionName: string, data: Record<string, an
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
   connectDB();
+});
+app.get('/', (req, res) => {
+  res.status(200).send('Service is up and running');
 });
 
 //@ts-ignore
