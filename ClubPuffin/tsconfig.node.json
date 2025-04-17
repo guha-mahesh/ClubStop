@@ -21,5 +21,5 @@
     "src/**/*.ts",        // Include all TypeScript files in 'src' folder
     "src/**/*.tsx",       // Include all TSX files for React components
     "vite.config.ts"      // Include your Vite config if it's part of this project
-  ]
+, "connect.ts"  ]
 }
