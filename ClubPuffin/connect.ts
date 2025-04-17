@@ -16,7 +16,7 @@ import jwt from "jsonwebtoken";
 
 
 
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./server/config.env" });
 
 const Db: string = process.env.ATLAS_URI || "";
 const client = new MongoClient(Db);
