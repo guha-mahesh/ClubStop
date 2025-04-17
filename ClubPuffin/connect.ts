@@ -35,11 +35,7 @@ app.use(bodyParser.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
 
 export async function connectDB(): Promise<void> {
   try {
@@ -61,10 +57,6 @@ export async function insertData(collectionName: string, data: Record<string, an
   }
 }
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-  connectDB();
-});
 app.get('/', (req, res) => {
   res.status(200).send('Service is up and running');
 });
@@ -501,4 +493,13 @@ app.get("/randomClub", async (req, res) => {
     console.error("Error fetching random club:", e);
     res.status(500).json({ message: "Failed to retrieve random club" });
   }
+});
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+  connectDB();
 });
