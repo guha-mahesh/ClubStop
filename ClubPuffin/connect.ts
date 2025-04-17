@@ -5,15 +5,23 @@ import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import path from "path";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
+
+
+
+
 
 dotenv.config({ path: "./server/config.env" });
 
 const Db: string = process.env.ATLAS_URI || "";
 const client = new MongoClient(Db);
 const app = express();
-const port = process.env.PORT || 5000;
+const port =  5000;
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
+
 
 app.use(cors({
   origin: ["https://club-puffin-wyst.vercel.app"],
@@ -21,7 +29,17 @@ app.use(cors({
   credentials: true,
 }));
 
+
 app.use(bodyParser.json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 export async function connectDB(): Promise<void> {
   try {
@@ -43,9 +61,12 @@ export async function insertData(collectionName: string, data: Record<string, an
   }
 }
 
-// API routes
-app.get('/api/health', (req, res) => {
-  res.status(200).send('API is healthy');
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+  connectDB();
+});
+app.get('/', (req, res) => {
+  res.status(200).send('Service is up and running');
 });
 
 //@ts-ignore
@@ -97,6 +118,7 @@ app.post("/register", async (req, res) => {
     res.status(500).json({ message: "Registration failed" });
   }
 });
+
 
 app.post("/Signin", async (req, res) => {
   const { user, pwd } = req.body;
@@ -458,6 +480,9 @@ app.post("/joinClub",verifyToken, async (req, res) => {
   }
 });
 
+
+
+
 app.get("/randomClub", async (req, res) => {
   try {
     const database = client.db("Puffino");
@@ -476,17 +501,4 @@ app.get("/randomClub", async (req, res) => {
     console.error("Error fetching random club:", e);
     res.status(500).json({ message: "Failed to retrieve random club" });
   }
-});
-
-// Serve static files from the 'dist' directory
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// This route should be after all your API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-  connectDB();
 });
