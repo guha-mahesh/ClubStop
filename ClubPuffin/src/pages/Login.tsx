@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import feather from "../../src/assets/FeatherIcon.png";
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "";
 const SIGNIN_URL = "/Signin";
 
 const Login = () => {
