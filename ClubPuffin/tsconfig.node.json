@@ -3,7 +3,21 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",   // React JSX support
+    "target": "ESNext",   // Targets modern JavaScript features
+    "strict": true,       // Enables strict mode for better type checking
+    "esModuleInterop": true, // Ensures compatibility with CommonJS modules
+    "skipLibCheck": true,  // Skip type checking of declaration files
+    "resolveJsonModule": true, // Enables importing JSON modules
+    "baseUrl": "./",        // Base directory for resolving non-relative modules
+    "paths": {
+      "@/*": ["src/*"]      // Alias for cleaner imports (optional)
+    }
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "src/**/*.ts",        // Include all TypeScript files in 'src' folder
+    "src/**/*.tsx",       // Include all TSX files for React components
+    "vite.config.ts"      // Include your Vite config if it's part of this project
+  ]
 }
