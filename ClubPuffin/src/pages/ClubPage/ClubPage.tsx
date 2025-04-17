@@ -361,6 +361,9 @@ const ClubPage = () => {
               <button
                 className="clubPageBtn"
                 onClick={() => {
+                  if (!userData) {
+                    navigate("/Login");
+                  }
                   if (clubID && userData) {
                     if (hasRatedClub(clubID, userData)) {
                       setRatingError("You have already rated this club.");
