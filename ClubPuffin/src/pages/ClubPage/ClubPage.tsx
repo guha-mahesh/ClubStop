@@ -26,12 +26,17 @@ interface Club {
   clubID: string;
   clubName: string;
 }
+interface member {
+  memberUserID: string;
+  role: string;
+}
 interface ClubData {
   creator: string;
   ClubName: string;
   ClubDescription?: string;
   Ratings?: Ratings[];
   _id: string;
+  members: member[];
 }
 interface RatedClubs {
   clubName: string;
@@ -78,6 +83,19 @@ const ClubPage = () => {
   const [legacy, setLegacy] = useState<string>("");
   const [ratingError, setRatingError] = useState<string>("");
   const [member, setMember] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("");
+
+  useEffect(() => {
+    console.log(userData?._id);
+    const member = clubData?.members.find(
+      (m) => m.memberUserID === userData?._id
+    );
+    if (member) {
+      setRole(member.role);
+    } else {
+      setRole("member");
+    }
+  }, [userData, clubData]);
 
   useEffect(() => {
     if (clubID) {
@@ -276,7 +294,7 @@ const ClubPage = () => {
                   icon={faCheck}
                   className={member ? "valid membIcon" : "hide"}
                 />
-                <h4 className="tooltip">You are a Member!</h4>
+                <h4 className="tooltip">You are a {role}!</h4>
               </div>
             </div>
             <strong>By:</strong> {clubData.creator}

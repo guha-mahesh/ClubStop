@@ -34,8 +34,10 @@
     font-size: 18px;
     margin: 20px;
     background-color: #c44c32;
+}
 
-  
+.clubCard *{
+
 }
 
 .clubCard:hover{
@@ -75,3 +77,6 @@
   font-family: 'Shrikhand';
 
   }
+
+
+

@@ -10,6 +10,7 @@ const clubUrl = "/ClubCreate";
 
 const CreateAClub: React.FC = () => {
   const [clubName, setClubName] = useState<string>("");
+  const [clubSchool, setClubSchool] = useState<string>("");
   const [clubDesc, setClubDesc] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
   const { signed, setSigned } = useGlobalContext();
@@ -29,13 +30,15 @@ const CreateAClub: React.FC = () => {
   interface ClubCreation {
     name: string;
     description: string;
-    username: string;
+    user: string;
+    school: string;
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (!user) {
       setErrorMessage("No user logged in.");
@@ -48,16 +51,21 @@ const CreateAClub: React.FC = () => {
         {
           name: clubName,
           description: clubDesc,
+          school: clubSchool,
           user: user,
         },
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
           withCredentials: true,
         }
       );
       console.log(success);
       console.log("Club created:", response.data);
       setSuccess(true);
+      navigate("/");
       setErrorMessage("");
     } catch (error) {
       console.error("Error creating club:", error);
@@ -98,6 +106,21 @@ const CreateAClub: React.FC = () => {
                   setClubDesc(e.target.value)
                 }
                 className="textarea-field"
+              />
+              <label htmlFor="clubSchool" className="label">
+                What University/School is this club at?
+              </label>
+              <input
+                ref={userRef}
+                id="clubSchool"
+                maxLength={30}
+                required
+                type="text"
+                value={clubSchool}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setClubSchool(e.target.value)
+                }
+                className="input-field"
               />
 
               <button type="submit" className="submit-btn">

@@ -169,14 +169,14 @@ app.get("/users", verifyToken, async (req, res) => {
   }
 });
 // @ts-ignore
-app.post("/ClubCreate", async (req, res) => {
-  const { name, description, user } = req.body;
+app.post("/ClubCreate",verifyToken, async (req, res) => {
+  const { name, description, user, school } = req.body;
 
-  /*
+  
     //@ts-ignore
     if (user && req.user.username !== user) {
       return res.status(403).json({ message: "Username does not match token" });
-    }*/
+    }
 
   if (!name || !description || !user) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -190,25 +190,41 @@ app.post("/ClubCreate", async (req, res) => {
     const filterQuery = { username: user };
     const userDocument = await usersCollection.findOne(filterQuery);
 
+
+
     if (!userDocument) {
       return res.status(404).json({ message: "User not found" });
     }
+    const userID = userDocument._id;
 
     const clubResult = await clubsCollection.insertOne({
       creator: user,
       ClubName: name,
       ClubDescription: description,
+      School: school
     });
 
     console.log("Club created with _id:", clubResult.insertedId);
 
     const updateResult = await usersCollection.updateOne(
-  { username: user },
+  { _id: userID },
   {
     //@ts-ignore
     $push: {
       clubs: { clubID: clubResult.insertedId, clubName: name },
       joinedClubs: { clubID: clubResult.insertedId, clubName: name }
+    }
+  }
+);
+const result2 = await clubsCollection.updateOne(
+  { _id: clubResult.insertedId },
+  {
+    //@ts-ignore
+    $push: {
+      members: {
+        memberUserID: userID,
+        role: "Leader"
+      }
     }
   }
 );
@@ -402,6 +418,11 @@ app.post("/joinClub",verifyToken, async (req, res) => {
     const clubDocument = await collection.findOne(filterQuery);
     const userDocument = await userCollection.findOne(filterQuery2);
 
+    if (!userDocument) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userID = userDocument._id;
+
     if (!clubDocument) {
       return res.status(404).json({ message: "Club not found." });
     }
@@ -413,8 +434,26 @@ app.post("/joinClub",verifyToken, async (req, res) => {
     }
     const result = await userCollection.updateOne(
       { username: name },
-      //@ts-ignore
-      { $push: { joinedClubs: {clubName: clubDocument.ClubName, clubID: ClubID} } }
+      { //@ts-ignore
+        $push: {
+          joinedClubs: {
+            clubName: clubDocument.ClubName,
+            clubID: ClubID
+          }
+        }
+      }
+    );
+    const result2 = await collection.updateOne(
+      { _id: ObjectId.createFromHexString(ClubID) },
+      {
+        //@ts-ignore
+        $push: {
+          members: {
+            memberUserID: userID,
+            role: "member"
+          }
+        }
+      }
     );
 
     if (result.modifiedCount > 0) {

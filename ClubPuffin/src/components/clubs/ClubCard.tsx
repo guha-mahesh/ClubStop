@@ -12,6 +12,7 @@ interface ClubData {
   creator: string;
   ClubName: string;
   ClubDescription?: string;
+  School: string;
   _id: string;
 }
 
