@@ -17,7 +17,7 @@ const ScreenHeader = ({ searchy = false }: Props) => {
   const navigate = useNavigate();
 
   const RandomClub = () => {
-    fetch("http://localhost:5000/randomClub")
+    fetch("/randomClub")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch random club");

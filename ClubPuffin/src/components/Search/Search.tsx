@@ -21,7 +21,7 @@ const Search = ({ placeholder, onChange, reason = "" }: Props) => {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/clubs")
+    fetch("/clubs")
       .then((res) => res.json())
       .then((data) => {
         setClubData(data);

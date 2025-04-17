@@ -5,7 +5,7 @@ import { useGlobalContext } from "../../Global";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "";
 const clubUrl = "/ClubCreate";
 
 const CreateAClub: React.FC = () => {

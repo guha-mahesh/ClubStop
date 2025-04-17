@@ -47,7 +47,7 @@ const MyClubs = () => {
     const token = localStorage.getItem("token"); // Retrieve JWT token from localStorage
 
     if (storedSigned && user) {
-      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`, {
+      fetch(`/users?user=${encodeURIComponent(user)}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`, // Add the JWT token in Authorization header

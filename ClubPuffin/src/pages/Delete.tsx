@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Global";
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "";
 
 const Delete = () => {
   const navigate = useNavigate();

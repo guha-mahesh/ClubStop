@@ -22,7 +22,7 @@ function Clubs({ id = "" }: Props) {
   useEffect(() => {
     if (id) {
       console.log(id);
-      fetch(`http://localhost:5000/clubs?club=${encodeURIComponent(id)}`)
+      fetch(`/clubs?club=${encodeURIComponent(id)}`)
         .then((response) => response.json())
         .then((data) => setClubData(data))
         .catch((error) => console.error("Error:", error));

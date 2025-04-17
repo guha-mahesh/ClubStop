@@ -10,7 +10,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import feather from "../../assets/FeatherIcon.png";
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "";
 const clubUrl = "/ClubRate";
 const joinClub = "/joinClub";
 
@@ -100,7 +100,7 @@ const ClubPage = () => {
   useEffect(() => {
     if (clubID) {
       console.log(clubID);
-      fetch(`http://localhost:5000/clubs?club=${encodeURIComponent(clubID)}`)
+      fetch(`/clubs?club=${encodeURIComponent(clubID)}`)
         .then((response) => response.json())
         .then((data) => setClubData(data))
         .catch((error) => console.error("Error:", error));
@@ -116,7 +116,7 @@ const ClubPage = () => {
       setSigned(false);
     }
     if (user) {
-      fetch(`http://localhost:5000/users?user=${encodeURIComponent(user)}`, {
+      fetch(`/users?user=${encodeURIComponent(user)}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
