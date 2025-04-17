@@ -57,9 +57,7 @@ export async function insertData(collectionName: string, data: Record<string, an
   }
 }
 
-app.get('/', (req, res) => {
-  res.status(200).send('Service is up and running');
-});
+
 
 //@ts-ignore
 function verifyToken(req, res, next) {
@@ -495,6 +493,7 @@ app.get("/randomClub", async (req, res) => {
   }
 });
 app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
