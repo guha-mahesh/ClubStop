@@ -367,12 +367,7 @@ const ClubPage = () => {
                     navigate("/Login");
                   }
                   if (clubID && userData) {
-                    if (hasRatedClub(clubID, userData)) {
-                      setRatingError("You have already rated this club.");
-                      setTimeout(() => setRatingError(""), 3000); // clear after 10 seconds
-                    } else {
-                      setRate(true);
-                    }
+                    setRate(true);
                   }
                 }}
               >
