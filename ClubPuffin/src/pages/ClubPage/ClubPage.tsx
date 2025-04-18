@@ -84,7 +84,6 @@ const ClubPage = () => {
   const [ratingError, setRatingError] = useState<string>("");
   const [member, setMember] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
-  const [hasRated, setHasRated] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(userData?._id);
@@ -150,14 +149,13 @@ const ClubPage = () => {
       }
     }
   }, [userData, clubData]);
-  useEffect(() => {
-    if (userData && userData.Ratedclubs) {
-      if (userData.Ratedclubs.some((club) => club.clubID === clubID)) {
-        setHasRated(false);
-      }
-    }
-  }, [clubData, userData]);
 
+  const hasRatedClub = (clubID: string, userData: UserData | null): boolean => {
+    if (userData && userData.Ratedclubs) {
+      return userData.Ratedclubs.some((club) => club.clubID === clubID);
+    }
+    return false;
+  };
   const clearInputs = () => {
     setCamaraderie("");
     setAscendancy("");
@@ -170,9 +168,6 @@ const ClubPage = () => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     e.preventDefault();
-    if (hasRated) {
-      navigate("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-    }
 
     if (!user || !clubData) {
       return;
@@ -212,7 +207,6 @@ const ClubPage = () => {
       console.log("Club rated:", response.data);
       clearInputs();
       setRate(false);
-      setHasRated(true);
       window.location.reload();
     } catch (error) {
       console.error("Error submitting rating:", error);
@@ -364,21 +358,24 @@ const ClubPage = () => {
                 </button>
               ) : null}
               <br />
-              {!hasRated ? (
-                <button
-                  className="clubPageBtn"
-                  onClick={() => {
-                    if (!userData) {
-                      navigate("/Login");
-                    }
-                    if (clubID && userData && !hasRated) {
+              <button
+                className="clubPageBtn"
+                onClick={() => {
+                  if (!userData) {
+                    navigate("/Login");
+                  }
+                  if (clubID && userData) {
+                    if (hasRatedClub(clubID, userData)) {
+                      setRatingError("You have already rated this club.");
+                      setTimeout(() => setRatingError(""), 3000); // clear after 10 seconds
+                    } else {
                       setRate(true);
                     }
-                  }}
-                >
-                  Rate Club
-                </button>
-              ) : null}
+                  }
+                }}
+              >
+                Rate Club
+              </button>
               {ratingError && <p className="error-message">{ratingError}</p>}
             </div>
           </div>
