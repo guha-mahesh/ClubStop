@@ -170,6 +170,9 @@ const ClubPage = () => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     e.preventDefault();
+    if (hasRated) {
+      navigate("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    }
 
     if (!user || !clubData) {
       return;
@@ -366,7 +369,7 @@ const ClubPage = () => {
                   if (!userData) {
                     navigate("/Login");
                   }
-                  if (clubID && userData) {
+                  if (clubID && userData && !hasRated) {
                     setRate(true);
                   }
                 }}
