@@ -84,6 +84,7 @@ const ClubPage = () => {
   const [ratingError, setRatingError] = useState<string>("");
   const [member, setMember] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
+  const [hasRated, setHasRated] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(userData?._id);
@@ -149,13 +150,14 @@ const ClubPage = () => {
       }
     }
   }, [userData, clubData]);
-
-  const hasRatedClub = (clubID: string, userData: UserData | null): boolean => {
+  useEffect(() => {
     if (userData && userData.Ratedclubs) {
-      return userData.Ratedclubs.some((club) => club.clubID === clubID);
+      if (userData.Ratedclubs.some((club) => club.clubID === clubID)) {
+        setHasRated(false);
+      }
     }
-    return false;
-  };
+  }, [clubData, userData]);
+
   const clearInputs = () => {
     setCamaraderie("");
     setAscendancy("");
