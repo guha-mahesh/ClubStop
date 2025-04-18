@@ -212,6 +212,7 @@ const ClubPage = () => {
       console.log("Club rated:", response.data);
       clearInputs();
       setRate(false);
+      setHasRated(true);
       window.location.reload();
     } catch (error) {
       console.error("Error submitting rating:", error);
