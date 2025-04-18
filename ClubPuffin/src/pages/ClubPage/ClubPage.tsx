@@ -227,7 +227,8 @@ const ClubPage = () => {
     );
     const averageTrait = totalTrait / club.Ratings.length;
 
-    return averageTrait;
+    // round to 1 decimal place
+    return Math.round(averageTrait * 10) / 10;
   }
 
   if (!clubData) {
