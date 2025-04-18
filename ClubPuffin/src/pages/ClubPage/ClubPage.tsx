@@ -364,19 +364,21 @@ const ClubPage = () => {
                 </button>
               ) : null}
               <br />
-              <button
-                className="clubPageBtn"
-                onClick={() => {
-                  if (!userData) {
-                    navigate("/Login");
-                  }
-                  if (clubID && userData && !hasRated) {
-                    setRate(true);
-                  }
-                }}
-              >
-                Rate Club
-              </button>
+              {!hasRated ? (
+                <button
+                  className="clubPageBtn"
+                  onClick={() => {
+                    if (!userData) {
+                      navigate("/Login");
+                    }
+                    if (clubID && userData && !hasRated) {
+                      setRate(true);
+                    }
+                  }}
+                >
+                  Rate Club
+                </button>
+              ) : null}
               {ratingError && <p className="error-message">{ratingError}</p>}
             </div>
           </div>
