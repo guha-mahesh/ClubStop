@@ -173,13 +173,16 @@ const ClubPage = () => {
       return;
     }
 
-    const total =
-      (parseFloat(ascendancy) +
-        parseFloat(camaraderie) +
-        parseFloat(legacy) +
-        parseFloat(prestige) +
-        parseFloat(obligation)) /
-      5;
+    const total = parseFloat(
+      (
+        (parseFloat(ascendancy) +
+          parseFloat(camaraderie) +
+          parseFloat(legacy) +
+          parseFloat(prestige) +
+          parseFloat(obligation)) /
+        5
+      ).toFixed(1)
+    );
 
     try {
       const response = await axios.post<ClubRate>(
