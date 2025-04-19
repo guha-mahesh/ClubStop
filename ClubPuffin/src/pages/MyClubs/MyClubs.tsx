@@ -98,14 +98,21 @@ const MyClubs = () => {
           <div>
             <span>Clubs You've Joined:</span>
             <ul>
-              {userData.joinedClubs ? (
-                userData.joinedClubs.map((club) => (
-                  <li key={club.clubID}>
-                    <Clubs id={club.clubID} />
-                  </li>
-                ))
+              {userData.joinedClubs && userData.joinedClubs.length > 0 ? (
+                userData.joinedClubs
+                  .filter(
+                    (club) =>
+                      !userData.clubs?.some(
+                        (createdClub) => createdClub.clubID === club.clubID
+                      )
+                  )
+                  .map((club) => (
+                    <li key={club.clubID}>
+                      <Clubs id={club.clubID} />
+                    </li>
+                  ))
               ) : (
-                <div> Join Some Clubs</div>
+                <div>Join Some Clubs</div>
               )}
             </ul>
           </div>
