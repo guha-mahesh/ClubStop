@@ -1,18 +1,19 @@
 .error-message {
-    color: red;
-    margin-top: 0.5rem;
-    font-weight: 500;
-    position:  absolute;
-  }
-  
+  color: red;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  position: absolute;
+}
 
-.clubTitle{
+
+.clubTitle {
   font-size: 3.8vh;
   font-family: 'Shrikhand';
   margin-bottom: 1vh;
 
 }
-.clubAuthor{
+
+.clubAuthor {
   font-style: italic;
   font-size: 3.5vh;
   margin-bottom: 1.8vh;
@@ -22,61 +23,61 @@
 
 }
 
-.clubTop{
+.clubTop {
   margin-bottom: 3vh;
 }
-.clubCard{
-    width: 40vh;
-    height: 40vh;
-    border-radius: 25px; 
-    padding: 2vh;
-    color: white;
-    font-size: 18px;
-    margin: 20px;
-    background-color: #c44c32;
+
+.clubCard {
+  width: 40vh;
+  height: 40vh;
+  border-radius: 25px;
+  padding: 2vh;
+  color: white;
+  font-size: 18px;
+  margin: 20px;
+  background-color: #c44c32;
 }
 
-.clubCard *{
+.clubCard * {}
 
-}
-
-.clubCard:hover{
-  background-color:#a53b26;
+.clubCard:hover {
+  background-color: #a53b26;
   font-weight: 300;
 
 }
-.clubLink{
+
+.clubLink {
 
 
   text-decoration: none;
 
 }
-.clubPhotoContainer{
+
+.clubPhotoContainer {
   display: flex;
   justify-content: center;
   height: 10vh;
   align-items: center;
   padding-top: 2.8vh;
- 
+
 }
 
-.clubPhoto{
+.clubPhoto {
   height: 15vh;
   width: auto;
 
 }
+
 .clubDescription {
   font-size: 1.75vh;
   font-style: italic;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  width: 36vh; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 36vh;
 }
-.clubNameHeader{
+
+.clubNameHeader {
   font-family: 'Shrikhand';
 
-  }
-
-
-
+}

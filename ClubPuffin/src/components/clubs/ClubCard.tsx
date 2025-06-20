@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import home from "../../assets/react.svg";
 
+
 interface Props {
   id?: string;
 }
@@ -53,7 +54,8 @@ function Clubs({ id = "" }: Props) {
           </section>
         </a>
       ) : (
-        <div>Loading...</div>
+        <div>Loading...oiasdosa</div>
+        
       )}
     </div>
   );
