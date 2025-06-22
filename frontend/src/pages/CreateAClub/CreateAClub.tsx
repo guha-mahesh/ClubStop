@@ -1,0 +1,149 @@
+//This is a page that lets you create a club
+
+import React, { useState, useRef, useEffect } from "react";
+
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {useAuth} from '../../contexts/AuthContexts'
+
+
+
+
+const CreateAClub: React.FC = () => {
+  const [clubName, setClubName] = useState<string>("");
+  const [clubSchool, setClubSchool] = useState<string>("");
+  const [clubDesc, setClubDesc] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const userRef = useRef<HTMLInputElement | null>(null);
+  const {user, isAuthenticated, loading} = useAuth();
+  const [clubId, setClubId]= useState("")
+
+  useEffect(() => {
+    if (userRef.current) {
+      userRef.current.focus();
+    }
+    
+  }, []);
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+      navigate("/login")
+    }
+    
+  }, [isAuthenticated,loading, navigate]);
+
+  interface ClubCreation {
+    name: string;
+    description: string;
+    user: string;
+    school: string;
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    
+    e.preventDefault();
+
+
+    const token = localStorage.getItem("authToken");
+
+
+    try {
+      if (user){
+
+      const response = await fetch("http://localhost:5000/api/club", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+      body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: clubSchool  }),
+    });
+    const data = await response.json();
+
+    if (data.success){
+      console.log("Success Creating Club");
+      console.log(data.clubId);
+      setClubId(data.clubId)
+      setSuccess(true);
+    }else{
+      console.log(data.error)
+    }
+}
+     
+
+    } catch (error) {
+      console.error("Error creating club:", error);
+      setErrorMessage("Error creating club. Please try again.");
+    }
+  };
+
+  return (
+    <>
+      <div className="container">
+  {
+    !success ? (
+      <form onSubmit={handleSubmit} className="club-form">
+        <label htmlFor="clubName" className="label">
+          Club Name
+        </label>
+        <input
+          ref={userRef}
+          id="clubName"
+          maxLength={20}
+          required
+          type="text"
+          value={clubName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setClubName(e.target.value)
+          }
+          className="input-field"
+        />
+
+        <label htmlFor="clubDesc" className="label">
+          Club Description
+        </label>
+        <textarea
+          id="clubDesc"
+          required
+          value={clubDesc}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setClubDesc(e.target.value)
+          }
+          className="textarea-field"
+        />
+        <label htmlFor="clubSchool" className="label">
+          What University/School is this club at?
+        </label>
+        <input
+          ref={userRef}
+          id="clubSchool"
+          maxLength={30}
+          required
+          type="text"
+          value={clubSchool}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setClubSchool(e.target.value)
+          }
+          className="input-field"
+        />
+
+        <button type="submit" className="submit-btn">
+          Submit
+        </button>
+      </form>
+    ) : (
+      <section className="success-message">
+        <h1>Club Created Successfully!</h1>
+        <p>
+          <a href={`/club/${clubId}`} className="home-link">
+            Go • to • Club
+          </a>
+        </p>
+      </section>
+    )
+  }
+</div>
+    </>
+  );
+};
+
+export default CreateAClub;
