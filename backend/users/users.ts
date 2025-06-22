@@ -1,0 +1,228 @@
+
+import { Router, Request, Response } from 'express';
+import { ResultSetHeader } from 'mysql2';
+import { RowDataPacket } from 'mysql2';
+import { pool } from '../server';
+import { hashPassword, verifyPassword } from './hash'
+import verifyToken from '../middleware/auth';
+import { AuthRequest } from '../middleware/auth';
+import jwt from 'jsonwebtoken';
+
+
+
+
+
+const router = Router();
+
+
+
+async function createUser(req: Request, res: Response) {
+    const { username, password } = req.body;
+
+
+    console.log('Received:', { username, password });
+
+    const pwd = await hashPassword(password);
+
+    try {
+        const [result] = await pool.execute<ResultSetHeader>(
+            'INSERT INTO users (username, password) VALUES (?, ?)',
+            [username, pwd]
+        );
+
+        if (result) {
+            const token = jwt.sign(
+                {
+                    userId: result.insertId,
+                    username: username
+                },
+                process.env.JWT_SECRET || 'your-secret-key',
+                { expiresIn: '24h' }
+            );
+
+            res.json({
+                success: true,
+                token: token,
+                user: {
+                    id: result.insertId,
+                    username: username
+                }
+
+            });
+        }
+    } catch (error) {
+
+        console.error('Database error:', error);
+        res.status(500).json({
+            error: 'Failed to create user',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+}
+
+
+async function getUserData(username: string) {
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM users WHERE username = ?',
+            [username]
+        ) as [RowDataPacket[], any];
+
+        if (rows.length === 0) {
+            return null;
+        }
+
+        return rows[0];
+
+    } catch (error) {
+        console.error("Couldn't find User :", error);
+        return null;
+    }
+}
+
+
+
+
+async function Login(req: Request, res: Response) {
+    const { username, password } = req.body;
+    console.log('Received:', { username, password });
+    const user_data = await getUserData(username)
+    if (user_data) {
+        const hashed_pwd = user_data.password
+        try {
+            const verification = await verifyPassword(password, hashed_pwd)
+            if (verification) {
+                const token = jwt.sign(
+                    {
+                        userId: user_data.users_id,
+                        username: user_data.username
+                    },
+                    process.env.JWT_SECRET || 'your-secret-key',
+                    { expiresIn: '24h' }
+                );
+                res.json({
+                    success: true,
+                    token: token,
+                    user: {
+                        id: user_data.users_id,
+                        username: user_data.username
+
+                    }
+                });
+            }
+            else {
+                res.json({ match: "incorrect password" })
+            }
+        }
+        catch (err) {
+            console.error("could not verify password", err)
+
+
+        }
+    }
+
+
+
+
+
+
+}
+
+
+async function getClubs(req: AuthRequest, res: Response) {
+    const userId = req.params.userId;
+    console.log("received", { userId })
+    try {
+        const [rows] = await pool.execute<RowDataPacket[]>('SELECT club_id, clubRole FROM clubMember WHERE users_id = ?', [userId])
+
+        if (rows.length !== 0) {
+            const clubIds = rows.map(row => row.club_id);
+            const placeholders = clubIds.map(() => '?').join(',');
+
+            const [clubs] = await pool.execute<RowDataPacket[]>(
+                `SELECT clubName, clubDesc, School, created_at, club_id, leader, leaderName FROM clubs WHERE club_id IN (${placeholders})`,
+                clubIds
+            );
+
+            if (clubs.length === rows.length) {
+
+                const roleMap = new Map<number, string>();
+                rows.forEach(row => roleMap.set(row.club_id, row.clubRole));
+
+
+                const enrichedClubs = clubs.map(club => ({
+                    ...club,
+                    clubRole: roleMap.get(club.club_id)
+                }));
+
+                res.json({
+                    success: true,
+                    clubData: enrichedClubs
+
+                });
+            }
+        }
+        else {
+            res.json({
+                success: true,
+                clubData: "No Clubs Yet"
+            })
+        }
+
+    } catch (err) {
+        res.json({
+            success: false,
+            error: err
+        })
+    }
+
+}
+
+
+async function joinClub(req: AuthRequest, res: Response) {
+    const { clubId, userId } = req.body;
+    console.log("Received:", { clubId, userId })
+    try {
+        const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubId, 'Member'])
+
+        if (userresult) {
+            res.json({
+                success: true,
+                order: userresult
+
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "something went wrong"
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+
+        res.json({
+            success: false,
+            error: err
+        })
+    }
+}
+
+
+
+
+
+
+
+router.post('/users', createUser);
+router.post('/login', Login)
+router.get('/clubs/:userId', verifyToken, getClubs)
+router.post('/member', verifyToken, joinClub)
+
+
+//router.get('/users/:id', getUser);  
+//router.put('/users/:id', updateUser);
+//router.delete('/users/:id', deleteUser);
+
+export default router;
