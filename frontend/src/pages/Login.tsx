@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import feather from "../../src/assets/FeatherIcon.png";
 import { useAuth } from "../contexts/AuthContexts";
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 
 

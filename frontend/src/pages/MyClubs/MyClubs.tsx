@@ -3,7 +3,7 @@ import Clubs from "../../components/clubs/ClubCard";
 import ScreenHeader from "../../components/ScreenHeader";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContexts';
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 
 
