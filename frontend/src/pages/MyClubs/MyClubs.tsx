@@ -3,6 +3,9 @@ import Clubs from "../../components/clubs/ClubCard";
 import ScreenHeader from "../../components/ScreenHeader";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContexts';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+
+
 
 const MyClubs = () => {
   interface Club {
@@ -38,7 +41,7 @@ const MyClubs = () => {
       const token = localStorage.getItem("authToken");
 
       try {
-        const response = await fetch(`http://localhost:5000/api/clubs/${user.id}`, {
+        const response = await fetch(`${backendUrl}/api/clubs/${user.id}`, {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json', 

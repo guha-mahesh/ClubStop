@@ -5,6 +5,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import feather from "../../src/assets/FeatherIcon.png";
 import { useAuth } from "../contexts/AuthContexts";
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+
+
 
 
 
@@ -44,7 +47,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch(`${backendUrl}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username, password: pwd }),

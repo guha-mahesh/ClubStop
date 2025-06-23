@@ -14,6 +14,9 @@ import { useAuth } from "../../contexts/AuthContexts";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+
+
 
 
 const Register = () => {
@@ -38,6 +41,7 @@ const Register = () => {
   const [success, setSuccess] = useState<boolean>(false);
 
   useEffect(() => {
+
     if (userRef.current) {
       userRef.current.focus();
     }
@@ -77,7 +81,7 @@ const Register = () => {
 
     try {
       console.log("trying to register")
-      const response = await fetch("http://localhost:5000/api/users", {
+      const response = await fetch(`${backendUrl}/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: user, password: pwd }),

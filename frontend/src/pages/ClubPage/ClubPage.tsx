@@ -11,7 +11,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import feather from "../../assets/FeatherIcon.png";
 import {useAuth} from '../../contexts/AuthContexts'
 
-axios.defaults.baseURL = "";
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+
+
 
 
 
@@ -80,7 +82,7 @@ const ClubPage = () => {
       
       if (user){
         console.log("user exists")
-        const response = await fetch(`http://localhost:5000/api/club/${clubID}?userId=${user.id}`,  {
+        const response = await fetch(`${backendUrl}/api/club/${clubID}?userId=${user.id}`,  {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', 'Authorization':`Bearer ${token}` },
     });
@@ -122,7 +124,7 @@ const ClubPage = () => {
     const token = localStorage.getItem("authToken")
 
     if(user){
-    const response = await fetch('http://localhost:5000/api/member', {
+    const response = await fetch(`${backendUrl}/api/member`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -181,7 +183,7 @@ const token = localStorage.getItem("authToken")
 
     try {
       if(user){
-      const response = await fetch('http://localhost:5000/api/rate', {
+      const response = await fetch(`${backendUrl}/api/rate`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

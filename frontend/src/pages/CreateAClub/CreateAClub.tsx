@@ -5,6 +5,9 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from '../../contexts/AuthContexts'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-backend-service.onrender.com';
+
+
 
 
 
@@ -52,7 +55,7 @@ const CreateAClub: React.FC = () => {
     try {
       if (user){
 
-      const response = await fetch("http://localhost:5000/api/club", {
+      const response = await fetch(`${backendUrl}/api/club`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
       body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: clubSchool  }),
