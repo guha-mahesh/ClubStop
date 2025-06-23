@@ -7,7 +7,14 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+# Build for production
+RUN npm run build
 
-# Important: --host flag for Docker
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Install serve
+RUN npm install -g serve
+
+# Use Render's PORT environment variable
+EXPOSE 10000
+
+# Serve the built files
+CMD ["serve", "-s", "dist", "-l", "10000"]
