@@ -60,6 +60,7 @@ const ClubPage = () => {
   const [legacy, setLegacy] = useState<string>("");
   const [ratingError, setRatingError] = useState<string>("");
   const [hasRated, setHasRated] = useState(true);
+  const [fetching, setFetching] = useState(true);
 
 
   const [role, setRole] = useState<string>("");
@@ -91,6 +92,7 @@ const ClubPage = () => {
     if (data.success){
       console.log(data.clubRole)
       setClubData(data.clubData)
+      setFetching(false)
       if( data.clubRole !== "Not a Member!"){
       setRole(data.clubRole)}
       setHasRated(data.hasRated)
@@ -238,7 +240,7 @@ if(data.success)
 
           <div className="ClubContent">
             
-              <div className="ratings">
+              {!fetching ? (<div className="ratings">
                 <h1 className="ratingBox ratingBox1">
                   Ascendancy: {clubData ?(<span>{clubData.ascendancy.toFixed(2)}</span>): (<span>None Yet</span>)}
                 </h1>
@@ -262,7 +264,7 @@ if(data.success)
                 <h1 className="ratingBox ratingBox6">
                   Overall: {clubData ? (<span>{clubData.total.toFixed(2)}</span>): (<span>None Yet</span>)}
                 </h1>
-              </div>
+              </div>): null}
 
         
 
