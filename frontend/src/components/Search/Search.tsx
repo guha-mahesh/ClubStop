@@ -1,4 +1,4 @@
-
+//the search bar with it's functionss
 
 import React, { useEffect, useState } from "react";
 

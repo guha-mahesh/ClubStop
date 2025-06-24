@@ -4,6 +4,7 @@ import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 import userRoutes from './users/users'
 import clubRoutes from './clubs/clubs'
+import rateRoutes from './ratings/ratings'
 
 
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', userRoutes);
 app.use('/api', clubRoutes);
+app.use('/api', rateRoutes);
 
 
 

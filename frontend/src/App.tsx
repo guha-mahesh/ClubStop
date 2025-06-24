@@ -9,6 +9,7 @@ import MyClubs from "./pages/MyClubs/MyClubs";
 import ClubPage from "./pages/ClubPage/ClubPage";
 import Delete from "./pages/Delete";
 import ConfigureProfile from "./components/ConfigureProfile";
+import ViewYourReview from "./pages/viewYourReview";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
           <Route
             path="/configureProfile"
             element={<ConfigureProfile></ConfigureProfile>}
+          />
+           <Route
+            path="/viewRating/:clubID"
+            element={<ViewYourReview></ViewYourReview>}
           />
         </Routes>
       </Router>

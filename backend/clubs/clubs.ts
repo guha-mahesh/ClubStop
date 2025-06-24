@@ -131,6 +131,7 @@ async function getClub(req: AuthRequest, res: Response) {
                         hasRated: hasRated,
 
 
+
                     })
 
 
@@ -140,6 +141,7 @@ async function getClub(req: AuthRequest, res: Response) {
 
                         success: true,
                         clubRole: "Not a Member!",
+                        hasRated: hasRated,
                         clubData: clubresult[0],
 
 
@@ -193,83 +195,15 @@ async function getClub(req: AuthRequest, res: Response) {
 }
 
 
-async function rateClub(req: AuthRequest, res: Response) {
-    const { userId, clubId, ascendancy,
-        camaraderie,
-        legacy,
-        prestige,
-        obligation,
-        total } = req.body;
-
-    console.log("received:", { userId, clubId, ascendancy, camaraderie, legacy, prestige, obligation, total })
-
-    try {
-        const [rating] = await pool.execute<ResultSetHeader>(
-            'INSERT INTO rating (users_id, club_id, ascendancy, camaraderie, legacy, prestige, obligation, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [userId, clubId, ascendancy, camaraderie, legacy, prestige, obligation, total]
-        )
-
-        if (rating) {
-
-            const [averages] = await pool.execute<RowDataPacket[]>(
-                `SELECT 
-        AVG(ascendancy) AS ascendancy, 
-        AVG(camaraderie) AS camaraderie, 
-        AVG(legacy) AS legacy, 
-        AVG(prestige) AS prestige, 
-        AVG(obligation) AS obligation,
-        AVG(total) AS total
-      FROM rating
-      WHERE club_id = ?`,
-                [clubId]
-            );
-
-            const avg = averages[0];
-
-            await pool.execute(
-                `UPDATE clubs SET 
-        ascendancy = ?, 
-        camaraderie = ?, 
-        legacy = ?, 
-        prestige = ?, 
-        obligation = ?, 
-        total = ?
-      WHERE club_id = ?`,
-                [avg.ascendancy, avg.camaraderie, avg.legacy, avg.prestige, avg.obligation, avg.total, clubId]
-            );
 
 
 
 
-            res.json({
-                success: true,
-                id: rating.insertId
-            })
 
-        }
-        else {
-            res.json({
-                success: false,
-                error: "Rating did not go through"
-            })
-        }
-
-
-    }
-    catch (err) {
-        console.log(err)
-        res.json({
-            success: false,
-            error: "Rating did not go through", err
-        })
-
-    }
-
-}
 
 router.post('/club', verifyToken, createClub);
 router.get('/club/:clubId', verifyToken, getClub);
-router.post('/rate', verifyToken, rateClub);
+
 
 
 export default router;

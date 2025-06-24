@@ -58,12 +58,28 @@ const ClubPage = () => {
   const [prestige, setPrestige] = useState<string>("");
   const [obligation, setObligation] = useState<string>("");
   const [legacy, setLegacy] = useState<string>("");
-  const [ratingError, setRatingError] = useState<string>("");
+  const [review, setReview] = useState<string>("")
   const [hasRated, setHasRated] = useState(true);
   const [fetching, setFetching] = useState(true);
 
 
+
   const [role, setRole] = useState<string>("");
+
+
+
+
+const formatDate = (isoString: string): string => {
+const year = isoString.substring(0, 4);
+const month = isoString.substring(5, 7);
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const formatted = `${monthNames[parseInt(month) - 1]} ${year}`;
+
+return formatted;
+}
 
 
   useEffect(() => {
@@ -90,13 +106,15 @@ const ClubPage = () => {
         
     const data = await response.json();
     if (data.success){
-      console.log(data.clubRole)
+
       setClubData(data.clubData)
+
       setFetching(false)
       if( data.clubRole !== "Not a Member!"){
       setRole(data.clubRole)}
+      console.log("hehe",data.hasRated)
       setHasRated(data.hasRated)
-      console.log(data.hasRated)
+
 
       console.log("Success")
     }
@@ -118,6 +136,7 @@ const ClubPage = () => {
     setPrestige("");
     setObligation("");
     setLegacy("");
+    setReview("");
   };
 
 
@@ -199,6 +218,7 @@ const token = localStorage.getItem("authToken")
     legacy: parseFloat(legacy),
     prestige: parseFloat(prestige),
     obligation: parseFloat(obligation),
+    review: review,
     total: total,
   }),
 });
@@ -296,8 +316,18 @@ if(data.success)
                 }}
               >
                 Rate Club
-              </button>) : null}
-              {ratingError && <p className="error-message">{ratingError}</p>}
+              </button>) : <div><button onClick = {()=>{navigate(`/viewRating/${clubID}`)}}>View your Reviews and Ratings</button></div>}
+              
+              <br></br>
+              <br></br>
+              <h1>Details:</h1>
+              <br></br>
+              <br></br>
+              <p>Club President: {clubData?.leaderName}</p>
+              <br></br>
+              {clubData?( <p>Created: {formatDate(clubData.created_at)}</p>): null}
+
+
             </div>
           </div>
         </div>
@@ -430,6 +460,20 @@ if(data.success)
                 onChange={(e) => setLegacy(e.target.value)}
                 required
               />
+            </div>
+            <div className = "rating-input-group">
+              <label htmlFor ="Review" className = "rating-label">
+                Review Here
+              </label>
+              <textarea
+              id = "review"
+              onChange ={(e)=>{setReview(e.target.value)}}>
+                
+
+
+              </textarea>
+
+
             </div>
 
             <button className="submit-rating-button" type="submit">

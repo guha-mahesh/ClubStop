@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS rating (
     obligation DOUBLE NOT NULL CHECK (obligation >= 0 AND obligation <= 100) DEFAULT 0,
     legacy DOUBLE NOT NULL CHECK (legacy >= 0 AND legacy <= 100) DEFAULT 0,
     total DOUBLE NOT NULL CHECK (total >= 0 AND total <= 100) DEFAULT 0,
+    review VARCHAR(500),
     FOREIGN KEY (users_id) REFERENCES users(users_id),
     FOREIGN KEY (club_id) REFERENCES clubs(club_id)
 );
