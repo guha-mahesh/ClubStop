@@ -298,7 +298,7 @@ if(data.success)
               src={feather}
             />
             <div className="rightScreen">
-              {!role ? (
+              {!role && !fetching ? (
                 <button className="clubPageBtn" onClick={()=>handleJoin()}>
                   Join Club
                 </button>
