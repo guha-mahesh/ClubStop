@@ -9,7 +9,7 @@ import MyClubs from "./pages/MyClubs/MyClubs";
 import ClubPage from "./pages/ClubPage/ClubPage";
 import Delete from "./pages/Delete";
 import ConfigureProfile from "./components/ConfigureProfile";
-import ViewYourReview from "./pages/viewYourReview";
+import ViewYourReview from "./pages/ViewYourReview";
 
 function App() {
   return (
