@@ -265,7 +265,31 @@ const ClubPage = () => {
                   Overall: {clubData ? (<span>{clubData.total.toFixed(2)}</span>): (<span>None Yet</span>)}
                 </h1>
               </div>
-            ): null}
+            ): <div className="ratings">
+                <h1 className="ratingBox ratingBox1">
+                  Ascendancy: (<span>None Yet</span>)
+                </h1>
+                <br />
+                <h1 className="ratingBox ratingBox2">
+                  Camaraderie: (<span>None Yet</span>)
+                </h1>
+                <br />
+                <h1 className="ratingBox ratingBox3">
+                  Prestige: (<span>None Yet</span>)
+                </h1>
+                <br />
+                <h1 className="ratingBox ratingBox4">
+                  Obligation: (<span>None Yet</span>)
+                </h1>
+                <br />
+                <h1 className="ratingBox ratingBox5">
+                  Legacy: (<span>None Yet</span>)
+                </h1>
+                <br />
+                <h1 className="ratingBox ratingBox6">
+                  Overall: (<span>None Yet</span>)
+                </h1>
+              </div>}
 
             <img className="featherIcon featherIconClubPage" src={feather} />
             <p className="description">
