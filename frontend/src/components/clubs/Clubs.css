@@ -40,7 +40,7 @@
 
 .clubCard * {}
 
-.clubCard:hover {
+.clubCard-Leader:hover {
   background-color: #a53b26;
   font-weight: 300;
 

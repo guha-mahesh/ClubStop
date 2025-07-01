@@ -1,5 +1,3 @@
-//THIS is a clubPage, we can prob make a lot of this stuff components but we need to be careful w the backend,,,
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ScreenHeader from "../../components/ScreenHeader";
@@ -13,13 +11,6 @@ import {useAuth} from '../../contexts/AuthContexts'
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
-
-
-
-
-
-
-
 interface Rating{
   camaraderie: number;
   ascendancy: number;
@@ -27,14 +18,14 @@ interface Rating{
   obligation: number;
   legacy: number;
   total: number;
-  
 }
+
 interface clubData{
-    clubName: string;
-    clubDesc: string;
-     School: string;
-      created_at: string;
-      camaraderie: number;
+  clubName: string;
+  clubDesc: string;
+  School: string;
+  created_at: string;
+  camaraderie: number;
   ascendancy: number;
   prestige: number;
   obligation: number;
@@ -42,13 +33,12 @@ interface clubData{
   total: number;
   leader: number;
   leaderName: string;
+}
 
-  }
 const ClubPage = () => {
-
-  
-
   const {loading, isAuthenticated, user} = useAuth();
+  const [isLeader, setIsLeader] = useState(false);
+  const [onBoard, setOnBoard] = useState(false);
   const navigate = useNavigate();
   const { clubID } = useParams<{ clubID: string }>();
   const [clubData, setClubData] = useState<clubData | null>(null);
@@ -61,73 +51,78 @@ const ClubPage = () => {
   const [review, setReview] = useState<string>("")
   const [hasRated, setHasRated] = useState(true);
   const [fetching, setFetching] = useState(true);
-
-
-
   const [role, setRole] = useState<string>("");
+  const [edit, setEdit] = useState(false);
 
+  const formatDate = (isoString: string): string => {
+    const year = isoString.substring(0, 4);
+    const month = isoString.substring(5, 7);
 
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    const formatted = `${monthNames[parseInt(month) - 1]} ${year}`;
 
-const formatDate = (isoString: string): string => {
-const year = isoString.substring(0, 4);
-const month = isoString.substring(5, 7);
-
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-const formatted = `${monthNames[parseInt(month) - 1]} ${year}`;
-
-return formatted;
-}
-
+    return formatted;
+  }
 
   useEffect(() => {
 
-    if(!loading && !isAuthenticated){
-      
-      navigate("/")
-    }
-    
-  }, [loading, isAuthenticated, navigate]);
-
-  useEffect(() => {
-    console.log("trying")
     const token = localStorage.getItem("authToken")
     const fetchClubData = async () =>{
-      console.log("trying 2.0")
+
       
       if (user){
         console.log("user exists")
         const response = await fetch(`${backendUrl}/api/club/${clubID}?userId=${user.id}`,  {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json', 'Authorization':`Bearer ${token}` },
-    });
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', 
+
+           },
+        });
         
-    const data = await response.json();
-    if (data.success){
+        const data = await response.json();
 
-      setClubData(data.clubData)
+        if (data.success){
+          setClubData(data.clubData)
+          setFetching(false)
 
-      setFetching(false)
-      if( data.clubRole !== "Not a Member!"){
-      setRole(data.clubRole)}
-      console.log("hehe",data.hasRated)
-      setHasRated(data.hasRated)
+          if( data.clubRole !== "Not a Member!"){
+            setRole(data.clubRole)
+          }
+
+          if(data.clubData.leader == user.id){
 
 
-      console.log("Success")
-    }
+            setIsLeader(true);
+           
 
+        }
+         if(data.clubRole == "Board"){
+              setOnBoard(true)
+            }
+
+          setHasRated(data.hasRated)
+          console.log("Success")
+        }
+      }
+      else{
+        const response = await fetch(`${backendUrl}/api/club/${clubID}`,  {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+        if (data.success){
+          setClubData(data.clubData)
+          setFetching(false)
+
+          
+
+        }
       }
     }
-  fetchClubData();
+    fetchClubData();
   }, [clubID, user]);
-
-  useEffect(()=>{
-    console.log(clubData, "\n", "\n", role)
-  }, [clubData, role])
-  
 
   
   const clearInputs = () => {
@@ -139,50 +134,34 @@ return formatted;
     setReview("");
   };
 
-
-
   const handleJoin = async () =>{
     const token = localStorage.getItem("authToken")
 
     if(user){
-    const response = await fetch(`${backendUrl}/api/member`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  },
-  body: JSON.stringify({
-    userId: user.id,
-    clubId: clubID,
-  }),
-});
+      const response = await fetch(`${backendUrl}/api/member`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          clubId: clubID,
+        }),
+      });
 
-const data = await response.json();
-if (data.success){
-  console.log("joined Club!")
-  setRole("Member")
-
-}else{
-  console.log("Failed to join club")
-}
-
-
-}
-
+      const data = await response.json();
+      if (data.success){
+        console.log("joined Club!")
+        setRole("Member")
+      }else{
+        console.log("Failed to join club")
+      }
+    }
   }
 
-
-
-
-
-
-
-
-
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-const token = localStorage.getItem("authToken")
+    const token = localStorage.getItem("authToken")
 
     e.preventDefault();
 
@@ -204,63 +183,64 @@ const token = localStorage.getItem("authToken")
 
     try {
       if(user){
-      const response = await fetch(`${backendUrl}/api/rate`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  },
-  body: JSON.stringify({
-    userId: user.id,
-    clubId: clubID,
-    ascendancy: parseFloat(ascendancy),
-    camaraderie: parseFloat(camaraderie),
-    legacy: parseFloat(legacy),
-    prestige: parseFloat(prestige),
-    obligation: parseFloat(obligation),
-    review: review,
-    total: total,
-  }),
-});
+        const response = await fetch(`${backendUrl}/api/rate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            clubId: clubID,
+            ascendancy: parseFloat(ascendancy),
+            camaraderie: parseFloat(camaraderie),
+            legacy: parseFloat(legacy),
+            prestige: parseFloat(prestige),
+            obligation: parseFloat(obligation),
+            review: review,
+            total: total,
+          }),
+        });
 
-const data = await response.json();
-if(data.success)
-
-     { console.log("Club rated:");
-      clearInputs();
-      setRate(false);
-      setHasRated(true)
-      window.location.reload();}}
+        const data = await response.json();
+        if(data.success) { 
+          console.log("Club rated:");
+          clearInputs();
+          setRate(false);
+          setHasRated(true)
+          window.location.reload();
+        }
+      }
     } catch (error) {
       console.error("Error submitting rating:", error);
     }
   };
 
-  
-
   return (
     <>
       <ScreenHeader />
       {!rate ? (
+
         <div>
+
+
           <div className="clubNameHeader">
             <div className="clubNameHeader topPart">
-              {hasRated}
               <h1 className="clubNameText">{clubData?.clubName}</h1>
               <div className="iconic">
                 <FontAwesomeIcon
                   icon={faCheck}
                   className={role ? "valid membIcon" : "hide"}
                 />
+
                 <h4 className="tooltip">You are a {role}!</h4>
               </div>
             </div>
-
           </div>
 
           <div className="ClubContent">
-            
-              {!fetching ? (<div className="ratings">
+            {!fetching ? (
+              <div className="ratings">
                 <h1 className="ratingBox ratingBox1">
                   Ascendancy: {clubData ?(<span>{clubData.ascendancy.toFixed(2)}</span>): (<span>None Yet</span>)}
                 </h1>
@@ -284,13 +264,12 @@ if(data.success)
                 <h1 className="ratingBox ratingBox6">
                   Overall: {clubData ? (<span>{clubData.total.toFixed(2)}</span>): (<span>None Yet</span>)}
                 </h1>
-              </div>): null}
-
-        
+              </div>
+            ): null}
 
             <img className="featherIcon featherIconClubPage" src={feather} />
             <p className="description">
-              {clubData?.clubDesc || "No description available."}
+              {!clubData ? "Loading..." : (clubData.clubDesc || "No description available.")}
             </p>
             <img
               className="featherIcon featherIconClubPage"
@@ -298,39 +277,58 @@ if(data.success)
               src={feather}
             />
             <div className="rightScreen">
-              {!role && !fetching ? (
+
+              {(isLeader || onBoard ) && (<button onClick = {()=>navigate(`/editClub/${clubID}`)}>Edit Club Information</button>)}
+              
+              {isAuthenticated && !role && !fetching ? (
                 <button className="clubPageBtn" onClick={()=>handleJoin()}>
                   Join Club
                 </button>
               ) : null}
               <br />
+
               
-              {! hasRated? (<button
-                className="clubPageBtn"
-                onClick={() => {
-                  if(! hasRated){
-                  
-                setRate(true);
-              
-              }else{console.log("hi")}
-                }}
-              >
-                Rate Club
-              </button>) : <div><button onClick = {()=>{navigate(`/viewRating/${clubID}`)}}>View your Reviews and Ratings</button></div>}
+              {isAuthenticated && (
+                !hasRated ? (
+                  <button
+                    className="clubPageBtn"
+                    onClick={() => {
+                      if(!hasRated){
+                        setRate(true);
+                      }else{
+                        console.log("hi")
+                      }
+                    }}
+                  >
+                    Rate Club
+                  </button>
+                ) : (
+                  <div>
+                    <button onClick={() => {navigate(`/viewRating/${clubID}`)}}>
+                      View your Reviews and Ratings
+                    </button>
+
+          
+                    
+                  </div>
+                )
+              )}
               
               <br></br>
               <br></br>
               <h1>Details:</h1>
               <br></br>
               <br></br>
-              <p>Club President: {clubData?.leaderName}</p>
+              <a href = {`/UserPage/${clubData?.leader}`}><p>Club President: {clubData?.leaderName}</p></a>
               <br></br>
-              {clubData?( <p>Created: {formatDate(clubData.created_at)}</p>): null}
-
-
+              {clubData ? (<p>Created: {formatDate(clubData.created_at)}</p>) : null}
             </div>
           </div>
-        </div>
+          
+        </div> 
+        
+
+
       ) : (
         <div className="rating-form">
           <button className="back-button" onClick={() => setRate(false)}>
@@ -466,14 +464,10 @@ if(data.success)
                 Review Here
               </label>
               <textarea
-              id = "review"
-              onChange ={(e)=>{setReview(e.target.value)}}>
-                
-
-
+                id = "review"
+                value={review}
+                onChange ={(e)=>{setReview(e.target.value)}}>
               </textarea>
-
-
             </div>
 
             <button className="submit-rating-button" type="submit">

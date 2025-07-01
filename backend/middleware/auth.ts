@@ -21,7 +21,7 @@ const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
         //console.log("secret", process.env.JWT_SECRET)
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-        //console.log(decoded)
+        //console.log("decoded", decoded)
 
 
         req.user = decoded;

@@ -1,16 +1,16 @@
 .profileDrop {
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 10px;
   justify-content: flex-start;
   position: absolute;
   top: 85px;
-  right: 10px; 
+  right: 10px;
   background-color: white;
-  border-radius: 8px; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-  padding: 10px; 
-  z-index: 100; 
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 100;
 }
 
 .dropdown-button {
@@ -20,23 +20,50 @@
   height: 50px;
   background-color: #ccc;
   border: none;
-  border-radius: 50%; 
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
   font-size: .75vh;
 }
 
 .dropdown-button:hover {
-  background-color: #aaa; 
+  background-color: #aaa;
 }
 
 .tempPuff {
   height: 6vh;
   width: auto;
-  max-width: 100%; 
-  border-radius: 8px; 
-  object-fit: cover; 
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+
+.memberCard {
+  background-color: #c44c32;
+}
+
+.Leader-memberCard:hover {
+  background-color: #a53b26;
+}
+
+.Member-memberCard {
+  background-color: aquamarine;
+}
+
+
+.Member-memberCard:hover {
+  background-color: darkcyan;
+}
+
+.Board-memberCard {
+  background-color: darkolivegreen;
+}
+
+
+.Board-memberCard:hover {
+  background-color: darkgreen;
 }

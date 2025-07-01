@@ -7,9 +7,10 @@ import Login from "./pages/Login";
 import CreateAClub from "./pages/CreateAClub/CreateAClub";
 import MyClubs from "./pages/MyClubs/MyClubs";
 import ClubPage from "./pages/ClubPage/ClubPage";
-import Delete from "./pages/Delete";
 import ConfigureProfile from "./components/ConfigureProfile";
 import ViewYourReview from "./pages/ViewYourReview";
+import UserPage from "./pages/UserPage";
+import EditClubPage from "./pages/ClubPage/EditClubPage";
 
 function App() {
   return (
@@ -22,7 +23,6 @@ function App() {
           <Route path="/CreateClub" element={<CreateAClub />} />
           <Route path="/MyClubs" element={<MyClubs />} />
           <Route path="/club/:clubID" element={<ClubPage />} />
-          <Route path="/deleteUser" element={<Delete></Delete>} />
           <Route
             path="/configureProfile"
             element={<ConfigureProfile></ConfigureProfile>}
@@ -31,7 +31,17 @@ function App() {
             path="/viewRating/:clubID"
             element={<ViewYourReview></ViewYourReview>}
           />
+          <Route
+            path="/UserPage/:userID"
+            element={<UserPage></UserPage>}
+            
+          />
+          <Route
+            path="/editClub/:clubID"
+            element={<EditClubPage></EditClubPage>}
+          />
         </Routes>
+         
       </Router>
       </AuthProvider>
 

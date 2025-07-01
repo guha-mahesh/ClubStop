@@ -3,12 +3,14 @@
 import { useState } from "react";
 import Puffin from "../../assets/puffin.png";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from '../../contexts/AuthContexts'
 
 import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
+  const {user }= useAuth();
 
 
   const checkJwt = () => {
@@ -59,12 +61,12 @@ const Profile = () => {
             </button>
             <button
               onClick={() => {
-                navigate("/deleteUser");
+                navigate(`/UserPage/${user?.id}`);
                 checkJwt();
               }}
               className="dropdown-button"
             >
-              delete user
+              View Profile
             </button>
           </div>
         </div>

@@ -210,8 +210,107 @@ async function joinClub(req: AuthRequest, res: Response) {
 }
 
 
+async function fetchUserData(req: Request, res: Response) {
+    const userId = req.params.userId;
+    console.log("Received", { userId })
+
+    try {
+        const [userrows] = await pool.execute<RowDataPacket[]>(
+            'SELECT * FROM users WHERE users_id = ?',
+            [userId]
+        );
+
+        const [clubsled] = await pool.execute<RowDataPacket[]>(
+            'SELECT * FROM clubs WHERE leader = ?',
+            [userId]
+        );
+
+        const [clubsjoined_id] = await pool.execute<RowDataPacket[]>(
+            'SELECT club_id FROM clubMember WHERE users_id = ?',
+            [userId]
+        );
 
 
+        const clubIds = clubsjoined_id.map(row => row.club_id);
+
+        let clubsjoined: RowDataPacket[] = [];
+
+        if (clubIds.length > 0) {
+            const [results] = await pool.query<RowDataPacket[]>(
+                `SELECT * FROM clubs WHERE club_id IN (${clubIds.map(() => '?').join(',')}) AND leader <> ?`,
+                [...clubIds, userId]
+            );
+            clubsjoined = results;
+        }
+
+        if (userrows.length !== 0) {
+            console.log(userrows[0].userDesc)
+
+            res.json({
+                success: true,
+                userData: userrows[0],
+                clubsLed: clubsled,
+                clubsJoined: clubsjoined
+
+
+
+            })
+
+        }
+        else {
+            res.json({
+                success: false,
+                error: "could not fetch any userData "
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+
+    }
+
+}
+
+
+async function editUserData(req: AuthRequest, res: Response) {
+    const { userId, username, school, desc } = req.body;
+    console.log("Received editUser", { username, school, desc })
+
+    try {
+        const [editrows] = await pool.execute<ResultSetHeader>(
+            'UPDATE users SET username=?, userDesc=?, School=? WHERE users_id=?',
+            [username, desc, school, userId]
+        );
+
+        if (editrows) {
+            const [clubstoedit] = await pool.execute<RowDataPacket[]>(
+                'SELECT * FROM clubs WHERE leader = ?', [userId]
+            );
+
+            if (clubstoedit.length !== 0) {
+                const [edittedClubs] = await pool.execute<ResultSetHeader>(
+                    'UPDATE clubs SET leaderName = ? WHERE leader = ?',
+                    [username, userId]
+                );
+
+                if (edittedClubs) {
+                    return res.json({ success: true });
+                }
+            }
+
+            return res.json({ success: true });
+        } else {
+            return res.json({
+                success: false,
+                error: "Could not edit profile"
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: "Internal server error" });
+    }
+
+}
 
 
 
@@ -219,10 +318,16 @@ router.post('/users', createUser);
 router.post('/login', Login)
 router.get('/clubs/:userId', verifyToken, getClubs)
 router.post('/member', verifyToken, joinClub)
+router.get('/user/:userId', fetchUserData)
+router.put('/user', verifyToken, editUserData)
 
 
 //router.get('/users/:id', getUser);  
 //router.put('/users/:id', updateUser);
-//router.delete('/users/:id', deleteUser);
+
 
 export default router;
+
+
+
+
