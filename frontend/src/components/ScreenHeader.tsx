@@ -62,15 +62,16 @@ const ScreenHeader = ({ searchy = false }: Props) => {
           </button>
         ) : (
           <button
-            className="navButton"
-            onClick={() => {
-
-              logout();
-
-            }}
-          >
-            Sign Out
-          </button>
+  className="navButton"
+  onClick={() => {
+    const confirmLogout = window.confirm("Are you sure you want to sign out?");
+    if (confirmLogout) {
+      logout();
+    }
+  }}
+>
+  Sign Out
+</button>
         )}
 
         <Profile />

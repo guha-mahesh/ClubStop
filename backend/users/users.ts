@@ -17,17 +17,17 @@ const router = Router();
 
 
 async function createUser(req: Request, res: Response) {
-    const { username, password } = req.body;
+    const { username, password, school, email } = req.body;
 
 
-    console.log('Received:', { username, password });
+    console.log('Received:', { username, password, school, email });
 
     const pwd = await hashPassword(password);
 
     try {
         const [result] = await pool.execute<ResultSetHeader>(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            [username, pwd]
+            'INSERT INTO users (username, password, School, email) VALUES (?, ?, ?, ?)',
+            [username, pwd, school, email]
         );
 
         if (result) {
@@ -314,12 +314,38 @@ async function editUserData(req: AuthRequest, res: Response) {
 
 
 
+async function getUniversities(req: Request, res: Response) {
+    try {
+        const [unirows] = await pool.execute<RowDataPacket[]>('SELECT name FROM universityData')
+
+        if (unirows.length !== 0) {
+            res.json({
+                success: true,
+                unis: unirows
+
+            })
+        } else {
+            res.json({
+                success: false,
+                error: "failed to fetch uni data"
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+
+
 router.post('/users', createUser);
 router.post('/login', Login)
 router.get('/clubs/:userId', verifyToken, getClubs)
 router.post('/member', verifyToken, joinClub)
 router.get('/user/:userId', fetchUserData)
 router.put('/user', verifyToken, editUserData)
+router.get('/university', getUniversities)
 
 
 //router.get('/users/:id', getUser);  

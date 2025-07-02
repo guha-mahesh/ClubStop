@@ -14,8 +14,13 @@ import { useAuth } from "../../contexts/AuthContexts";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
+
+interface University{
+  name: string;
+}
 
 
 
@@ -23,6 +28,10 @@ const Register = () => {
   const navigate = useNavigate();
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef<HTMLParagraphElement | null>(null);
+
+  const [unis, setUnis] = useState<University[] | null>(null)
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<University | null>(null);
 
   const [user, setUser] = useState<string>("");
   const [validName, setValidName] = useState<boolean>(false);
@@ -33,12 +42,50 @@ const Register = () => {
   const [validPwd, setValidPwd] = useState<boolean>(false);
   const [pwdFocus, setPwdFocus] = useState<boolean>(false);
 
+  const [email, setEmail] = useState("")
+
+
   const [matchPwd, setMatchPwd] = useState<string>("");
   const [validMatch, setValidMatch] = useState<boolean>(false);
   const [matchFocus, setMatchFocus] = useState<boolean>(false);
+  
+  const [validEmail, setValidEmail] = useState(false)
 
   const [errMsg, setErrMsg] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
+  
+  useEffect(()=>{
+
+    const fetchUniData = async ()=>{
+      const result = await fetch(`${backendUrl}/api/university`,
+        {method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      
+      }
+
+
+      )
+
+      const data = await result.json();
+
+      if (data.success){
+        setUnis(data.unis)
+        console.log("success")
+      }else{
+        console.log(data.error)
+      }
+
+
+
+    }
+    fetchUniData();
+
+
+
+  }, [])
+
+
+
 
   useEffect(() => {
 
@@ -51,6 +98,10 @@ const Register = () => {
     setValidName(USER_REGEX.test(user));
   }, [user]);
 
+    useEffect(() => {
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [email]);
+
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(pwd));
     setValidMatch(pwd === matchPwd);
@@ -59,6 +110,8 @@ const Register = () => {
   useEffect(() => {
     setErrMsg("");
   }, [user, pwd, matchPwd]);
+
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,11 +137,11 @@ const Register = () => {
       const response = await fetch(`${backendUrl}/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: user, password: pwd }),
+      body: JSON.stringify({ username: user, password: pwd, email: email, school: selected?.name}),
     });
 
     const data = await response.json()
-    console.log(data.success)
+    console.log(data.success) 
 
     if (data.success){
     login({
@@ -104,6 +157,7 @@ const Register = () => {
       setUser("");
       setPwd("");
       setMatchPwd("");
+      setEmail("")
       navigate("/");
     } catch (err: any) {
       if (!err?.response) {
@@ -116,6 +170,8 @@ const Register = () => {
       if (errRef.current) errRef.current.focus();
     }
   };
+    const filteredUnis = unis?.filter(u => u.name.toLowerCase().startsWith(search.toLowerCase()))
+  .slice(0, 3);
 
   return (
     <>
@@ -176,6 +232,24 @@ const Register = () => {
                 <br />
                 Letters, numbers, underscores, hyphens allowed.
               </p>
+              <label htmlFor="email">
+                Email:
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className={validEmail ? "valid" : "hide"}
+                />
+              </label>
+              <input
+                type="email"
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+                aria-invalid={validMatch ? "false" : "true"}
+                aria-describedby="confirmnote"
+                onFocus={() => setMatchFocus(true)}
+                onBlur={() => setMatchFocus(false)}
+              />
 
               <label htmlFor="password">
                 Password:
@@ -243,6 +317,28 @@ const Register = () => {
                 <FontAwesomeIcon icon={faInfoCircle} />
                 Must match the first password input field.
               </p>
+            <label htmlFor="school">
+                Select School:
+              </label>
+              <input
+              type="text"
+              placeholder="Search universities..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}/>
+               <ul>
+            {filteredUnis?.map((uni, idx) => (
+            <li key={idx} onClick={() => setSelected(uni)} style={{cursor: 'pointer'}}>
+            {uni.name}
+            </li>
+
+        ))}
+      </ul>
+      {selected && (
+        <div>
+          Selected: <strong>{selected.name}</strong>
+        </div>
+      )}
+
 
               <button disabled={!validName || !validPwd || !validMatch}>
                 Sign Up

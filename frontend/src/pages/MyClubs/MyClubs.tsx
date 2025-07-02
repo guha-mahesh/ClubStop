@@ -71,6 +71,9 @@ const MyClubs = () => {
 
 
         }
+        else if (data.success && data.clubData == "No Clubs Yet") {
+          setFetching(false)
+        }
       } catch (error) {
         console.error("Error fetching club data:", error);
       }
