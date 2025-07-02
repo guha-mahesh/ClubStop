@@ -226,7 +226,7 @@ const ClubPage = () => {
 
           <div className="clubNameHeader">
             <div className="clubNameHeader topPart">
-              <h1 className="clubNameText">{clubData?.clubName}</h1>
+              {!fetching ? (<h1 className="clubNameText">{clubData?.clubName}</h1>): <h1>Loading...</h1>}
               <div className="iconic">
                 <FontAwesomeIcon
                   icon={faCheck}
@@ -300,7 +300,7 @@ const ClubPage = () => {
               id="featherIcon2clubpage"
               src={feather}
             />
-            <div className="rightScreen">
+           {!fetching ? ( <div className="rightScreen">
 
               {(isLeader || onBoard ) && (<button onClick = {()=>navigate(`/editClub/${clubID}`)}>Edit Club Information</button>)}
               
@@ -346,7 +346,10 @@ const ClubPage = () => {
               <a href = {`/UserPage/${clubData?.leader}`}><p>Club President: {clubData?.leaderName}</p></a>
               <br></br>
               {clubData ? (<p>Created: {formatDate(clubData.created_at)}</p>) : null}
-            </div>
+            </div>): <h1>Loading...</h1>}
+
+
+
           </div>
           
         </div> 

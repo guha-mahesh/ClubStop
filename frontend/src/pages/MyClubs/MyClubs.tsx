@@ -24,6 +24,7 @@ const MyClubs = () => {
   const [leading, setLeading] = useState<Club[] | null>(null);
   const [joined, setJoined] = useState<Club[] | null>(null);
   const { user, loading, isAuthenticated } = useAuth();
+  const [fetching,setFetching] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated && !loading) {
@@ -66,6 +67,9 @@ const MyClubs = () => {
             club.clubRole !== 'Leader' && club.leader !== user.id
           );
           setJoined(joinedClubs);
+          setFetching(false)
+
+
         }
       } catch (error) {
         console.error("Error fetching club data:", error);
@@ -86,7 +90,8 @@ const MyClubs = () => {
   }
 
   return (
-    <div>
+    <>
+    {!fetching ? (<div>
       <ScreenHeader />
       <div className="allClubs">
 
@@ -154,7 +159,8 @@ const MyClubs = () => {
 
         
       </div>
-    </div>
+    </div>):(<h1>Loading...</h1>)}
+    </>
   );
 };
 
