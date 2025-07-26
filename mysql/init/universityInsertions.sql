@@ -3,6 +3,7 @@
 USE mydb;
 
 CREATE TABLE `universityData` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `web_pages`	VARCHAR(512),
     `name`	VARCHAR(512),
     `alpha_two_code`	VARCHAR(512),
