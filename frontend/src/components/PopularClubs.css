@@ -1,0 +1,113 @@
+.popular {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  margin-bottom: 40px;
+}
+
+.head {
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.popular-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.card-holder {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  font-weight: normal;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  margin: 2px;
+  margin-left: 4px;
+}
+
+.popular-card {
+  width: 250px;
+  height: 210px;
+  background-color: #F3F4F8;
+  border-radius: 15px;
+  border: 2px solid gray;
+  display: flex;
+  flex-direction: column;
+}
+
+.popular-card:hover {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.image-container {
+  flex: 1;
+  margin: 4px 4px 0px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  height: 100%;
+}
+
+.text-container {
+  flex: 0.5;
+  margin: 0px 0px 4px 4px;
+  display: flex;
+  flex-direction: row;
+  color: black;
+}
+
+.club-container {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.club-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 2px;
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.score-holder {
+  margin: 10px;
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.score {
+  font-family: 'Inter', sans-serif;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 

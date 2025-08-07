@@ -11,11 +11,11 @@ export default defineConfig({
     },
     proxy: {
       '/Signin': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
       },
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
       }
     }

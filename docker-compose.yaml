@@ -17,7 +17,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "5000:5000"
+      - "3001:5000"
     environment:
       - DB_HOST=mysql
       - DB_USER=user

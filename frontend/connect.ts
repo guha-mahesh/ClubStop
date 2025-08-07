@@ -19,7 +19,7 @@ dotenv.config({ path: "./server/config.env" });
 const Db: string = process.env.ATLAS_URI || "";
 const client = new MongoClient(Db);
 const app = express();
-const port =  5000;
+const port =  3001;
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 
