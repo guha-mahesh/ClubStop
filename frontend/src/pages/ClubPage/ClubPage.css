@@ -116,7 +116,7 @@ strong{
   display:flex;
   justify-content: flex-start;
   gap: 6%;
-  margin-top: 1vh;
+  margin-top: 100px; /* Add margin to account for fixed Navbar */
 }
 
 

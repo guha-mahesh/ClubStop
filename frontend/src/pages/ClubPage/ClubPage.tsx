@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ScreenHeader from "../../components/ScreenHeader";
+import Navbar from "../../components/layout/Navbar";
 import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
@@ -76,8 +76,9 @@ const ClubPage = () => {
         console.log("user exists")
         const response = await fetch(`${backendUrl}/api/club/${clubID}?userId=${user.id}`,  {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json', 
-
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
            },
         });
         
@@ -218,7 +219,7 @@ const ClubPage = () => {
 
   return (
     <>
-      <ScreenHeader />
+      <Navbar />
       {!rate ? (
 
         <div>
@@ -343,7 +344,12 @@ const ClubPage = () => {
               <h1>Details:</h1>
               <br></br>
               <br></br>
-              <a href = {`/UserPage/${clubData?.leader}`}><p>Club President: {clubData?.leaderName}</p></a>
+              <button 
+                onClick={() => navigate(`/UserPage/${clubData?.leader}`)}
+                style={{ background: 'none', border: 'none', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', padding: 0 }}
+              >
+                <p>Club President: {clubData?.leaderName}</p>
+              </button>
               <br></br>
               {clubData ? (<p>Created: {formatDate(clubData.created_at)}</p>) : null}
             </div>): <h1>Loading...</h1>}

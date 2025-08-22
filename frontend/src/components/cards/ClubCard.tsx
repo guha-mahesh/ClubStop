@@ -1,5 +1,5 @@
 import React from 'react';
-import './PopularClubs.css';
+import './ClubCard.css';
 
 type ClubCardProps = {
   category: string;

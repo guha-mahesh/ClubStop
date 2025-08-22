@@ -1,6 +1,7 @@
-//the search bar with it's functionss
+//the search bar with its functions
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   placeholder: string;
@@ -16,6 +17,7 @@ interface ClubData {
 }
 
 const Search = ({ placeholder, onChange, reason = "" }: Props) => {
+  const navigate = useNavigate();
   const [clubData, setClubData] = useState<ClubData[]>([]);
   const [filteredClubs, setFilteredClubs] = useState<ClubData[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -48,8 +50,12 @@ const Search = ({ placeholder, onChange, reason = "" }: Props) => {
     const selectedId = e.target.value;
     const selectedClub = clubData.find((club) => club._id === selectedId);
     if (selectedClub) {
-      window.location.href = `/club/${selectedClub._id}`;
+      navigate(`/club/${selectedClub._id}`);
     }
+  };
+
+  const handleClubClick = (clubId: string) => {
+    navigate(`/club/${clubId}`);
   };
 
   return (
@@ -67,7 +73,7 @@ const Search = ({ placeholder, onChange, reason = "" }: Props) => {
             <li
               key={club._id}
               className="dropdown-item"
-              onClick={() => (window.location.href = `/club/${club._id}`)}
+              onClick={() => handleClubClick(club._id)}
             >
               {club.ClubName}
             </li>

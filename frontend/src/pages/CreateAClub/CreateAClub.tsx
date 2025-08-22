@@ -1,7 +1,7 @@
 //This is a page that lets you create a club
 
 import React, { useState, useRef, useEffect } from "react";
-
+import Navbar from "../../components/layout/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from '../../contexts/AuthContexts'
@@ -32,7 +32,7 @@ const CreateAClub: React.FC = () => {
   }, []);
   useEffect(() => {
     if (!isAuthenticated && !loading) {
-      navigate("/login")
+      navigate("/Login")
     }
     
   }, [isAuthenticated,loading, navigate]);
@@ -81,6 +81,7 @@ const CreateAClub: React.FC = () => {
 
   return (
     <>
+      <Navbar />
       <div className="container">
   {
     !success ? (
@@ -137,9 +138,13 @@ const CreateAClub: React.FC = () => {
       <section className="success-message">
         <h1>Club Created Successfully!</h1>
         <p>
-          <a href={`/club/${clubId}`} className="home-link">
+          <button 
+            onClick={() => navigate(`/club/${clubId}`)} 
+            className="home-link"
+            style={{ background: 'none', border: 'none', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit' }}
+          >
             Go • to • Club
-          </a>
+          </button>
         </p>
       </section>
     )

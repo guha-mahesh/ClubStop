@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ClubCard from './ClubCard';
+import ClubCard from '../cards/ClubCard';
 import './PopularClubs.css';
 
 interface Club {
@@ -72,7 +72,7 @@ const PopularClubs = () => {
 
   return (
     <div className="popular">
-      <h2 className="head">Popular</h2>
+      <h2 className="head">Popular Clubs</h2>
       <div className="popular-cards">
         {clubs.map((club) => (
           <ClubCard

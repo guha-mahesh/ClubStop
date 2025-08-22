@@ -1,9 +1,9 @@
 // this is the icon at the top right of the home page where the user can view their stuff
 
 import { useState } from "react";
-import Puffin from "../../assets/puffin.png";
+import Puffin from "../../../assets/puffin.png";
 import { useNavigate } from "react-router-dom";
-import {useAuth} from '../../contexts/AuthContexts'
+import {useAuth} from '../../../contexts/AuthContexts'
 
 import { jwtDecode } from "jwt-decode";
 
@@ -14,7 +14,7 @@ const Profile = () => {
 
 
   const checkJwt = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     if (token) {
       const decode = jwtDecode(token) as { exp: number };
       const time = Date.now() / 1000;
@@ -43,7 +43,7 @@ const Profile = () => {
           <div className="profileDrop">
             <button
               onClick={() => {
-                navigate("/createClub");
+                navigate("/CreateClub");
                 checkJwt();
               }}
               className="dropdown-button"

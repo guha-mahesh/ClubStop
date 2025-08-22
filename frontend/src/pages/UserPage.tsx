@@ -3,7 +3,7 @@ import {useAuth} from '../contexts/AuthContexts'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Clubs from "../components/clubs/ClubCard";
+import Clubs from "../components/cards/clubs/ClubCard";
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 const UserPage = () => {
