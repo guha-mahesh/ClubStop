@@ -6,6 +6,8 @@ import { RowDataPacket } from 'mysql2';
 import { pool } from '../server';
 import jwt from 'jsonwebtoken';
 import { errorMonitor } from "node:events";
+import { error } from "node:console";
+
 
 
 
@@ -431,6 +433,53 @@ async function deleteFlair(req: AuthRequest, res: Response) {
 
 }
 
+async function getClubByFlair(req: Request, res: Response) {
+    const flairName = req.params.flairName;
+    console.log("getClubByFlair Received:", { flairName })
+
+    try {
+        const [flairIds] = await pool.execute<RowDataPacket[]>(
+            'SELECT club_id FROM clubFlair WHERE flairName = ?',
+            [flairName]
+        );
+
+
+
+
+
+        if (flairIds.length === 0) {
+            return res.json({
+                success: false,
+                error: "No clubs found for this flair",
+                errorCode: 404
+            });
+        }
+        else {
+            const clubIds = flairIds.map(row => row.club_id);
+
+            const placeholders = clubIds.map(() => '?').join(',');
+
+            const [sortables] = await pool.execute<RowDataPacket[]>(`SELECT School, leaderName, clubName, clubDesc, club_id FROM clubs WHERE club_id IN (${placeholders})  ORDER BY total DESC
+   LIMIT 20` , clubIds);
+            res.json({
+                success: true,
+                clubName: sortables.map(club => club.clubName),
+                School: sortables.map(club => club.School),
+                leaderName: sortables.map(club => club.leaderName),
+                clubDesc: sortables.map(club => club.clubDesc),
+                club_id: sortables.map(club => club.club_id),
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.json({
+            success: false,
+            error: "Error fetching clubs by flair",
+            errorCode: 500
+        });
+    }
+}
+
 router.post('/club', verifyToken, createClub);
 router.get('/club/:clubId', getClub);
 router.get('/editclub/:clubId', verifyToken, geteditClub)
@@ -438,6 +487,7 @@ router.put('/role', verifyToken, editRole)
 router.put('/club', verifyToken, editclub)
 router.post('/flair', verifyToken, addFlair)
 router.delete('/flair/:Flair/:ClubID', verifyToken, deleteFlair)
+router.get('/sort/:flairName', getClubByFlair);
 
 
 

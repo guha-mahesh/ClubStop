@@ -1,20 +1,36 @@
 import React from 'react';
 import './CategoryGrid.css';
+import { useNavigate } from 'react-router-dom';
 
-const categories = [
-  "Computer Science", "Finance", "Arts", "Med",
-  "Student Associations", "Sports", "Engineering", "Misc"
-];
 
-const CategoryGrid = () => (
-  <div className="categories">
+
+
+
+
+
+const CategoryGrid = () => {
+
+  const navigate = useNavigate();
+  const categories = {
+"Computer Science": 1,
+"Business": 9,
+"Medicine": 18,
+"Arts": 29,
+"Sports": 33,
+"Community Service": 36,
+"Music": 30,
+"Engineering": 2,  
+}
+  return (
+    <div className="categories">
     <h2>Categories</h2>
     <div className="categories-grid">
-      {categories.map((cat) => (
-        <div className="category-box" key={cat}>{cat}</div>
+      {Object.entries(categories).map(([name,id]) => (
+        <div onClick = {()=>{navigate( `/sortFlair/${name}`)}}className="category-box" key={id}>{name}</div>
       ))}
     </div>
   </div>
-);
+  )
+}
 
-export default CategoryGrid; 
+export default CategoryGrid
