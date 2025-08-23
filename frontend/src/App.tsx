@@ -11,6 +11,8 @@ import ConfigureProfile from "./components/cards/ConfigureProfile";
 import ViewYourReview from "./pages/ViewYourReview";
 import UserPage from "./pages/UserPage";
 import EditClubPage from "./pages/ClubPage/EditClubPage";
+import FlairSort from "./pages/FlairSort";
+
 
 function App() {
   return (
@@ -35,6 +37,10 @@ function App() {
           <Route
             path="/editClub/:clubID"
             element={<EditClubPage></EditClubPage>}
+          />
+             <Route
+            path="/sortFlair/:flairName"
+            element={<FlairSort></FlairSort>}
           />
         </Routes>
       </Router>
