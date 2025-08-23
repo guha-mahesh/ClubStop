@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import userRoutes from './users/users'
 import clubRoutes from './clubs/clubs'
 import rateRoutes from './ratings/ratings'
+import pictureRoutes from './pictures/upload'
 
 
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', userRoutes);
 app.use('/api', clubRoutes);
 app.use('/api', rateRoutes);
+app.use('/api', pictureRoutes)
 
 
 

@@ -8,6 +8,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import feather from "../../assets/FeatherIcon.png";
 import {useAuth} from '../../contexts/AuthContexts'
+import Flair from "../../components/Flair";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
@@ -34,6 +35,9 @@ interface clubData{
   leader: number;
   leaderName: string;
 }
+interface flair{
+  flairName: string;
+}
 
 const ClubPage = () => {
   const {loading, isAuthenticated, user} = useAuth();
@@ -53,6 +57,7 @@ const ClubPage = () => {
   const [fetching, setFetching] = useState(true);
   const [role, setRole] = useState<string>("");
   const [edit, setEdit] = useState(false);
+  const [flairs,setFlairs] = useState<flair[] | null>(null)
 
   const formatDate = (isoString: string): string => {
     const year = isoString.substring(0, 4);
@@ -70,6 +75,7 @@ const ClubPage = () => {
 
     const token = localStorage.getItem("authToken")
     const fetchClubData = async () =>{
+    console.log(user)
 
       
       if (user){
@@ -85,6 +91,8 @@ const ClubPage = () => {
 
         if (data.success){
           setClubData(data.clubData)
+          setFlairs(data.flairs)
+          console.log(data.flairs)
           setFetching(false)
 
           if( data.clubRole !== "Not a Member!"){
@@ -302,7 +310,7 @@ const ClubPage = () => {
             />
            {!fetching ? ( <div className="rightScreen">
 
-              {(isLeader || onBoard ) && (<button onClick = {()=>navigate(`/editClub/${clubID}`)}>Edit Club Information</button>)}
+              {(isLeader || onBoard ) && (<button onClick = {()=>navigate(`/editClub/${clubID}`)}>Manage Club</button>)}
               
               {isAuthenticated && !role && !fetching ? (
                 <button className="clubPageBtn" onClick={()=>handleJoin()}>
@@ -346,6 +354,13 @@ const ClubPage = () => {
               <a href = {`/UserPage/${clubData?.leader}`}><p>Club President: {clubData?.leaderName}</p></a>
               <br></br>
               {clubData ? (<p>Created: {formatDate(clubData.created_at)}</p>) : null}
+              <br></br>
+              <br></br>
+              {flairs ? (
+  flairs.map((flair, idx) => <Flair key={idx} dlt = {false} Flair = {flair.flairName} ClubID={clubID} />)
+) : null}
+
+
             </div>): <h1>Loading...</h1>}
 
 

@@ -338,6 +338,30 @@ async function getUniversities(req: Request, res: Response) {
 }
 
 
+async function getFlairs(req: Request, res: Response) {
+    console.log("getting flairs")
+    try {
+        const [flairRows] = await pool.execute<RowDataPacket[]>('SELECT flair_name FROM club_flairs')
+
+        if (flairRows.length !== 0) {
+            res.json({
+                success: true,
+                flairs: flairRows
+
+            })
+        } else {
+            res.json({
+                success: false,
+                error: "failed to fetch uni data"
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
 
 router.post('/users', createUser);
 router.post('/login', Login)
@@ -346,6 +370,7 @@ router.post('/member', verifyToken, joinClub)
 router.get('/user/:userId', fetchUserData)
 router.put('/user', verifyToken, editUserData)
 router.get('/university', getUniversities)
+router.get('/flair', getFlairs)
 
 
 //router.get('/users/:id', getUser);  

@@ -94,14 +94,14 @@ async function getClub(req: Request, res: Response) {
     const { userId } = req.query;
 
 
-    console.log("Received:", { clubId, userId })
+    console.log("getClub Received:", { clubId, userId })
 
 
     try {
 
         if (userId) {
             const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
-
+            const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
 
             if (clubresult.length !== 0) {
@@ -131,6 +131,7 @@ async function getClub(req: Request, res: Response) {
                         clubRole: role[0].clubRole,
                         clubData: clubresult[0],
                         hasRated: hasRated,
+                        flairs: flairresult
 
 
 
@@ -145,6 +146,7 @@ async function getClub(req: Request, res: Response) {
                         clubRole: "Not a Member!",
                         hasRated: hasRated,
                         clubData: clubresult[0],
+                        flairs: flairresult
 
 
                     })
@@ -162,6 +164,7 @@ async function getClub(req: Request, res: Response) {
         else if (clubId) {
 
             const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
+            const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
 
             if (clubresult.length !== 0) {
@@ -170,6 +173,7 @@ async function getClub(req: Request, res: Response) {
                 res.json({
                     success: true,
                     clubData: clubresult[0],
+                    flairs: flairresult
 
                 })
             }
@@ -203,8 +207,8 @@ async function geteditClub(req: AuthRequest, res: Response) {
 
 
     try {
-        const [clubRows] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubs WHERE club_id = ?', [1]);
-        console.log(clubRows)
+        const [clubRows] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubs WHERE club_id = ?', [clubID]);
+
 
         if (clubRows.length === 0) {
             return res.json({
@@ -212,6 +216,12 @@ async function geteditClub(req: AuthRequest, res: Response) {
                 error: "Could not find club to edit"
             });
         }
+
+
+        const [flairRows] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubFlair WHERE club_id = ?', [clubID])
+
+
+
 
         const [memberRows] = await pool.execute<RowDataPacket[]>(
             'SELECT users_id, clubRole FROM clubMember WHERE club_id = ?',
@@ -240,7 +250,8 @@ async function geteditClub(req: AuthRequest, res: Response) {
         return res.json({
             success: true,
             clubData: clubRows[0],
-            ...(memberData && { memberData })
+            ...(memberData && { memberData }),
+            ...(flairRows && { flairRows })
         });
     } catch (err) {
         console.error(err);
@@ -311,13 +322,122 @@ async function editclub(req: AuthRequest, res: Response) {
 }
 
 
+async function addFlair(req: AuthRequest, res: Response) {
+    const { Flair, ClubID } = req.body;
+    console.log("hi")
 
+
+    console.log('Received:', { Flair, ClubID });
+
+    try {
+
+        const [count] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubFlair WHERE club_id = ?', [ClubID])
+
+
+
+        if (count.length < 5) {
+            const [flairresult] = await pool.execute<ResultSetHeader>(
+                'INSERT INTO clubFlair (club_id, flairName) VALUES (?, ?)',
+                [ClubID, Flair]
+            );
+
+            if (flairresult) {
+                res.json({
+                    success: true,
+                    result: flairresult.insertId
+
+                })
+            }
+            else {
+                res.json({
+                    success: false,
+                    error: "Couldn't add flairs"
+                })
+
+            }
+        }
+        else {
+            res.json({
+                success: false,
+                error: "too many flairs"
+            })
+        }
+
+
+
+
+    }
+    catch (err) {
+        console.log(err)
+        res.json({
+            success: false,
+            error: "some error with api, i don't know", err
+        })
+
+    }
+
+}
+
+
+async function deleteFlair(req: AuthRequest, res: Response) {
+    const Flair = req.params.Flair;
+    const ClubID = req.params.ClubID;
+    console.log("hi")
+
+
+    console.log('Received:', { Flair, ClubID });
+
+    try {
+
+
+
+
+
+
+        const [flairresult] = await pool.execute<ResultSetHeader>(
+            'DELETE FROM clubFlair WHERE flairName = ? AND club_id = ?',
+            [Flair, ClubID]
+        );
+
+        if (flairresult) {
+            res.json({
+                success: true,
+                result: flairresult.insertId
+
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "Couldn't delete flairs"
+            })
+
+        }
+
+
+
+
+
+
+    }
+    catch (err) {
+        console.log(err)
+        res.json({
+            success: false,
+            error: "some error with api, i don't know", err
+        })
+
+    }
+
+}
 
 router.post('/club', verifyToken, createClub);
 router.get('/club/:clubId', getClub);
 router.get('/editclub/:clubId', verifyToken, geteditClub)
 router.put('/role', verifyToken, editRole)
 router.put('/club', verifyToken, editclub)
+router.post('/flair', verifyToken, addFlair)
+router.delete('/flair/:Flair/:ClubID', verifyToken, deleteFlair)
 
 
 

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Clubs from "../components/clubs/ClubCard";
+import UploadPfp from '../components//UploadPfp'
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 const UserPage = () => {
@@ -32,6 +33,7 @@ const UserPage = () => {
     const [joinedClubs, setJoinedClubs] = useState<Club[] | null>(null)
     const [fetching, setFetching] = useState(true);
     const [viewingOwn, setViewingOwn] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [edit, setEdit] = useState(false)
 
     const [username, setUsername] = useState("")
@@ -95,6 +97,44 @@ const UserPage = () => {
 
     }, [userData])
 
+      const handleFileChange = (file: File | null) => {
+    setSelectedFile(file);
+  };
+
+  const handleSet = async (file: File) =>{
+     if (!file) {
+    alert("Please select a file first");
+    return;
+  }
+    const token = localStorage.getItem("authToken")
+
+      const formData = new FormData();
+    formData.append("image", file);  
+
+
+    const response = await fetch(`${backendUrl}/api/image`,  {
+      method: 'POST',
+       headers: {
+      "Authorization": `Bearer ${token}`,  
+      
+    },
+    body: formData 
+
+    });
+     if (!response.ok) {
+
+    const error = await response.json();
+    console.error(error);
+    return;
+  }
+  const data = await response.json();
+  console.log("Upload successful:", data);
+
+  }
+
+
+
+
 
     const handleEdit = async (e: React.FormEvent<HTMLFormElement>) =>{
         
@@ -127,6 +167,8 @@ if (user){
         console.log(data.error)
     }
 
+
+
 }
 
 
@@ -148,6 +190,9 @@ if (user){
     <br></br>
     <h2>{desc}</h2>
     <h3>{school}</h3>
+    <UploadPfp onFileChange={handleFileChange}></UploadPfp>
+    {//@ts-ignore
+    <button onClick={ () => handleSet(selectedFile)}>Set as PFP</button>}
     <h2>President of</h2>
     {ledClubs?.map((club) => (
   <div key={club.club_id}>

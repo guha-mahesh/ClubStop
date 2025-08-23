@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     School VARCHAR(30) NOT NULL DEFAULT 'No School Reported',
     email VARCHAR(320) NOT NULL UNIQUE,
-    userDesc VARCHAR(500) DEFAULT 'Set Description'
+    userDesc VARCHAR(500) DEFAULT 'Set Description',
+    profilePic VARCHAR(100)
 
 
 );
@@ -30,6 +31,15 @@ CREATE TABLE IF NOT EXISTS clubs (
     obligation DOUBLE NOT NULL CHECK (obligation >= 0 AND obligation <= 100) DEFAULT 0,
     legacy DOUBLE NOT NULL CHECK (legacy >= 0 AND legacy <= 100) DEFAULT 0,
     total DOUBLE NOT NULL CHECK (total >= 0 AND total <= 100) DEFAULT 0
+);
+
+
+CREATE TABLE IF NOT EXISTS clubFlair (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    club_id INT NOT NULL,
+    flairName VARCHAR(50) NOT NULL,
+    UNIQUE(club_id, flairName),
+    FOREIGN KEY (club_id) REFERENCES clubs(club_id)
 );
 
 CREATE TABLE IF NOT EXISTS clubMember (
