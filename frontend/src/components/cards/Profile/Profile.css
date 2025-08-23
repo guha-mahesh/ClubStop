@@ -1,10 +1,27 @@
+.Avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 50px;
+}
+
+button {
+  background-color: #d37379;
+  border: 2px solid #98576c;
+  cursor: pointer;
+  height: 50px;
+  width: 70px;
+  margin-top: 5px;
+}
+
 .profileDrop {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: flex-start;
   position: absolute;
-  top: 85px;
+  top: 80px;
   right: 10px;
   background-color: white;
   border-radius: 8px;
@@ -16,17 +33,18 @@
 .dropdown-button {
   margin: 0;
   padding: 0;
-  width: 50px;
-  height: 50px;
-  background-color: #ccc;
+  width: 80px;
+  height: 80px;
+  background-color: #c8c6da;
   border: none;
-  border-radius: 50%;
+  border-radius: 40%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: .75vh;
+  font-size: 1.05vh;
+  font-weight: bold;
 }
 
 .dropdown-button:hover {
@@ -34,8 +52,8 @@
 }
 
 .tempPuff {
-  height: 6vh;
-  width: auto;
+  height: 1.5vh;
+  width: 2vh;
   max-width: 100%;
   border-radius: 8px;
   object-fit: cover;

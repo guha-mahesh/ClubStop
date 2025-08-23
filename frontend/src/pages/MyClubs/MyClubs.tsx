@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Clubs from "../../components/clubs/ClubCard";
-import ScreenHeader from "../../components/ScreenHeader";
+import Clubs from "../../components/cards/clubs/ClubCard";
+import Navbar from "../../components/layout/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContexts';
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
@@ -95,7 +95,7 @@ const MyClubs = () => {
   return (
     <>
     {!fetching ? (<div>
-      <ScreenHeader />
+      <Navbar />
       <div className="allClubs">
 
         <div className="leading-section">
@@ -122,9 +122,12 @@ const MyClubs = () => {
           ) : (
             <div className="no-clubs-section">
               <h2>Not Leading any Clubs</h2>
-              <a href="/CreateClub" className="create-club-link">
-                <button>Create Your First Club</button>
-              </a>
+              <button 
+                onClick={() => navigate("/CreateClub")} 
+                className="create-club-link"
+              >
+                Create Your First Club
+              </button>
             </div>
           )}
         </div>

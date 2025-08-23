@@ -1,22 +1,54 @@
 .popular {
-  display: flex;
-  flex-direction: column;
-  margin-top: 100px;
-  margin-bottom: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
 }
 
 .head {
-  justify-content: center;
-  text-align: center;
-  font-weight: bold;
-  font-size: 2rem;
-  margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
 }
 
+
 .popular-cards {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .popular {
+        padding: 1.5rem 0;
+    }
+    
+    .head {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .popular-cards {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .head {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .popular-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
 }
 
 .card-holder {
@@ -40,6 +72,7 @@ h2 {
   border: 2px solid gray;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .popular-card:hover {
