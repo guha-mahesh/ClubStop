@@ -12,13 +12,13 @@ interface Props{
     userrole: string;
     clubID?: string;
     canEdit?:boolean;
-
+    onRoleChange: (id:string , newRole:string) => void;
 
 
 
 }
 
-const EditMemberCard = ({userID, username, role, userrole, clubID="", canEdit = false}: Props) => {
+const EditMemberCard = ({userID, username, role, userrole, clubID="", onRoleChange, canEdit = false }: Props) => {
     const navigate = useNavigate()
     const [edit, setEdit] = useState(false)
     const [selectedRole, setSelectedRole] = useState(role)
@@ -61,12 +61,13 @@ const EditMemberCard = ({userID, username, role, userrole, clubID="", canEdit = 
           const data = await response.json();
       
           if(data.success){
-              console.log("success")
+
               setActualRole(selectedRole)
-              console.log("a",userrole, selectedRole)
-              console.log("b",comparePerms[userrole], comparePerms[selectedRole])
-              console.log("c",comparePerms[userrole] > comparePerms[selectedRole])
+
+
+
               setEditable(comparePerms[userrole] > comparePerms[selectedRole])
+              onRoleChange(userID , selectedRole);
               setEdit(false)
               
 
@@ -88,7 +89,7 @@ const EditMemberCard = ({userID, username, role, userrole, clubID="", canEdit = 
 
 
     {!edit ? (
-  <div className={`${role}-memberCard memberCard`}>
+  <div className={`${actualRole}-memberCard memberCard`}>
     <div onClick={() => navigate(`/UserPage/${userID}`)}>
       <h1>{username}</h1>
       <br />

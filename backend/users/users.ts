@@ -50,13 +50,17 @@ async function createUser(req: Request, res: Response) {
 
             });
         }
-    } catch (error) {
-
-        console.error('Database error:', error);
-        res.status(500).json({
-            error: 'Failed to create user',
-            details: error instanceof Error ? error.message : 'Unknown error'
-        });
+    } catch (error: any) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            if (error.message.includes('users.email')) {
+                return res.status(400).json({ error: 'You have already created an account with this Email.' });
+            } else if (error.message.includes('users.username')) {
+                return res.status(400).json({ error: 'Username Taken' });
+            }
+        }
+        else {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     }
 }
 
@@ -352,7 +356,7 @@ async function getFlairs(req: Request, res: Response) {
         } else {
             res.json({
                 success: false,
-                error: "failed to fetch uni data"
+                error: "failed to fetch flair data"
             })
         }
 

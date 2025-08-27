@@ -149,16 +149,22 @@ const Register = () => {
     user: data.user
     
   });
-     }
-
-
-      setSuccess(true);
-
       setUser("");
       setPwd("");
       setMatchPwd("");
       setEmail("")
       navigate("/");
+      setSuccess(true);
+     }
+     else{
+      console.log(data.error)
+      setErrMsg(data.error)
+     }
+
+
+      
+
+      
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");

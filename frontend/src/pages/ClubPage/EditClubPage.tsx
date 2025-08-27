@@ -23,6 +23,7 @@ interface clubFlair{
 }
 
 const EditClubPage = () => {
+
     const { clubID } = useParams<{ clubID: string }>();
     const {user, loading, isAuthenticated} = useAuth();
     const navigate = useNavigate();
@@ -31,7 +32,8 @@ const EditClubPage = () => {
     const [name, setName] = useState("")
     const [founded, setFounded] = useState("")
     const [edit, setEdit] = useState(false)
-    const [flairs, setFlairs] = useState<clubFlair[] | null>(null)
+    const [flairs, setFlairs] = useState<string[] | null>(null)
+    const [primaryFlair, setPrimaryFlair] = useState("")
     const [fetchingFlairs, setFetchingFlairs] = useState(true)
 
     const [adding, setAdding] = useState(false)
@@ -128,6 +130,8 @@ const EditClubPage = () => {
     const userRole = userInClub?.clubRole;
     setRole(userRole)
 
+  
+
   const sortedMembers = data.memberData.sort((a: Member, b: Member) => {
     const roleDiff = rolePriority[a.clubRole] - rolePriority[b.clubRole];
     if (roleDiff !== 0) return roleDiff;
@@ -138,12 +142,19 @@ const EditClubPage = () => {
   setDesc(data.clubData.clubDesc);
   setName(data.clubData.clubName);
   
-  if (data.flairRows) {
-  console.log(data.flairRows)
-  setFlairs(data.flairRows);
+
+  if (data.otherFlairs) {
+  console.log(data.otherFlairs)
+  setFlairs(data.otherFlairs);
 
 }else{
-  console.log("ni")
+  console.log(data)
+}
+if (data.clubData.primaryFlair){
+  console.log(data.clubData.primaryFlair)
+  setPrimaryFlair(data.clubData.primaryFlair)
+}else{
+  console.log("None Found")
 }
   setFounded(data.clubData.created_at);
   setFetching(false);
@@ -156,6 +167,31 @@ const EditClubPage = () => {
         }
         fetchClubData();
     }, [user, clubID])
+  
+  
+    const updateRole = (memberId: string, newRole: string) => {
+      console.log("updatingRole", memberId, newRole)
+
+  const rolePriority: { [key: string]: number } = {
+    'Leader': 0,
+    'Board': 1,
+    'Member': 2
+  };
+
+  setMembers(prev => {
+  if (!prev) return [];
+
+  const updated = prev.map(m => m.users_id === memberId ? {...m, clubRole: newRole} : m);
+
+  return [...updated].sort((a, b) => {
+  const diff = rolePriority[a.clubRole] - rolePriority[b.clubRole];
+  if (diff !== 0) return diff;
+  return a.username.localeCompare(b.username);
+});
+});
+
+
+};
 
 const handleEdit = async () =>{
     const token = localStorage.getItem("authToken")
@@ -310,6 +346,7 @@ window.location.reload();
       {members?.map((member) => (
         <div key={member.users_id}>
           <EditMemberCard
+          onRoleChange = {updateRole}
             userID={member.users_id}
             userrole={role}
             username={member.username}
@@ -325,18 +362,31 @@ window.location.reload();
     <div>
       <h3>Club Flairs</h3>
 
-      {flairs && flairs.length === 5 ? (
+      {flairs && primaryFlair && flairs.length === 5 ? (
+        <>
+        <div>
+        <h1>Primary Flair</h1>
+        <Flair primary = {true}Flair = {primaryFlair} ClubID={clubID}></Flair>
+        </div>
+        
 
-        flairs.map((flair, index) => (
-          <div key={index}>{<Flair Flair = {flair.flairName} ClubID={clubID}></Flair>}</div>
-        ))
-      ) : flairs && flairs.length > 0 ? (
+        {flairs.map((flair, index) => (
+          <div key={index}>{<Flair primary = {false}Flair = {flair} ClubID={clubID}></Flair>}</div>
+        ))}
+        </>
+        
+      ) : primaryFlair ? (
 
         <>
-          {flairs.map((flair, index) => (
-            <div key={index}>{<Flair Flair = {flair.flairName} ClubID={clubID}></Flair>}</div>
+        <div style={{"outline":"8px solid red"}}>
+        <h1>Primary Flair</h1>
+
+          <Flair primary = {false}Flair = {primaryFlair} ClubID={clubID}></Flair>
+        </div>
+          {flairs?.map((flair, index) => (
+            <div key={index}>{<Flair primary = {false}Flair = {flair} ClubID={clubID} chngprm={true}></Flair>}</div>
           ))}
-          {!adding && fetchingFlairs ? (
+          {!adding && !fetchingFlairs ? (
             <button onClick={() => setAdding(true)}>Add Flairs</button>
           ) : (
             <div>

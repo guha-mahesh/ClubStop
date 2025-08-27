@@ -5,8 +5,9 @@ import { ResultSetHeader } from 'mysql2';
 import { RowDataPacket } from 'mysql2';
 import { pool } from '../server';
 import jwt from 'jsonwebtoken';
-import { errorMonitor } from "node:events";
-import { error } from "node:console";
+
+
+
 
 
 
@@ -102,7 +103,7 @@ async function getClub(req: Request, res: Response) {
     try {
 
         if (userId) {
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair,clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
 
@@ -113,6 +114,10 @@ async function getClub(req: Request, res: Response) {
                 const [ratings] = await pool.execute<RowDataPacket[]>('SELECT * FROM rating WHERE users_id = ? AND club_id = ?', [userId, clubId])
 
                 const leader_id = clubresult[0].leader
+
+                const primaryFlair = clubresult[0].primaryFlair
+
+                const otherFlairs = flairresult.map(flair => flair.flairName).filter(flairName => flairName !== primaryFlair)
 
 
 
@@ -133,7 +138,9 @@ async function getClub(req: Request, res: Response) {
                         clubRole: role[0].clubRole,
                         clubData: clubresult[0],
                         hasRated: hasRated,
-                        flairs: flairresult
+                        primaryFlair: primaryFlair,
+                        flairs: otherFlairs,
+
 
 
 
@@ -197,7 +204,7 @@ async function getClub(req: Request, res: Response) {
     catch (err) {
         res.json({
             success: false,
-            error: errorMonitor
+            error: err
 
         })
     }
@@ -221,6 +228,10 @@ async function geteditClub(req: AuthRequest, res: Response) {
 
 
         const [flairRows] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubFlair WHERE club_id = ?', [clubID])
+
+        const primaryFlair = clubRows[0].primaryFlair
+
+        const otherFlairs = flairRows.map(flair => flair.flairName).filter(flairName => flairName !== primaryFlair)
 
 
 
@@ -253,7 +264,7 @@ async function geteditClub(req: AuthRequest, res: Response) {
             success: true,
             clubData: clubRows[0],
             ...(memberData && { memberData }),
-            ...(flairRows && { flairRows })
+            ...(flairRows && { otherFlairs })
         });
     } catch (err) {
         console.error(err);
@@ -338,6 +349,14 @@ async function addFlair(req: AuthRequest, res: Response) {
 
 
         if (count.length < 5) {
+
+            if (count.length === 0) {
+                const [primary] = await pool.execute<ResultSetHeader>(
+                    'UPDATE clubs SET primaryFlair = ? WHERE club_id = ?',
+                    [Flair, ClubID]
+                );
+            }
+
             const [flairresult] = await pool.execute<ResultSetHeader>(
                 'INSERT INTO clubFlair (club_id, flairName) VALUES (?, ?)',
                 [ClubID, Flair]
@@ -379,59 +398,51 @@ async function addFlair(req: AuthRequest, res: Response) {
     }
 
 }
-
-
 async function deleteFlair(req: AuthRequest, res: Response) {
     const Flair = req.params.Flair;
     const ClubID = req.params.ClubID;
-    console.log("hi")
-
-
     console.log('Received:', { Flair, ClubID });
 
     try {
+        let primresult: ResultSetHeader = {} as ResultSetHeader;
 
+        const [primary] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair FROM clubs WHERE club_id = ?', [ClubID]);
 
-
-
-
+        if (primary[0].primaryFlair === Flair) {
+            console.log("Deleting Primary...");
+            const [result] = await pool.execute<ResultSetHeader>(
+                'UPDATE clubs SET primaryFlair = "" WHERE club_id = ?',
+                [ClubID]
+            );
+            console.log("Deleted Primary.");
+            primresult = result;
+        }
 
         const [flairresult] = await pool.execute<ResultSetHeader>(
             'DELETE FROM clubFlair WHERE flairName = ? AND club_id = ?',
             [Flair, ClubID]
         );
 
-        if (flairresult) {
-            res.json({
-                success: true,
-                result: flairresult.insertId
 
-            })
-        }
-        else {
-            res.json({
-                success: false,
-                error: "Couldn't delete flairs"
-            })
-
+        if (primresult.affectedRows !== 0) {
+            const [newPrimary] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubFlair WHERE club_id = ?', [ClubID]);
+            if (newPrimary.length > 0) {
+                console.log("Adding new Primary");
+                await pool.execute<ResultSetHeader>('UPDATE clubs SET primaryFlair = ? WHERE club_id = ?', [newPrimary[0].flairName, ClubID]);
+            }
         }
 
 
+        return res.json({ success: true, result: flairresult.affectedRows });
 
-
-
-
+    } catch (err) {
+        console.log(err);
+        if (!res.headersSent) {
+            return res.status(500).json({ success: false, error: err });
+        }
     }
-    catch (err) {
-        console.log(err)
-        res.json({
-            success: false,
-            error: "some error with api, i don't know", err
-        })
-
-    }
-
 }
+
 
 async function getClubByFlair(req: Request, res: Response) {
     const flairName = req.params.flairName;
@@ -480,6 +491,41 @@ async function getClubByFlair(req: Request, res: Response) {
     }
 }
 
+
+
+async function changePrimary(req: AuthRequest, res: Response) {
+    const { newPrimary, clubID } = req.body;
+    console.log({ newPrimary, clubID })
+    try {
+
+        const [updateCurrentPrimary] = await pool.execute<ResultSetHeader>('UPDATE clubs SET primaryFlair = ? WHERE club_id = ?', [newPrimary, clubID]);
+
+        if (updateCurrentPrimary.affectedRows != 0) {
+            res.json({
+                success: true
+            })
+
+        }
+        else {
+            res.json({
+                success: false,
+                error: "didn't update primary"
+            })
+        }
+    } catch (err) {
+        console.log(err)
+        res.json({
+            success: false,
+            error: err
+        })
+
+
+
+    }
+
+}
+
+
 router.post('/club', verifyToken, createClub);
 router.get('/club/:clubId', getClub);
 router.get('/editclub/:clubId', verifyToken, geteditClub)
@@ -488,6 +534,7 @@ router.put('/club', verifyToken, editclub)
 router.post('/flair', verifyToken, addFlair)
 router.delete('/flair/:Flair/:ClubID', verifyToken, deleteFlair)
 router.get('/sort/:flairName', getClubByFlair);
+router.put('/flair', verifyToken, changePrimary)
 
 
 
