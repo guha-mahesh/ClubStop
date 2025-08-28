@@ -35,9 +35,7 @@ interface clubData{
   leader: number;
   leaderName: string;
 }
-interface flair{
-  flairName: string;
-}
+
 
 const ClubPage = () => {
   const {loading, isAuthenticated, user} = useAuth();
@@ -57,7 +55,8 @@ const ClubPage = () => {
   const [fetching, setFetching] = useState(true);
   const [role, setRole] = useState<string>("");
   const [edit, setEdit] = useState(false);
-  const [flairs,setFlairs] = useState<flair[] | null>(null)
+  const [flairs,setFlairs] = useState<string[] | null>(null)
+  const [primaryFlair, setPrimaryFlair] = useState("")
 
   const formatDate = (isoString: string): string => {
     const year = isoString.substring(0, 4);
@@ -93,6 +92,7 @@ const ClubPage = () => {
         if (data.success){
           setClubData(data.clubData)
           setFlairs(data.flairs)
+          setPrimaryFlair(data.primaryFlair)
           console.log(data.flairs)
           setFetching(false)
 
@@ -362,9 +362,16 @@ const ClubPage = () => {
               {clubData ? (<p>Created: {formatDate(clubData.created_at)}</p>) : null}
               <br></br>
               <br></br>
-              {flairs ? (
-  flairs.map((flair, idx) => <Flair key={idx} dlt = {false} Flair = {flair.flairName} ClubID={clubID} />)
-) : null}
+              {<>
+                {
+                  <> 
+                  <h1>Primary Flair</h1>
+                  <Flair Flair = {primaryFlair} ClubID={clubID} primary = {true}/> 
+                  </>
+                  }
+
+              {flairs ? ( flairs.map((flair, idx) => <Flair primary = {false} key={idx} dlt = {false} Flair = {flair} ClubID={clubID} />)) : null}
+              </>}
 
 
             </div>): <h1>Loading...</h1>}

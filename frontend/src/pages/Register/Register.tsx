@@ -146,7 +146,8 @@ const Register = () => {
     if (data.success){
     login({
     token: data.token,
-    user: data.user
+    user: data.user,
+    school: data.school
     
   });
       setUser("");

@@ -6,8 +6,11 @@ import CategoryGrid from '../../components/ui/CategoryGrid';
 import { useAuth } from '../../contexts/AuthContexts';
 import './Home.css';
 
+
 const Home = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, school } = useAuth();
+
+
 
   return (
     <>
@@ -18,7 +21,7 @@ const Home = () => {
         </div>
         <div className="hero-content">
           <h1 className="hero-title">
-            Looking for a club at Northeastern?
+            Looking for a club at {school}?
           </h1>
           <p className="hero-subtitle">
             Discover, join, and connect with amazing student organizations

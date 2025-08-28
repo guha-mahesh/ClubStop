@@ -378,7 +378,7 @@ window.location.reload();
       ) : primaryFlair ? (
 
         <>
-        <div style={{"outline":"8px solid red"}}>
+        <div >
         <h1>Primary Flair</h1>
 
           <Flair primary = {false}Flair = {primaryFlair} ClubID={clubID}></Flair>

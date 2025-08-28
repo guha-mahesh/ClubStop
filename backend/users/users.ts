@@ -46,7 +46,8 @@ async function createUser(req: Request, res: Response) {
                 user: {
                     id: result.insertId,
                     username: username
-                }
+                },
+                school: school
 
             });
         }

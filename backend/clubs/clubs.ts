@@ -155,7 +155,8 @@ async function getClub(req: Request, res: Response) {
                         clubRole: "Not a Member!",
                         hasRated: hasRated,
                         clubData: clubresult[0],
-                        flairs: flairresult
+                        flairs: otherFlairs,
+                        primaryFlair: primaryFlair
 
 
                     })
@@ -175,6 +176,9 @@ async function getClub(req: Request, res: Response) {
             const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
+            const primaryFlair = clubresult[0].primaryFlair
+
+            const otherFlairs = flairresult.map(flair => flair.flairName).filter(flairName => flairName !== primaryFlair)
 
             if (clubresult.length !== 0) {
                 console.log(clubresult[0].leaderName)
@@ -182,7 +186,8 @@ async function getClub(req: Request, res: Response) {
                 res.json({
                     success: true,
                     clubData: clubresult[0],
-                    flairs: flairresult
+                    flairs: otherFlairs,
+                    primaryFlair: primaryFlair
 
                 })
             }

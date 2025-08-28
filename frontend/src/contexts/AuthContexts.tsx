@@ -6,6 +6,9 @@ interface User {
   id: string;
   username: string;
 }
+interface School{
+  school: string;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -13,11 +16,13 @@ interface AuthContextType {
   loading: boolean;
   login: (data: LoginResponse) => void;
   logout: () => void;
+  school: School | null;
 }
 
 interface LoginResponse {
   token: string;
   user: User;
+  school: School;
 }
 
 
@@ -40,6 +45,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [school, setSchool] = useState<School | null>(null)
   const [loading, setLoading] = useState<boolean>(true);
 
 
@@ -47,12 +53,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     
     const token = localStorage.getItem('authToken');
     const userData = localStorage.getItem('user');
+    const school = localStorage.getItem('school')
 
 
     
-    if (token && userData) {
+    if (token && userData && school) {
       setIsAuthenticated(true);
       setUser(JSON.parse(userData));
+      setSchool(JSON.parse(school));
     }
     
     setLoading(false);
@@ -61,8 +69,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = (data: LoginResponse) => {
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem('school', JSON.stringify(data.school));
     setIsAuthenticated(true);
     setUser(data.user);
+    setSchool(data.school)
   };
 
   const logout = () => {
@@ -76,6 +86,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isAuthenticated,
     user,
     loading,
+    school,
     login,
     logout
   };
