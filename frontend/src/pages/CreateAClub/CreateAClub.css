@@ -1,88 +1,359 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    margin-top: 80px; /* Add margin to account for fixed Navbar */
+.create-club-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #eb7535 0%, #764ba2 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background-decoration {
+  position: fixed;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  z-index: 0;
+  opacity: 0.08;
+  pointer-events: none;
+  max-width: 400px;
+  height: auto;
+}
+
+
+.club-creation-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  .club-form {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
+}
+
+
+.form-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.form-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c44c32, #e74c3c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+
+.input-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.input-label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.8rem;
+  transition: color 0.2s ease;
+}
+
+.text-input,
+.textarea-input {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #1e293b;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.text-input:focus,
+.textarea-input:focus {
+  outline: none;
+  border-color: #c44c32;
+  box-shadow: 0 0 0 3px rgba(196, 76, 50, 0.1);
+  transform: translateY(-1px);
+}
+
+.textarea-input {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+
+.social-links-section {
+  margin: 3rem 0;
+}
+
+.social-links-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.social-links-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #c44c32, #e74c3c);
+  border-radius: 2px;
+}
+
+.social-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.social-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.social-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.social-icon-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.instagram-icon {
+  color: white;
+  font-size: 2rem;
+}
+
+.linktree-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  filter: brightness(0) invert(1);
+}
+
+.social-input {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.8rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.social-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.social-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+
+.submit-button {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  background: linear-gradient(135deg, #c44c32, #e74c3c);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(196, 76, 50, 0.3);
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+
+.success-section {
+  text-align: center;
+  padding: 3rem 2rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
-  
-  .input-field,
-  .textarea-field {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    color: #333;
-    resize: none;
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .textarea-field {
-    height: 300px; /* Fixed height */
-    padding: 15px;
-    overflow-y: auto; /* Allow scrolling if the content exceeds the height */
+}
+
+.success-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 1rem;
+}
+
+.success-description {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.club-link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.club-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+  text-decoration: none;
+  color: white;
+}
+
+
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+
+@media (max-width: 768px) {
+  .create-club-container {
+    padding: 1rem;
   }
-  
-  .input-field:focus,
-  .textarea-field:focus {
-    outline-color: #c44c32;
+
+  .club-creation-card {
+    padding: 2rem;
+    margin: 1rem 0;
   }
-  
-  .submit-btn {
-    background-color: #c44c32;
-    color: white;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+
+  .form-title {
+    font-size: 2rem;
   }
-  
-  .submit-btn:hover {
-    background-color: #800000;
+
+  .social-links-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  
-  .success-message {
-    text-align: center;
-    font-size: 18px;
-    color: #4caf50;
+
+  .background-decoration {
+    display: none;
   }
-  
-  .home-link {
-    color: #6c5ce7;
-    text-decoration: none;
-    font-weight: bold;
+
+  .input-label {
+    font-size: 1rem;
   }
-  
-  .home-link:hover {
-    text-decoration: underline;
+
+  .social-icon-container {
+    width: 70px;
+    height: 70px;
   }
-  
-  .login-prompt {
-    font-size: 18px;
-    color: #333;
-    text-align: center;
+}
+
+@media (max-width: 480px) {
+  .club-creation-card {
+    padding: 1.5rem;
   }
-  
+
+  .form-title {
+    font-size: 1.8rem;
+  }
+
+  .input-group {
+    margin-bottom: 1.5rem;
+  }
+}

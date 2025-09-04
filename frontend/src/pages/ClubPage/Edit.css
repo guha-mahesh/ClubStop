@@ -1,0 +1,422 @@
+.edit-club-page {
+    max-width: 100vw;
+    margin: 0 auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #a32a2a 0%, #b74203 100%);
+    min-height: 100vh;
+
+
+}
+
+textarea {
+    resize: none;
+}
+
+
+.club-info-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.3s ease;
+}
+
+.club-info-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.club-details-view,
+.club-details-edit {
+    position: relative;
+}
+
+
+.club-form {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+}
+
+.club-form.edit-mode {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px dashed #cbd5e1;
+    position: relative;
+}
+
+.club-form.edit-mode::before {
+    content: "✏️ Editing Mode";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: #c44c32;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.form-input {
+    padding: 0.875rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: white;
+    color: #374151;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #c44c32;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.disabled {
+    background: #f9fafb;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.form-input:hover:not(.disabled) {
+    border-color: #d1d5db;
+}
+
+
+.edit-button,
+.save-button,
+.cancel-button,
+.add-flair-button,
+.confirm-button,
+.cancel-selection-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.primary {
+    background: linear-gradient(135deg, #c44c32 0%, #d81d4f 100%);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4);
+}
+
+.primary:hover {
+    background: linear-gradient(135deg, #ae2b0e 0%, #900c2f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+}
+
+.secondary {
+    background: white;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+}
+
+.secondary:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+
+.members-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.members-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.member-item {
+    transition: transform 0.2s ease;
+}
+
+.member-item:hover {
+    transform: translateX(4px);
+}
+
+
+.flairs-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.section-title {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border-radius: 2px;
+}
+
+.flair-subtitle {
+    color: #4b5563;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.flairs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.primary-flair-container {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 12px;
+    border: 2px solid #f59e0b;
+}
+
+.secondary-flairs-container {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border: 2px solid #0ea5e9;
+}
+
+.flairs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.flair-item {
+    transition: transform 0.2s ease;
+}
+
+.flair-item:hover {
+    transform: scale(1.02);
+}
+
+
+.flair-search-container {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px dashed #cbd5e1;
+    margin-top: 1rem;
+}
+
+.search-input-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.flair-search-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.flair-search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.flair-options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.flair-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.flair-option:last-child {
+    border-bottom: none;
+}
+
+.flair-option:hover {
+    background: #f3f4f6;
+    color: #3b82f6;
+}
+
+.flair-option.selected {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    font-weight: 600;
+}
+
+.flair-selection-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.selected-flair-info {
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.selection-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+
+@media (max-width: 768px) {
+    .edit-club-page {
+        padding: 1rem;
+    }
+
+    .club-info-section,
+    .members-section,
+    .flairs-section {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .selection-buttons {
+        flex-direction: column;
+    }
+
+    .flairs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .flairs-container {
+        gap: 1.5rem;
+    }
+}
+
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.club-info-section,
+.members-section,
+.flairs-section {
+    animation: fadeIn 0.4s ease-out;
+}
+
+
+.flair-options-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.flair-options-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.flair-options-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.flair-options-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+.edit-button:focus,
+.save-button:focus,
+.cancel-button:focus,
+.add-flair-button:focus,
+.confirm-button:focus,
+.cancel-selection-button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+
+.form-input:not(.disabled):focus+.form-label {
+    color: #3b82f6;
+}

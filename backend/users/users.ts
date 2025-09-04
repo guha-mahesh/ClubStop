@@ -112,7 +112,8 @@ async function Login(req: Request, res: Response) {
                         id: user_data.users_id,
                         username: user_data.username
 
-                    }
+                    },
+                    school: user_data.School
                 });
             }
             else {

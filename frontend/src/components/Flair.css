@@ -1,0 +1,127 @@
+.flair-container {
+    display: inline-flex;
+    align-items: center;
+    margin: 4px;
+}
+
+.flair {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #a32a2a 0%, #b74203 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(163, 42, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.flair:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: left 0.6s ease;
+}
+
+.flair:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(163, 42, 42, 0.5);
+}
+
+.flair:hover:before {
+    left: 100%;
+}
+
+.primary-flair {
+    background: linear-gradient(135deg, #a32a2a 0%, #b74203 100%);
+    box-shadow: 0 6px 24px rgba(163, 42, 42, 0.6), 0 0 30px rgba(183, 66, 3, 0.4);
+    transform: scale(1.08);
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    animation: primaryGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes primaryGlow {
+    0% {
+        box-shadow: 0 6px 24px rgba(163, 42, 42, 0.6), 0 0 30px rgba(183, 66, 3, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 8px 32px rgba(163, 42, 42, 0.8), 0 0 40px rgba(183, 66, 3, 0.6);
+    }
+}
+
+.flair-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.delete-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+}
+
+.delete-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.delete-btn:active {
+    transform: scale(0.95);
+}
+
+.delete-icon {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.primary-btn {
+    padding: 6px 12px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.primary-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 215, 0, 0.2));
+    transform: scale(1.05);
+    box-shadow: 0 3px 12px rgba(255, 215, 0, 0.4);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+.crown-icon {
+    font-size: 14px;
+    margin-right: 4px;
+}

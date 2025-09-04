@@ -38,45 +38,119 @@ async function getUsernameFromId(id: string) {
 }
 
 async function createClub(req: AuthRequest, res: Response) {
-    const { userId, clubName, clubDesc, school } = req.body;
+    const { userId, clubName, clubDesc, school, instagram, linkTree } = req.body;
     console.log("hi")
 
 
-    console.log('Received:', { userId, clubName, clubDesc, school });
+    console.log('Received:', { userId, clubName, clubDesc, school, instagram, linkTree });
 
     try {
-        const username = await getUsernameFromId(userId);
-        console.log(username)
 
-        const [clubresult] = await pool.execute<ResultSetHeader>(
-            'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName) VALUES (?, ?, ?, ?, ?)',
-            [clubName, clubDesc, school, userId, username]
-        );
+        if (!instagram && !linkTree) {
+            const username = await getUsernameFromId(userId);
+            console.log(username)
 
-        if (clubresult) {
+            const [clubresult] = await pool.execute<ResultSetHeader>(
+                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName) VALUES (?, ?, ?, ?, ?)',
+                [clubName, clubDesc, school, userId, username]
+            );
 
-            const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
-            if (userresult) {
-                res.json({
-                    success: true,
-                    clubId: clubresult.insertId,
-                })
+            if (clubresult) {
+
+                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
+                if (userresult) {
+                    res.json({
+                        success: true,
+                        clubId: clubresult.insertId,
+                    })
+
+                }
+                else {
+                    console.log("failed to insert userResult")
+                    res.json({
+                        success: false,
+                        error: "couldn't handle users club creation"
+                    })
+                }
 
             }
             else {
-                console.log("failed to insert userResult")
                 res.json({
                     success: false,
-                    error: "couldn't handle users club creation"
+                    error: "Couldn't create Club"
+                })
+            }
+        }
+        else if (linkTree) {
+            const username = await getUsernameFromId(userId);
+            console.log(username)
+
+            const [clubresult] = await pool.execute<ResultSetHeader>(
+                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName, linktree) VALUES (?, ?, ?, ?, ?, ?)',
+                [clubName, clubDesc, school, userId, username, linkTree]
+            );
+
+            if (clubresult) {
+
+                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
+                if (userresult) {
+                    res.json({
+                        success: true,
+                        clubId: clubresult.insertId,
+                    })
+
+                }
+                else {
+                    console.log("failed to insert userResult")
+                    res.json({
+                        success: false,
+                        error: "couldn't handle users club creation"
+                    })
+                }
+
+            }
+            else {
+                res.json({
+                    success: false,
+                    error: "Couldn't create Club"
                 })
             }
 
         }
-        else {
-            res.json({
-                success: false,
-                error: "Couldn't create Club"
-            })
+        else if (instagram) {
+            const username = await getUsernameFromId(userId);
+            console.log(username)
+
+            const [clubresult] = await pool.execute<ResultSetHeader>(
+                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName, instagram) VALUES (?, ?, ?, ?, ?)',
+                [clubName, clubDesc, school, userId, username, instagram]
+            );
+
+            if (clubresult) {
+
+                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
+                if (userresult) {
+                    res.json({
+                        success: true,
+                        clubId: clubresult.insertId,
+                    })
+
+                }
+                else {
+                    console.log("failed to insert userResult")
+                    res.json({
+                        success: false,
+                        error: "couldn't handle users club creation"
+                    })
+                }
+
+            }
+            else {
+                res.json({
+                    success: false,
+                    error: "Couldn't create Club"
+                })
+            }
         }
 
     }
@@ -103,7 +177,7 @@ async function getClub(req: Request, res: Response) {
     try {
 
         if (userId) {
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair,clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair,clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instagram, linktree FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
 
@@ -173,7 +247,7 @@ async function getClub(req: Request, res: Response) {
         }
         else if (clubId) {
 
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instragram, linktree FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
             const primaryFlair = clubresult[0].primaryFlair
@@ -314,12 +388,12 @@ async function editRole(req: AuthRequest, res: Response) {
 }
 
 async function editclub(req: AuthRequest, res: Response) {
-    const { clubID, name, description, founded } = req.body;
+    const { clubID, name, description, founded, instagram, linktree } = req.body;
     console.log("editclubfr received:", { clubID, name, description, founded })
     try {
         const [editrows] = await pool.execute<ResultSetHeader>(
-            'UPDATE clubs SET clubName = ?, clubDesc = ?, created_at = ? WHERE club_id = ?',
-            [name, description, founded, clubID]
+            'UPDATE clubs SET clubName = ?, clubDesc = ?, created_at = ?, instagram = ?, linktree = ? WHERE club_id = ?',
+            [name, description, founded, instagram, linktree, clubID]
         );
         if (editrows) {
             res.json({

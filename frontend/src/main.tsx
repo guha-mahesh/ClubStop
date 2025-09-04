@@ -12,6 +12,7 @@ import "./pages/MyClubs/MyClubs.css";
 import "./pages/ClubPage/ClubPage.css";
 import "./pages/CreateAClub/CreateAClub.css";
 import './components/Flair.css'
+import './pages/ClubPage/Edit.css'
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

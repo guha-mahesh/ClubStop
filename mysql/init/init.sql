@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS clubs (
     prestige DOUBLE NOT NULL CHECK (prestige >= 0 AND prestige <= 100) DEFAULT 0,
     obligation DOUBLE NOT NULL CHECK (obligation >= 0 AND obligation <= 100) DEFAULT 0,
     legacy DOUBLE NOT NULL CHECK (legacy >= 0 AND legacy <= 100) DEFAULT 0,
-    total DOUBLE NOT NULL CHECK (total >= 0 AND total <= 100) DEFAULT 0
+    total DOUBLE NOT NULL CHECK (total >= 0 AND total <= 100) DEFAULT 0,
+    instagram VARCHAR(50) NOT NULL DEFAULT '',
+    linktree VARCHAR(50) NOT NULL DEFAULT ''
+
 );
 
 

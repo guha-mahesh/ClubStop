@@ -2,39 +2,42 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "../../components/layout/Navbar";
+import { FaInstagram } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from '../../contexts/AuthContexts'
+import linktree from '../../assets/linktree-logo-icon.svg'
+import bg from '../../assets/CreateClubBackground.png'
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
-
-
-
-
+interface University{
+  name: string;
+}
 
 const CreateAClub: React.FC = () => {
   const [clubName, setClubName] = useState<string>("");
-  const [clubSchool, setClubSchool] = useState<string>("");
   const [clubDesc, setClubDesc] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
+  const [instagram, setInstagram] = useState<string>("")
+  const [linkTree, setLinkTree] = useState<string>("")
 
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userRef = useRef<HTMLInputElement | null>(null);
-  const {user, isAuthenticated, loading} = useAuth();
+  const {user, isAuthenticated, loading, school} = useAuth();
   const [clubId, setClubId]= useState("")
-
+  
   useEffect(() => {
     if (userRef.current) {
       userRef.current.focus();
     }
-    
   }, []);
+
   useEffect(() => {
     if (!isAuthenticated && !loading) {
       navigate("/Login")
     }
-    
   }, [isAuthenticated,loading, navigate]);
 
   interface ClubCreation {
@@ -45,34 +48,29 @@ const CreateAClub: React.FC = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
     e.preventDefault();
-
 
     const token = localStorage.getItem("authToken");
 
-
     try {
       if (user){
+        const response = await fetch(`${backendUrl}/api/club`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+          body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: school, instagram: instagram, linkTree: linkTree }),
+        });
+        const data = await response.json();
 
-      const response = await fetch(`${backendUrl}/api/club`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-      body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: clubSchool  }),
-    });
-    const data = await response.json();
-
-    if (data.success){
-      console.log("Success Creating Club");
-      console.log(data.clubId);
-      setClubId(data.clubId)
-      setSuccess(true);
-    }else{
-      console.log(data.error)
-    }
-}
-     
-
+        if (data.success){
+          console.log("Success Creating Club");
+          console.log(data.clubId);
+          setClubId(data.clubId)
+          setSuccess(true);
+          navigate(`/club/${data.clubId}`)
+        }else{
+          console.log(data.error)
+        }
+      }
     } catch (error) {
       console.error("Error creating club:", error);
       setErrorMessage("Error creating club. Please try again.");
@@ -82,74 +80,115 @@ const CreateAClub: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="container">
-  {
-    !success ? (
-      <form onSubmit={handleSubmit} className="club-form">
-        <label htmlFor="clubName" className="label">
-          Club Name
-        </label>
-        <input
-          ref={userRef}
-          id="clubName"
-          maxLength={20}
-          required
-          type="text"
-          value={clubName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setClubName(e.target.value)
-          }
-          className="input-field"
-        />
+      <div className="create-club-container">
+        <img src={bg} className="background-decoration" alt="Background decoration" />
+        
+        {!success ? (
+          <div className="club-creation-card">
+            <div className="form-header">
+              <h1 className="form-title">Create Your Club</h1>
+              <p className="form-subtitle">Build your community and connect with like-minded students</p>
+            </div>
 
-        <label htmlFor="clubDesc" className="label">
-          Club Description
-        </label>
-        <textarea
-          id="clubDesc"
-          required
-          value={clubDesc}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setClubDesc(e.target.value)
-          }
-          className="textarea-field"
-        />
-        <label htmlFor="clubSchool" className="label">
-          What University/School is this club at?
-        </label>
-        <input
-          ref={userRef}
-          id="clubSchool"
-          maxLength={30}
-          required
-          type="text"
-          value={clubSchool}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setClubSchool(e.target.value)
-          }
-          className="input-field"
-        />
+            {errorMessage && (
+              <div className="error-message">
+                {errorMessage}
+              </div>
+            )}
 
-        <button type="submit" className="submit-btn">
-          Submit
-        </button>
-      </form>
-    ) : (
-      <section className="success-message">
-        <h1>Club Created Successfully!</h1>
-        <p>
-          <button 
-            onClick={() => navigate(`/club/${clubId}`)} 
-            className="home-link"
-            style={{ background: 'none', border: 'none', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit' }}
-          >
-            Go • to • Club
-          </button>
-        </p>
-      </section>
-    )
-  }
-</div>
+            <form onSubmit={handleSubmit}>
+              <div className="input-group">
+                <label htmlFor="clubName" className="input-label">
+                  Club Name
+                </label>
+                <input
+                  ref={userRef}
+                  id="clubName"
+                  maxLength={20}
+                  required
+                  type="text"
+                  value={clubName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setClubName(e.target.value)
+                  }
+                  className="text-input"
+                  placeholder="Enter your club's name"
+                />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="clubDesc" className="input-label">
+                  Club Description
+                </label>
+                <textarea
+                  id="clubDesc"
+                  required
+                  value={clubDesc}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setClubDesc(e.target.value)
+                  }
+                  className="textarea-input"
+                  placeholder="Describe your club's purpose, activities, and what makes it special..."
+                />
+              </div>
+
+              <div className="social-links-section">
+                <h3 className="social-links-title">Connect Your Socials</h3>
+                <div className="social-links-grid">
+                  <div className="social-input-group">
+                    <div className="social-icon-container">
+                      <FaInstagram className="instagram-icon" />
+                    </div>
+                    <input
+                      id="instagram"
+                      value={instagram}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setInstagram(e.target.value)
+                      }
+                      className="social-input"
+                      placeholder="@username"
+                    />
+                  </div>
+
+                  <div className="social-input-group">
+                    <div className="social-icon-container">
+                      <img className="linktree-icon" src={linktree} alt="Linktree" />
+                    </div>
+                    <input
+                      id="linktree"
+                      value={linkTree}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setLinkTree(e.target.value)
+                      }
+                      className="social-input"
+                      placeholder="linktr.ee/yourclub"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" className="submit-button">
+                Create Club
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="club-creation-card">
+            <div className="success-section">
+              <h1 className="success-title">🎉 Club Created!</h1>
+              <p className="success-description">
+                Your club has been successfully created and is ready for members.
+              </p>
+              <button 
+                onClick={() => navigate(`/club/${clubId}`)} 
+                className="club-link-button"
+              >
+                Visit Your Club →
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };
