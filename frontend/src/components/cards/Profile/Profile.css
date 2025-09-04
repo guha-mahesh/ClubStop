@@ -1,87 +1,76 @@
-.Avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 50px;
+.sidebar {
+  position: fixed;
+  right: -300px;
+
+  transition: right 0.3s ease;
 }
 
-button {
-  background-color: #d37379;
-  border: 2px solid #98576c;
-  cursor: pointer;
-  height: 50px;
-  width: 70px;
-  margin-top: 5px;
-}
-
-.profileDrop {
+.sidebar-open {
+  right: -300px;
+  top: 0;
+  background-color: #721515;
+  height: 100vw;
+  width: 25vh;
+  border-radius: 10% 0 10% 0;
+  animation: sidebar-open 0.5s ease forwards;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  justify-content: flex-start;
-  position: absolute;
-  top: 80px;
-  right: 10px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  z-index: 100;
+  align-items: center;
 }
 
+.sidebarfirst {
+  animation: sidebar-close 0.5s ease forwards;
+}
+
+@keyframes sidebar-open {
+  0% {
+    right: -300px;
+  }
+
+  50% {
+    right: 0px;
+    width: 30vh;
+  }
+
+  100% {
+    right: 0;
+    width: 25vh;
+  }
+}
+
+@keyframes sidebar-close {
+  from {
+    right: 0;
+  }
+
+  to {
+    right: -300px;
+  }
+}
+
+
 .dropdown-button {
-  margin: 0;
-  padding: 0;
-  width: 80px;
-  height: 80px;
-  background-color: #c8c6da;
-  border: none;
-  border-radius: 40%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 1.05vh;
-  font-weight: bold;
+
+  width: 100%;
+  padding: 3rem 1rem;
+  background-color: #721515;
+  border: 4px solid black;
+
 }
 
 .dropdown-button:hover {
-  background-color: #aaa;
+
+
+  color: #c31b1b;
+  border: 4px solid #c31b1b;
+
 }
 
-.tempPuff {
-  height: 1.5vh;
-  width: 2vh;
-  max-width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-}
+.buttonFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4rem;
+  gap: 2rem;
 
-
-.memberCard {
-  background-color: #c44c32;
-}
-
-.Leader-memberCard:hover {
-  background-color: #a53b26;
-}
-
-.Member-memberCard {
-  background-color: aquamarine;
-}
-
-
-.Member-memberCard:hover {
-  background-color: darkcyan;
-}
-
-.Board-memberCard {
-  background-color: darkolivegreen;
-}
-
-
-.Board-memberCard:hover {
-  background-color: darkgreen;
 }

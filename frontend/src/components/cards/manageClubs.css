@@ -1,0 +1,25 @@
+.memberCard {
+    background-color: #c44c32;
+}
+
+.Leader-memberCard:hover {
+    background-color: #a53b26;
+}
+
+.Member-memberCard {
+    background-color: aquamarine;
+}
+
+
+.Member-memberCard:hover {
+    background-color: darkcyan;
+}
+
+.Board-memberCard {
+    background-color: darkolivegreen;
+}
+
+
+.Board-memberCard:hover {
+    background-color: darkgreen;
+}

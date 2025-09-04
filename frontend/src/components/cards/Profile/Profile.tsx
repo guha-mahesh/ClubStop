@@ -1,77 +1,61 @@
-// this is the icon at the top right of the home page where the user can view their stuff
-
 import { useState } from "react";
-import Puffin from "../../../assets/puffin.png";
 import { useNavigate } from "react-router-dom";
-import {useAuth} from '../../../contexts/AuthContexts'
-
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from '../../../contexts/AuthContexts';
+import { FaBars } from 'react-icons/fa';
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
-  const {user }= useAuth();
+  const [closing, setClosing] = useState<boolean>(false);
 
-
-  const checkJwt = () => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      const decode = jwtDecode(token) as { exp: number };
-      const time = Date.now() / 1000;
-
-      if (decode.exp < time) {
-        localStorage.clear();
-
-        window.location.reload();
-      }
-    }
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);  
+      setClosing(false);
+    }, 500); 
   };
 
   return (
-    <div>
-      {!open ? (
-        <div className="Avatar">
-          <button onClick={() => setOpen((prev) => !prev)}>
-            <img className="tempPuff" src={Puffin} />
-          </button>
-        </div>
-      ) : (
-        <div className="Avatar">
-          <button onClick={() => setOpen((prev) => !prev)}>
-            <img className="tempPuff" src={Puffin} />
-          </button>
-          <div className="profileDrop">
-            <button
-              onClick={() => {
-                navigate("/CreateClub");
-                checkJwt();
-              }}
-              className="dropdown-button"
-            >
-              Create a Club
-            </button>
-            <button
-              onClick={() => {
-                navigate("/MyClubs");
-                checkJwt();
-              }}
-              className="dropdown-button"
-            >
-              My Clubs
-            </button>
-            <button
-              onClick={() => {
-                navigate(`/UserPage/${user?.id}`);
-                checkJwt();
-              }}
-              className="dropdown-button"
-            >
-              View Profile
-            </button>
-          </div>
+    <>
+      {!user ? null : (
+        <div>
+          <FaBars
+            className="hamburgerMenu"
+            onClick={() => setOpen(true)}
+            size={32}
+          />
+
+
+          {(open || closing) && (
+            <div className={`sidebar ${open ? 'sidebar-open' : ''} ${closing ? 'sidebarfirst' : ''}`}>
+              <div className="buttonFlex">
+                <FaBars onClick={handleClose} size={32} />
+                <button
+                  onClick={() => navigate(`/UserPage/${user?.id}`)}
+                  className="dropdown-button"
+                >
+                  View Profile
+                </button>
+                <button
+                  onClick={() => navigate(`/`)}
+                  className="dropdown-button"
+                >
+                  Saved Clubs
+                </button>
+                <button
+                  onClick={() => navigate(`/`)}
+                  className="dropdown-button"
+                >
+                  Club Lists
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 
