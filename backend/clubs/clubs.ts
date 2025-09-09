@@ -167,16 +167,20 @@ async function createClub(req: AuthRequest, res: Response) {
 
 
 async function getClub(req: Request, res: Response) {
-    const clubId = req.params.clubId;
+    let clubId = req.params.clubId;
     const { userId } = req.query;
+
+
 
 
     console.log("getClub Received:", { clubId, userId })
 
 
     try {
+        console.log("trying")
 
         if (userId) {
+
             const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair,clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instagram, linktree FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
@@ -245,9 +249,10 @@ async function getClub(req: Request, res: Response) {
             }
 
         }
-        else if (clubId) {
+        else if (clubId !== '""') {
+            console.log("this one")
 
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instragram, linktree FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instagram, linktree FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
             const primaryFlair = clubresult[0].primaryFlair
@@ -265,20 +270,27 @@ async function getClub(req: Request, res: Response) {
 
                 })
             }
-            else {
-                res.json({
-                    success: false,
-                    error: 'club not found'
-                })
-            }
+
 
         }
         else {
-            res.json({
-                success: false,
-                error: "clubId not existent"
-            })
+            console.log("case ???")
+
+            const [allClubs] = await pool.execute<RowDataPacket[]>('SELECT clubName, club_id, School FROM clubs')
+            if (allClubs) {
+                res.json({
+                    success: true,
+                    clubData: allClubs,
+                })
+            } else {
+                res.json({
+                    success: false,
+                    error: "clubData not found"
+                })
+
+            }
         }
+
     }
     catch (err) {
         res.json({

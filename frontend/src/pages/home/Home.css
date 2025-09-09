@@ -1,12 +1,15 @@
 /* ===== MODERN HOME STYLES ===== */
 * {
-    font-family: 'Inter', sans-serif;  
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
-html, body {
+/*secttion bg overlay content*/
+html,
+body {
     margin: 0;
     padding: 0;
     background-color: #f8fafc;
@@ -23,6 +26,7 @@ body {
 
 /* ===== HERO SECTION ===== */
 .hero-section {
+    padding-top: 3rem;
     position: relative;
     min-height: 70vh;
     display: flex;
@@ -30,6 +34,7 @@ body {
     justify-content: center;
     overflow: hidden;
     background: linear-gradient(135deg, #e15656 0%, #e5512c 100%);
+
 }
 
 .hero-background {
@@ -41,6 +46,7 @@ body {
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23ffffff;stop-opacity:0.1"/><stop offset="100%" style="stop-color:%23ffffff;stop-opacity:0.05"/></linearGradient></defs><path d="M0,0 L1200,0 L1200,800 Q600,700 0,800 Z" fill="url(%23a)"/><path d="M0,0 L1200,0 L1200,800 Q900,750 600,800 Q300,850 0,800 Z" fill="url(%23a)"/></svg>') no-repeat center center;
     background-size: cover;
     opacity: 0.3;
+
 }
 
 .hero-overlay {
@@ -103,16 +109,16 @@ body {
         min-height: 70vh;
         padding: 2rem 1rem;
     }
-    
+
     .hero-content {
         padding: 0 1rem;
     }
-    
+
     .search-container {
         padding: 1.5rem;
         margin: 0 1rem;
     }
-    
+
     .main-content {
         padding: 2rem 1rem;
     }
@@ -122,11 +128,11 @@ body {
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .hero-subtitle {
         font-size: 1rem;
     }
-    
+
     .search-container {
         padding: 1rem;
     }
@@ -138,6 +144,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

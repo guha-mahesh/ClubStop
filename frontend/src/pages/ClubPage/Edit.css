@@ -420,3 +420,7 @@ textarea {
 .form-input:not(.disabled):focus+.form-label {
     color: #3b82f6;
 }
+
+.endingButton {
+    margin-left: 1rem;
+}

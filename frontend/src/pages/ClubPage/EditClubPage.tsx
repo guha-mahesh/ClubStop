@@ -560,6 +560,10 @@ return (
        </div>
      )}
    </div>
+   <br></br><br></br>
+    <button type="button" className="edit-button primary endingButton" onClick={()=>navigate(`/club/${clubID}`)}>
+          back to Club
+         </button>
  </div>
 );
 }

@@ -7,7 +7,7 @@ import "./pages/home/Home.css";
 import "./pages/Register/Register.css";
 import "./components/cards/Profile/Profile.css";
 import "./components/cards/clubs/Clubs.css";
-import "./components/ui/Search.css";
+import "./components/ui//searchbar/SearchBar.css";
 import "./pages/MyClubs/MyClubs.css";
 import "./pages/ClubPage/ClubPage.css";
 import "./pages/CreateAClub/CreateAClub.css";

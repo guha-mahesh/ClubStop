@@ -25,6 +25,7 @@ const MyClubs = () => {
   const [joined, setJoined] = useState<Club[] | null>(null);
   const { user, loading, isAuthenticated } = useAuth();
   const [fetching,setFetching] = useState(true);
+  const [viewing, setViewing] = useState("")
 
   useEffect(() => {
     if (!isAuthenticated && !loading) {

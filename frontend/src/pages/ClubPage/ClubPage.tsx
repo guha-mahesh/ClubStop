@@ -113,6 +113,7 @@ const ClubPage = () => {
 
           setHasRated(data.hasRated)
           console.log("Success")
+          console.log(data.clubData)
         }
       }
       else{
@@ -124,9 +125,13 @@ const ClubPage = () => {
         if (data.success){
           setClubData(data.clubData)
           setFetching(false)
+          console.log("success")
 
           
 
+        }else{
+          console.log("failure")
+          console.log(data.error)
         }
       }
     }
