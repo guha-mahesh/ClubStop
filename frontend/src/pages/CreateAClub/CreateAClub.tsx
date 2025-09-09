@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "../../components/layout/Navbar";
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from '../../contexts/AuthContexts'
