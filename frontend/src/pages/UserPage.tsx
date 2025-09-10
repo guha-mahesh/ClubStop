@@ -13,6 +13,8 @@ const UserPage = () => {
         username: string;
         School: string;
         userDesc: string;
+        email: string;
+        profilePic: string;
 
     }
 
@@ -60,6 +62,7 @@ const UserPage = () => {
     const data = await response.json();
 
     if(data.success){
+      console.log("userdata",userData)
         
         setUserData(data.userData)
         setLedClubs(data.clubsLed)
@@ -111,6 +114,10 @@ const UserPage = () => {
       const formData = new FormData();
     formData.append("image", file);  
 
+    if (user)
+      {
+        formData.append("userId", user.id);
+
 
     const response = await fetch(`${backendUrl}/api/image`,  {
       method: 'POST',
@@ -129,6 +136,7 @@ const UserPage = () => {
   }
   const data = await response.json();
   console.log("Upload successful:", data);
+}else{navigate("/login")}
 
   }
 
@@ -190,7 +198,10 @@ if (user){
     <br></br>
     <h2>{desc}</h2>
     <h3>{school}</h3>
-    <UploadPfp onFileChange={handleFileChange}></UploadPfp>
+    <UploadPfp 
+  onFileChange={handleFileChange}  
+  {...(userData?.profilePic ? { IMAGE_URL: userData.profilePic } : {})} 
+/>
     {//@ts-ignore
     <button onClick={ () => handleSet(selectedFile)}>Set as PFP</button>}
     <h2>President of</h2>

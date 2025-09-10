@@ -1,11 +1,13 @@
 import formidable from "formidable";
-import { S3Client, PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ObjectCannedACL, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Router, Request, Response } from 'express';
 import fs from "fs";
 import path from "path";
 import { AuthRequest } from "../middleware/auth";
 import verifyToken from "../middleware/auth";
 import dotenv from 'dotenv'
+import { pool } from '../server';
+import { RowDataPacket } from "mysql2";
 
 dotenv.config();
 
@@ -60,6 +62,10 @@ async function uploadHandler(req: AuthRequest, res: Response) {
 
 
         const { fields, files } = await parseForm(req);
+        const userId = Array.isArray(fields.userId) ? fields.userId[0] : fields.userId ?? null;
+
+
+
 
 
 
@@ -93,6 +99,38 @@ async function uploadHandler(req: AuthRequest, res: Response) {
 
 
         await fs.promises.unlink(file.filepath);
+        try {
+            const [rows] = await pool.execute<RowDataPacket[]>(
+                "UPDATE users SET profilePic = ? WHERE users_id = ?",
+                [fileUrl, userId]
+            );
+
+
+
+
+
+
+
+
+
+
+
+        } catch (err) {
+            console.log(err)
+            try {
+                await s3.send(new DeleteObjectCommand({
+                    Bucket: "clubstop",
+                    Key: filename,
+                }));
+                console.log(`Rolled back upload: deleted ${filename} from S3`);
+            } catch (s3Err) {
+                console.error("Failed to delete from S3:", s3Err);
+            }
+
+            return res.status(500).json({
+                error: "Database update failed. Upload rolled back."
+            });
+        }
 
         return res.status(200).json({
             success: true,

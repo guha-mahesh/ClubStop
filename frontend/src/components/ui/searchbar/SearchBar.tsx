@@ -12,7 +12,9 @@ interface University{
 interface props{
   api: string[];
   placeholder?: string;
-  School?: string;
+  setSpecified: (e: string) => void;
+  setApis: (apis: string[] | null) => void;
+ specified?:string;
 }
 
 interface Flair{
@@ -24,215 +26,116 @@ interface Club {
   club_id: string;
   School: string;
 }
-const SearchBar = ({api, placeholder = "Ex. Computer Science...", School = ""}:props) => {
+const SearchBar = ({api, placeholder = "Ex. Computer Science...", specified = "", setSpecified, setApis}: props) => {
+  const [unis, setUnis] = useState<University[] | null>(null);
+  const [clubs, setClubs] = useState<Club[] | null>(null);
+  const [flairs, setFlairs] = useState<Flair[] | null>(null);
+
+  const [clubSrch, setClubSrch] = useState("");
+  const [uniSrch, setUniSrch] = useState("");
 
 
-
-const [unis, setUnis] = useState<University[] | null>(null)
-
-  const [fetching, setFetching] = useState(true)
-  const navigate = useNavigate();
-  const [flairs, setFlairs] = useState<Flair[] | null>(null)
-  const [clubs, setClubs] = useState<Club[] | null>(null)
-  const [filteredClubs, setFilteredClubs] = useState<Club[] | null>(null)
-  const [filteredUnis, setFilteredUnis] = useState<University[] | null>(null)
-  const [specified, setSpecified] = useState(School)
-
-  const [clubSrch, setClubSrch] = useState("")
-  const [uniSrch, setUniSrch] = useState("")
-
-
-useEffect(()=>{ 
-
-  const fetchFlairData = async ()=>{
-
-
-
-          const result = await fetch(`${backendUrl}/api/flair`,
-            {method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          
-          }
-    
-    
-          )
-    
-          const data = await result.json();
-    
-          if (data.success){
-            setFlairs(data.flairs)
-
-
-          }else{
-            console.log(data.error)
-          }
-    
-        }
-
-        const fetchClubData = async ()=>{
-
-            const result = await fetch(`${backendUrl}/api/club/""`,
-            {method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          
-          }
-    
-    
-          )
-    
-          const data = await result.json();
-    
-          if (data.success){
-            console.log(data.clubData)
-            setClubs(data.clubData)
-
-
-
-          }else{
-            console.log(data.error)
-          }
-
-
-
-        }
-
-
-
-        const fetchUniData = async ()=>{
-      const result = await fetch(`${backendUrl}/api/university`,
-        {method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      
-      }
-
-
-      )
-
-      const data = await result.json();
-
-      if (data.success){
-        setUnis(data.unis)
-        console.log("success")
-      }else{
-        console.log(data.error)
-      }
-
-
-
-    }
-
-        if(api.includes("clubs")){
-          
-        fetchClubData();
-        }
-        if(api.includes("flairs")){
-          fetchFlairData();
-        }
-
-        if (api.includes("universities")){
-          fetchUniData();
-        }
-        
-        setFetching(false)
-
-
-
-
-
-
-
-
-    },[])
 
   useEffect(() => {
-  if (!clubSrch.trim()) {
-    setFilteredClubs(null);
-    return;
-  }
 
-  const results = clubs?.filter(
-    (club) =>
-      club.clubName.toLowerCase().startsWith(clubSrch.toLowerCase()) &&
-      club.School === School
-  );
-  console.log(clubSrch)
-  console.log("reuslts:",results)
-  setFilteredClubs(results || null);
-}, [clubSrch, clubs, School]);
+    const fetchFlairData = async () => {
+      console.log("fetching Flairs")
+      const res = await fetch(`${backendUrl}/api/flair`);
+      const data = await res.json();
+      if (data.success) setFlairs(data.flairs);
+    };
 
-useEffect(() => {
-  if (!uniSrch.trim()) {
-    setFilteredUnis(null);
-    return;
-  }
+    const fetchClubData = async () => {
+      console.log("fetching clubs")
+      const res = await fetch(`${backendUrl}/api/club/""`);
+      const data = await res.json();
+      if (data.success) setClubs(data.clubData);
+    };
 
-  const results = unis?.filter((uni) =>
-    uni.name.toLowerCase().startsWith(uniSrch.toLowerCase())
-  );
-  setFilteredUnis(results || null);
-}, [uniSrch, unis]);
+    const fetchUniData = async () => {
+      console.log("fetching unis")
+      const res = await fetch(`${backendUrl}/api/university`);
+      const data = await res.json();
+      if (data.success) {
+        setUnis(data.unis);
+      }
+    };
+
+    if (api.includes("clubs")) fetchClubData();
+    if (api.includes("flairs")) fetchFlairData();
+    if (api.includes("universities")) fetchUniData();
+  }, [api]);
+
+  const filteredClubs = clubSrch.trim()
+    ? clubs?.filter(
+        (club) =>
+          club.clubName.toLowerCase().includes(clubSrch.toLowerCase()) &&
+          club.School === specified
+      )
+    : null;
+
+  const filteredUnis = uniSrch.trim()
+    ? unis?.filter((uni) =>
+        uni.name.toLowerCase().includes(uniSrch.trim().toLowerCase())
+      )
+    : null;
+
+
+
+
 
   return (
     <>
-
-    {specified ? (<>
-  <div className={!filteredClubs ? "search" : "search searchCurve"}>
-    <input 
-      type="text" 
-      name="query" 
-      placeholder={placeholder}
-      onChange={(e) => setClubSrch(e.target.value)}
-    />
-    <button type="submit" className="search-button">🔎</button>
-    
-  </div>
-  {filteredClubs && (
-      <div className="searchResults">
-        {filteredClubs.map((club, idx) => (
-          <SearchItem 
-            type = {0}
-            key={idx}
-            club={club.clubName} 
-            school={club.School} 
-            id={club.club_id} 
-          />
-        ))}
-      </div>
-    )}</>
-) : 
-
-
-(
-<>
-<div className={!filteredUnis? "search" : "search searchCurve"}>
-    <input 
-      type="text" 
-      name="query" 
-      placeholder={placeholder}
-      onChange={(e)=>setUniSrch(e.target.value)}
-    />
-    <button type="submit" className="search-button">🔎</button>
-    
-  </div>
-  {filteredUnis && (
-      <div className="searchResults">
-        {filteredUnis.map((uni, idx) => (
-          <SearchItem 
-            key={idx}
-            type = {1}
-            uniName={uni.name}
-
-          />
-        ))}
-      </div>
-    )}
-
-</>
-
-)}
-
+      {specified ? (
+        <>
+          <div className={!filteredClubs ? "search" : "search searchCurve"}>
+            <input
+              type="text"
+              placeholder={placeholder}
+              onChange={(e) => setClubSrch(e.target.value)}
+              value={clubSrch}
+            />
+            <button type="submit" className="search-button">
+              🔎
+            </button>
+          </div>
+          {filteredClubs && (
+            <div className="searchResults">
+              {filteredClubs.map((club, idx) => (
+                <SearchItem
+                  key={idx}
+                  type={0}
+                  club={club.clubName}
+                  school={club.School}
+                  id={club.club_id}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <div className={!filteredUnis ? "search" : "search searchCurve"}>
+            <input
+              type="text"
+              placeholder={placeholder}
+              onChange={(e) => setUniSrch(e.target.value)}
+              value={uniSrch}
+            />
+            <button type="submit" className="search-button">
+              🔎
+            </button>
+          </div>
+          {filteredUnis && (
+            <div className="searchResults">
+              {filteredUnis.map((uni, idx) => (
+                <SearchItem onSelecttwo = {(ls) => setApis(ls)}onSelect = {(name) => setSpecified(name)} key={idx} type={1} uniName={uni.name} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 };
-
-export default SearchBar; 
+export default SearchBar;

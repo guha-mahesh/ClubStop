@@ -1,46 +1,42 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
 interface props{
-    type: number;
-     club?: string;
-     school?: string;
-     id?: string;   
-     uniName?: string;
+    onSelect?: (e: string) => void;
+    onSelecttwo?: (e: string[])=> void;
 
+    type: number;
+    club?: string;
+    school?: string;
+    id?: string;   
+    uniName?: string;
+}
+
+const SearchItem = ({club = "", school = "", id = "", uniName = "", onSelect = () => {},onSelecttwo = () => {},type}: props) => {
+    const navigate = useNavigate();
+
+    if (type === 0) {
+        return (
+            <div className="SearchItem" onClick={() => navigate(`/club/${id}`)}>
+                <h1>{club}</h1>
+                <h2>@ {school}</h2>
+            </div>
+        );
+    } else if (type === 1) {
+        return (
+            <>
+            {uniName? (<div className="SearchItem" onClick={() => {
+                onSelect(uniName)
+                onSelecttwo(['clubs', 'flairs'])
+
+            }}>
+                <h1>{uniName}</h1>
+            </div>): null}
+            </>
+        );
     }
 
-
-
-const SearchItem = ({club ="", school ="", id = "", uniName = "",type}: props) => {
-    const [situation, setSituation] = useState<JSX.Element | null>(null);
-
-    useEffect(()=>{ setSituation(map[type]);},[])
-const navigate = useNavigate();
-
-
-
-const situation1 = 
-(<div className = "SearchItem" onClick = {()=>navigate(`/club/${id}`)}>
-        <h1>{club}</h1>
-        <h2>@ {school}</h2>
-
-    </div>)
-
-
-const situation2 = 
-(<div className = "SearchItem" onClick = {()=>navigate(`/club/${id}`)}>
-        <h1>{uniName}</h1>
-
-    </div>)
-
-const map: Record<number, JSX.Element> = {0 : situation1,1 : situation2}
-
-
-
-    
-  return situation
+    return null;
 }
 
 export default SearchItem
