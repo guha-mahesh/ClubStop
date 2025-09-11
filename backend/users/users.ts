@@ -169,7 +169,7 @@ async function getClubs(req: AuthRequest, res: Response) {
 
                 });
             } else {
-                console.log("youre a failure")
+                console.log("youre a failure x")
             }
         }
         else {
