@@ -168,6 +168,8 @@ async function getClubs(req: AuthRequest, res: Response) {
                     clubData: enrichedClubs
 
                 });
+            } else {
+                console.log("youre a failure")
             }
         }
         else {
