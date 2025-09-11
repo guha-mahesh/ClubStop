@@ -139,9 +139,11 @@ async function getClubs(req: AuthRequest, res: Response) {
     const userId = req.params.userId;
     console.log("received", { userId })
     try {
+        console.log("trying")
         const [rows] = await pool.execute<RowDataPacket[]>('SELECT club_id, clubRole FROM clubMember WHERE users_id = ?', [userId])
 
         if (rows.length !== 0) {
+            console.log("got rows!")
             const clubIds = rows.map(row => row.club_id);
             const placeholders = clubIds.map(() => '?').join(',');
 
@@ -169,6 +171,7 @@ async function getClubs(req: AuthRequest, res: Response) {
             }
         }
         else {
+            console.log("Got past rows!")
             res.json({
                 success: true,
                 clubData: "No Clubs Yet"

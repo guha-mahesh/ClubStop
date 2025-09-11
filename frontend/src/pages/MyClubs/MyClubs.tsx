@@ -22,6 +22,7 @@ const MyClubs = () => {
   const [leading, setLeading] = useState<Club[] | null>(null);
   const [joined, setJoined] = useState<Club[] | null>(null);
   const { user, loading, isAuthenticated } = useAuth();
+
   const [fetching, setFetching] = useState(true);
   const [filterType, setFilterType] = useState<"all" | "leading" | "joined">("all");
 
@@ -32,6 +33,7 @@ const MyClubs = () => {
   }, [isAuthenticated, loading, navigate]);
 
   useEffect(() => {
+    console.log("Fetching stuff")
     const fetchClubData = async () => {
       if (!user) {
         navigate("/Login");
@@ -41,6 +43,7 @@ const MyClubs = () => {
       const token = localStorage.getItem("authToken");
 
       try {
+        console.log("Fr tryingg")
         const response = await fetch(`${backendUrl}/api/clubs/${user.id}`, {
           method: 'GET',
           headers: { 
@@ -64,9 +67,11 @@ const MyClubs = () => {
             club.clubRole !== 'Leader' && club.leader !== user.id
           );
           setJoined(joinedClubs);
+          console.log("yipeee1")
           setFetching(false);
         }
         else if (data.success && data.clubData == "No Clubs Yet") {
+          console.log("yipeee2")
           setFetching(false);
         }
       } catch (error) {
