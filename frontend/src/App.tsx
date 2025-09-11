@@ -39,7 +39,7 @@ function App() {
             element={<EditClubPage></EditClubPage>}
           />
              <Route
-            path="/sortFlair/:flairName"
+            path="/sortFlair/:university/:flairName"
             element={<FlairSort></FlairSort>}
           />
         </Routes>

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS clubs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     leader VARCHAR(50),
     leaderName VARCHAR(30),
+    flairPic VARCHAR(50),
     primaryFlair varChar(50) NOT NULL DEFAULT '',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     camaraderie DOUBLE NOT NULL CHECK (camaraderie >= 0 AND camaraderie <= 100) DEFAULT 0,

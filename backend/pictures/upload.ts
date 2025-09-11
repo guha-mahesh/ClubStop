@@ -75,6 +75,27 @@ async function uploadHandler(req: AuthRequest, res: Response) {
         if (!fileArray || (Array.isArray(fileArray) && fileArray.length === 0)) {
             return res.status(400).json({ error: "No file uploaded" });
         }
+        const [fileURL] = await pool.execute<RowDataPacket[]>('SELECT profilePic FROM users WHERE users_id = ?', [userId])
+
+        if (fileURL[0].profilePic) {
+            const fileUrl = fileURL[0].profilePic;
+            console.log(fileUrl)
+            const fileName = fileUrl.split('/').pop();
+            console.log(fileName)
+            try {
+                await s3.send(new DeleteObjectCommand({
+                    Bucket: "clubstop",
+                    Key: fileName,
+                }));
+                console.log(`deleted ${fileName} from S3`);
+            } catch (err) {
+                console.log("couldn't delete old pfp", err)
+                res.json({
+                    success: false,
+                    erorr: err
+                })
+            }
+        }
 
         const file = Array.isArray(fileArray) ? fileArray[0] : fileArray;
 
@@ -150,6 +171,8 @@ async function uploadHandler(req: AuthRequest, res: Response) {
 }
 
 
+
 router.post("/image", verifyToken, uploadHandler);
+
 
 export default router;

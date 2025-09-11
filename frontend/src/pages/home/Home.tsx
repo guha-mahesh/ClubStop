@@ -11,8 +11,19 @@ import './Home.css';
 const Home = () => {
   const { user, isAuthenticated, school, loading} = useAuth();
   //@ts-ignore
-    const [selectedSchool, setSelectedSchool] = useState<string | null>(school);
+    const [selectedSchool, setSelectedSchool] = useState<string | null>(null);
+
+
     const [apis, setApis] = useState(["universities"])
+
+    useEffect(() => {
+  if (!loading && school) {
+
+    //@ts-ignore
+    setSelectedSchool(school); 
+    setApis(['flairs', 'clubs']);
+  }
+}, [loading, school]);
 
 
    
@@ -59,10 +70,11 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {selectedSchool?(
       <div className="main-content">
         <PopularClubs />
-        <CategoryGrid />
-      </div>
+        <CategoryGrid school = {selectedSchool} />
+      </div>): null}
     </>
   );
 };

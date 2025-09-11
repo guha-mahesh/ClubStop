@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import home from "../../../assets/react.svg";
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 
 interface Props {
@@ -16,6 +17,35 @@ interface Props {
 
 
 function Clubs({ leader, ClubName, ClubDescription, School, id = "" }: Props) {
+  const [flairPic,setFlairPic] = useState("")
+  const [fetching,setFetching] = useState(true)
+  useEffect(()=>{
+    const fetchClub = async ()=>{
+
+       const response = await fetch(`${backendUrl}/api/club/${id}`,  {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+        if (data.success){
+          setFlairPic(data.clubData.flairPic)
+          setFetching(false)
+          console.log("success")
+          console.log(data.clubData)
+
+          
+
+        }else{
+          console.log("failure")
+          console.log(data.error)
+        }
+    }
+
+    fetchClub();
+
+
+
+  }, [])
   const navigate = useNavigate();
 
   const handleClubClick = () => {
@@ -40,7 +70,7 @@ function Clubs({ leader, ClubName, ClubDescription, School, id = "" }: Props) {
             </div>
           </div>
           <div className="clubPhotoContainer">
-            <img className="clubPhoto" src={home} alt="Club" />
+            <img className="clubPhoto" src={`/ClubIcons/${flairPic}`} alt="Club" />
           </div>
         </section>
       </div>

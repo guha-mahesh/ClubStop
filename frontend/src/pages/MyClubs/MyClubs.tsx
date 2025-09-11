@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContexts';
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
-
-
 const MyClubs = () => {
   interface Club {
     clubName: string;
@@ -24,8 +22,8 @@ const MyClubs = () => {
   const [leading, setLeading] = useState<Club[] | null>(null);
   const [joined, setJoined] = useState<Club[] | null>(null);
   const { user, loading, isAuthenticated } = useAuth();
-  const [fetching,setFetching] = useState(true);
-  const [viewing, setViewing] = useState("")
+  const [fetching, setFetching] = useState(true);
+  const [filterType, setFilterType] = useState<"all" | "leading" | "joined">("all");
 
   useEffect(() => {
     if (!isAuthenticated && !loading) {
@@ -52,28 +50,24 @@ const MyClubs = () => {
         });
 
         const data = await response.json();
-        
+          
         if (data.success && data.clubData !== "No Clubs Yet") {
           const clubs = data.clubData;
           setClubData(clubs);
           
-
           const leadingClubs = clubs.filter((club: Club) => 
             club.clubRole === 'Leader' || club.leader === user.id
           );
           setLeading(leadingClubs);
           
-
           const joinedClubs = clubs.filter((club: Club) => 
             club.clubRole !== 'Leader' && club.leader !== user.id
           );
           setJoined(joinedClubs);
-          setFetching(false)
-
-
+          setFetching(false);
         }
         else if (data.success && data.clubData == "No Clubs Yet") {
-          setFetching(false)
+          setFetching(false);
         }
       } catch (error) {
         console.error("Error fetching club data:", error);
@@ -85,6 +79,58 @@ const MyClubs = () => {
     }
   }, [user, navigate, isAuthenticated, loading]);
 
+  // Get clubs to display based on filter
+  const getDisplayClubs = () => {
+    switch (filterType) {
+      case "leading":
+        return leading || [];
+      case "joined":
+        return joined || [];
+      case "all":
+      default:
+        return clubData || [];
+    }
+  };
+
+  // Get section title based on filter
+  const getSectionTitle = () => {
+    switch (filterType) {
+      case "leading":
+        return "Clubs You're Leading";
+      case "joined":
+        return "Clubs You've Joined";
+      case "all":
+      default:
+        return "All Your Clubs";
+    }
+  };
+
+  // Get empty state message and button
+  const getEmptyState = () => {
+    switch (filterType) {
+      case "leading":
+        return {
+          message: "Not Leading any Clubs",
+          showButton: true,
+          buttonText: "Create Your First Club",
+          buttonAction: () => navigate("/CreateClub")
+        };
+      case "joined":
+        return {
+          message: "Haven't Joined Any Clubs Yet",
+          showButton: false
+        };
+      case "all":
+      default:
+        return {
+          message: "No Clubs Yet",
+          showButton: true,
+          buttonText: "Create Your First Club",
+          buttonAction: () => navigate("/CreateClub")
+        };
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -93,80 +139,71 @@ const MyClubs = () => {
     return null;
   }
 
+  const displayClubs = getDisplayClubs();
+  const emptyState = getEmptyState();
+
   return (
     <>
-    {!fetching ? (<div>
-      <Navbar />
-      <div className="allClubs">
-
-        <div className="leading-section">
-          {leading && leading.length > 0 ? (
-            <>
-              <h2>Clubs You're Leading:</h2>
-              <div className="clubs-grid">
-                {leading.map((club) => (
-                  <div key={club.club_id} className="club-item">
-                    <Clubs 
-                      id={club.club_id} 
-                      ClubName={club.clubName} 
-                      ClubDescription={club.clubDesc} 
-                      School={club.school} 
-                      leader={club.leaderName}
-                    />
-                    <p className="club-date">
-                      Created: {new Date(club.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="no-clubs-section">
-              <h2>Not Leading any Clubs</h2>
-              <button 
-                onClick={() => navigate("/CreateClub")} 
-                className="create-club-link"
+      {!fetching ? (
+        <div>
+          <Navbar />
+          <div className="allClubs">
+            {/* Filter Dropdown */}
+            <div className="filter-section">
+              <label htmlFor="club-filter">View: </label>
+              <select 
+                id="club-filter"
+                value={filterType} 
+                onChange={(e) => setFilterType(e.target.value as "all" | "leading" | "joined")}
+                className="club-filter-dropdown"
               >
-                Create Your First Club
-              </button>
+                <option value="all">All Clubs</option>
+                <option value="leading">Leading</option>
+                <option value="joined">Joined</option>
+              </select>
             </div>
-          )}
-        </div>
 
-
-        <div className="joined-section">
-          {joined && joined.length > 0 ? (
-            <>
-              <h2>Clubs You've Joined:</h2>
-              <div className="clubs-grid">
-                {joined.map((club) => (
-                  <div key={club.club_id} className="club-item">
-                    <Clubs 
-                      id={club.club_id} 
-                      ClubName={club.clubName} 
-                      ClubDescription={club.clubDesc} 
-                      School={club.school} 
-                      leader={club.leaderName}
-                    />
-                    <p className="club-date">
-                      Joined: {new Date(club.created_at).toLocaleDateString()}
-                    </p>
+            {/* Clubs Display Section */}
+            <div className="clubs-section">
+              {displayClubs && displayClubs.length > 0 ? (
+                <>
+                  <h2>{getSectionTitle()}:</h2>
+                  <div className="clubs-grid">
+                    {displayClubs.map((club) => (
+                      <div key={club.club_id} className="club-item">
+                        <Clubs 
+                          id={club.club_id} 
+                          ClubName={club.clubName} 
+                          ClubDescription={club.clubDesc} 
+                          School={club.school} 
+                          leader={club.leaderName}
+                        />
+                        <p className="club-date">
+                          {filterType === "leading" ? "Created" : "Joined"}: {new Date(club.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="no-clubs-section">
-              <h2>Haven't Joined Any Clubs Yet</h2>
-             
+                </>
+              ) : (
+                <div className="no-clubs-section">
+                  <h2>{emptyState.message}</h2>
+                  {emptyState.showButton && (
+                    <button 
+                      onClick={emptyState.buttonAction} 
+                      className="create-club-link"
+                    >
+                      {emptyState.buttonText}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-
-
-        
-      </div>
-    </div>):(<h1>Loading...</h1>)}
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </>
   );
 };

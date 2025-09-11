@@ -10,14 +10,15 @@ interface props{
     school?: string;
     id?: string;   
     uniName?: string;
+    flairName?: string
 }
 
-const SearchItem = ({club = "", school = "", id = "", uniName = "", onSelect = () => {},onSelecttwo = () => {},type}: props) => {
+const SearchItem = ({club = "", school = "", id = "", uniName = "", flairName = "", onSelect = () => {},onSelecttwo = () => {},type}: props) => {
     const navigate = useNavigate();
 
     if (type === 0) {
         return (
-            <div className="SearchItem" onClick={() => navigate(`/club/${id}`)}>
+            <div className="SearchItem searchClub" onClick={() => navigate(`/club/${id}`)}>
                 <h1>{club}</h1>
                 <h2>@ {school}</h2>
             </div>
@@ -25,7 +26,7 @@ const SearchItem = ({club = "", school = "", id = "", uniName = "", onSelect = (
     } else if (type === 1) {
         return (
             <>
-            {uniName? (<div className="SearchItem" onClick={() => {
+            {uniName? (<div className="SearchItem searchUni" onClick={() => {
                 onSelect(uniName)
                 onSelecttwo(['clubs', 'flairs'])
 
@@ -34,6 +35,14 @@ const SearchItem = ({club = "", school = "", id = "", uniName = "", onSelect = (
             </div>): null}
             </>
         );
+    }
+    else{
+        return(
+            <div className="SearchItem searchFlair" onClick={() => navigate(`/sortFlair/${school}/${flairName}`)}>
+
+                <h1>{flairName}</h1>
+            </div>
+        )
     }
 
     return null;

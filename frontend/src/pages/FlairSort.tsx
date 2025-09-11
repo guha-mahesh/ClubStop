@@ -22,7 +22,8 @@ interface Club {
 const FlairSort = () => {
     const [fetching, setFetching] = useState(true);
     const [clubs, setClubs] = useState<Club[] | null>(null);
-    const { flairName } = useParams<{ flairName: string }>();
+    const { flairName} = useParams<{ flairName: string }>();
+    const { university} = useParams<{ university: string }>();
     const [noClubs, setNoClubs] = useState(false);
 
 
@@ -32,7 +33,7 @@ const FlairSort = () => {
             try {
                 console.log(flairName)
 
-                const result = await fetch(`${backendUrl}/api/sort/${flairName}`,
+                const result = await fetch(`${backendUrl}/api/sort/${flairName}/${university}`,
             {method: 'GET',
             headers: { 'Content-Type': 'application/json' },
           

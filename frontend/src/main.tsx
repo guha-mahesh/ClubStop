@@ -13,6 +13,8 @@ import "./pages/ClubPage/ClubPage.css";
 import "./pages/CreateAClub/CreateAClub.css";
 import './components/Flair.css'
 import './pages/ClubPage/Edit.css'
+import './pages/userPage.css'
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

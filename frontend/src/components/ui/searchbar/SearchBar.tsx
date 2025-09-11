@@ -66,18 +66,27 @@ const SearchBar = ({api, placeholder = "Ex. Computer Science...", specified = ""
     if (api.includes("universities")) fetchUniData();
   }, [api]);
 
-  const filteredClubs = clubSrch.trim()
-    ? clubs?.filter(
-        (club) =>
-          club.clubName.toLowerCase().includes(clubSrch.toLowerCase()) &&
-          club.School === specified
-      )
-    : null;
+  const filteredResults = clubSrch.trim()
+  ? [
+      ...(clubs
+        ?.filter(
+          (club) =>
+            club.clubName.toLowerCase().includes(clubSrch.toLowerCase()) &&
+            club.School === specified
+        ) || []),
+      ...(flairs
+        ?.filter((flair) =>
+          flair.flair_name.toLowerCase().includes(clubSrch.toLowerCase())
+        ) || []),
+    ]
+  : [];
+  const displayedResults = filteredResults.slice(0, 5);
+
 
   const filteredUnis = uniSrch.trim()
     ? unis?.filter((uni) =>
         uni.name.toLowerCase().includes(uniSrch.trim().toLowerCase())
-      )
+      ).slice(0,5)
     : null;
 
 
@@ -88,7 +97,7 @@ const SearchBar = ({api, placeholder = "Ex. Computer Science...", specified = ""
     <>
       {specified ? (
         <>
-          <div className={!filteredClubs ? "search" : "search searchCurve"}>
+          <div className={!filteredResults ? "search" : "search searchCurve"}>
             <input
               type="text"
               placeholder={placeholder}
@@ -99,18 +108,27 @@ const SearchBar = ({api, placeholder = "Ex. Computer Science...", specified = ""
               🔎
             </button>
           </div>
-          {filteredClubs && (
+          {filteredResults && (
             <div className="searchResults">
-              {filteredClubs.map((club, idx) => (
-                <SearchItem
-                  key={idx}
-                  type={0}
-                  club={club.clubName}
-                  school={club.School}
-                  id={club.club_id}
-                />
-              ))}
-            </div>
+  {displayedResults.map((item, idx) =>
+    "club_id" in item ? (
+      <SearchItem
+        key={idx}
+        type={0} 
+        club={item.clubName}
+        school={item.School}
+        id={item.club_id}
+      />
+    ) : (
+      <SearchItem
+        key={idx}
+        type={2} 
+        flairName={item.flair_name}
+        school = {specified}
+      />
+    )
+  )}
+</div>
           )}
         </>
       ) : (

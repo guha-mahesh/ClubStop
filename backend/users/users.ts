@@ -225,6 +225,11 @@ async function fetchUserData(req: Request, res: Response) {
             'SELECT * FROM users WHERE users_id = ?',
             [userId]
         );
+        const user = userrows[0];
+        if (user) {
+            delete user.password;
+        }
+
 
         const [clubsled] = await pool.execute<RowDataPacket[]>(
             'SELECT * FROM clubs WHERE leader = ?',
@@ -254,7 +259,7 @@ async function fetchUserData(req: Request, res: Response) {
 
             res.json({
                 success: true,
-                userData: userrows[0],
+                userData: user,
                 clubsLed: clubsled,
                 clubsJoined: clubsjoined
 

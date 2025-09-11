@@ -28,7 +28,7 @@ body {
 .hero-section {
     padding-top: 3rem;
     position: relative;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,6 +39,7 @@ body {
 
 .hero-background {
     position: absolute;
+
     top: 0;
     left: 0;
     right: 0;
@@ -64,6 +65,7 @@ body {
     text-align: center;
     max-width: 800px;
     padding: 0 2rem;
+
 }
 
 .hero-title {

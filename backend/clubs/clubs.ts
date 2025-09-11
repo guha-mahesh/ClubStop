@@ -15,6 +15,78 @@ import jwt from 'jsonwebtoken';
 
 const router = Router();
 
+const image_groups: string[][] = [
+
+    ["Computer Science", "Engineering", "Mathematics", "Physics", "Chemistry", "Biology", "Data Science", "Statistics", "Quantum Computing", "Robotics", "Bioinformatics", "Genetics", "Astronomy", "Geology", "Meteorology", "Oceanography", "3D Printing", "Cloud Computing", "DevOps", "Blockchain", "Cybersecurity", "Big Data", "Internet of Things"],
+
+
+    ["Psychology", "Economics", "Philosophy", "History", "Political Science", "Sociology", "Anthropology", "Literature", "Languages", "Education"],
+
+
+    ["Medicine", "Neuroscience", "Health & Wellness", "Veterinary Science"],
+
+
+    ["Business", "Finance", "Marketing", "Consulting", "Entrepreneurship"],
+
+
+    ["Arts", "Music", "Theatre", "Dance", "Cultural", "Photography"],
+
+
+    ["Law", "Architecture"],
+
+
+    ["Artificial Intelligence", "Machine Learning", "Virtual Reality", "Augmented Reality", "Web Development", "Mobile Development", "Game Development"],
+
+
+    ["Environmental Science", "Sustainability", "Ecology", "Botany", "Zoology"],
+
+
+    ["Sports", "Recreation", "Gaming", "Outdoors", "Competition"],
+
+
+    ["Social", "Community Service", "Leadership", "Networking"],
+
+
+    ["Academic", "Professional", "Research"],
+
+
+    ["Media", "Communications"],
+
+
+    ["Hobby"],
+
+
+    ["Religious", "International"],
+
+
+    ["Technology"]
+];
+
+
+const categoryMap = new Map<string, number>();
+
+image_groups.forEach((group, index) => {
+    group.forEach(item => {
+        categoryMap.set(item, index + 1);
+    });
+});
+const numberMap: Record<number, string> = {
+    1: "StemComputing.png",
+    2: "SSH.png",
+    3: "Medicine & Health.png",
+    4: "Business.png",
+    5: "ArtsCulture.png",
+    6: "Law&Architecture.png",
+    7: "AI.png",
+    8: "Environment&Sustainability.png",
+    9: "Sports.png",
+    10: "Community & Leadership.png",
+    11: "Education&academic.png",
+    12: "Media&Communication.png",
+    13: "entertainment.png",
+    14: "ReligiousAndInternational.png",
+    15: "Misc.png"
+};
 
 
 
@@ -36,133 +108,69 @@ async function getUsernameFromId(id: string) {
         return null;
     }
 }
-
 async function createClub(req: AuthRequest, res: Response) {
-    const { userId, clubName, clubDesc, school, instagram, linkTree } = req.body;
-    console.log("hi")
+    const { userId, clubName, clubDesc, school, instagram, linkTree, primaryFlair } = req.body;
 
-
-    console.log('Received:', { userId, clubName, clubDesc, school, instagram, linkTree });
+    const flairNum = categoryMap.get(primaryFlair);
+    const png = flairNum ? numberMap[flairNum] : null;
+    console.log(png)
 
     try {
+        const username = await getUsernameFromId(userId);
 
-        if (!instagram && !linkTree) {
-            const username = await getUsernameFromId(userId);
-            console.log(username)
+        const baseFields = ['clubName', 'clubDesc', 'School', 'leader', 'leaderName', 'primaryFlair', 'flairPic'];
+        const baseValues = [clubName, clubDesc, school, userId, username, primaryFlair, png];
 
-            const [clubresult] = await pool.execute<ResultSetHeader>(
-                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName) VALUES (?, ?, ?, ?, ?)',
-                [clubName, clubDesc, school, userId, username]
-            );
+        const fields = [...baseFields];
+        const values = [...baseValues];
 
-            if (clubresult) {
-
-                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
-                if (userresult) {
-                    res.json({
-                        success: true,
-                        clubId: clubresult.insertId,
-                    })
-
-                }
-                else {
-                    console.log("failed to insert userResult")
-                    res.json({
-                        success: false,
-                        error: "couldn't handle users club creation"
-                    })
-                }
-
-            }
-            else {
-                res.json({
-                    success: false,
-                    error: "Couldn't create Club"
-                })
-            }
-        }
-        else if (linkTree) {
-            const username = await getUsernameFromId(userId);
-            console.log(username)
-
-            const [clubresult] = await pool.execute<ResultSetHeader>(
-                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName, linktree) VALUES (?, ?, ?, ?, ?, ?)',
-                [clubName, clubDesc, school, userId, username, linkTree]
-            );
-
-            if (clubresult) {
-
-                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
-                if (userresult) {
-                    res.json({
-                        success: true,
-                        clubId: clubresult.insertId,
-                    })
-
-                }
-                else {
-                    console.log("failed to insert userResult")
-                    res.json({
-                        success: false,
-                        error: "couldn't handle users club creation"
-                    })
-                }
-
-            }
-            else {
-                res.json({
-                    success: false,
-                    error: "Couldn't create Club"
-                })
-            }
-
-        }
-        else if (instagram) {
-            const username = await getUsernameFromId(userId);
-            console.log(username)
-
-            const [clubresult] = await pool.execute<ResultSetHeader>(
-                'INSERT INTO clubs (clubName, clubDesc, School, leader, leaderName, instagram) VALUES (?, ?, ?, ?, ?)',
-                [clubName, clubDesc, school, userId, username, instagram]
-            );
-
-            if (clubresult) {
-
-                const [userresult] = await pool.execute<ResultSetHeader>('INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?,?,?)', [userId, clubresult.insertId, 'Leader'])
-                if (userresult) {
-                    res.json({
-                        success: true,
-                        clubId: clubresult.insertId,
-                    })
-
-                }
-                else {
-                    console.log("failed to insert userResult")
-                    res.json({
-                        success: false,
-                        error: "couldn't handle users club creation"
-                    })
-                }
-
-            }
-            else {
-                res.json({
-                    success: false,
-                    error: "Couldn't create Club"
-                })
-            }
+        if (instagram) {
+            fields.push('instagram');
+            values.push(instagram);
         }
 
-    }
-    catch (err) {
-        console.log(err)
+        if (linkTree) {
+            fields.push('linktree');
+            values.push(linkTree);
+        }
+
+        const placeholders = fields.map(() => '?').join(', ');
+        const query = `INSERT INTO clubs (${fields.join(', ')}) VALUES (${placeholders})`;
+
+        const [clubResult] = await pool.execute<ResultSetHeader>(query, values);
+
+        if (!clubResult?.insertId) {
+            return res.json({
+                success: false,
+                error: "Couldn't create Club"
+            });
+        }
+
+        const [userResult] = await pool.execute<ResultSetHeader>(
+            'INSERT INTO clubMember (users_id, club_id, clubRole) VALUES (?, ?, ?)',
+            [userId, clubResult.insertId, 'Leader']
+        );
+
+        if (!userResult) {
+            return res.json({
+                success: false,
+                error: "couldn't handle users club creation"
+            });
+        }
+
+        res.json({
+            success: true,
+            clubId: clubResult.insertId
+        });
+
+    } catch (err) {
+        console.log(err);
         res.json({
             success: false,
-            error: "some error with api, i don't know", err
-        })
-
+            error: "Database error occurred",
+            details: err
+        });
     }
-
 }
 
 
@@ -181,7 +189,7 @@ async function getClub(req: Request, res: Response) {
 
         if (userId) {
 
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT primaryFlair,clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instagram, linktree FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
 
@@ -252,7 +260,7 @@ async function getClub(req: Request, res: Response) {
         else if (clubId !== '""') {
             console.log("this one")
 
-            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT clubName, clubDesc, School, leader, leaderName, created_at, camaraderie, ascendancy, prestige, obligation, legacy, total, instagram, linktree FROM clubs WHERE club_id = ?', [clubId])
+            const [clubresult] = await pool.execute<RowDataPacket[]>('SELECT * FROM clubs WHERE club_id = ?', [clubId])
             const [flairresult] = await pool.execute<RowDataPacket[]>('SELECT flairName FROM clubFlair WHERE club_id = ?', [clubId])
 
             const primaryFlair = clubresult[0].primaryFlair
@@ -537,6 +545,7 @@ async function deleteFlair(req: AuthRequest, res: Response) {
 
 async function getClubByFlair(req: Request, res: Response) {
     const flairName = req.params.flairName;
+    const university = req.params.university;
     console.log("getClubByFlair Received:", { flairName })
 
     try {
@@ -561,8 +570,14 @@ async function getClubByFlair(req: Request, res: Response) {
 
             const placeholders = clubIds.map(() => '?').join(',');
 
-            const [sortables] = await pool.execute<RowDataPacket[]>(`SELECT School, leaderName, clubName, clubDesc, club_id FROM clubs WHERE club_id IN (${placeholders})  ORDER BY total DESC
-   LIMIT 20` , clubIds);
+            const [sortables] = await pool.execute<RowDataPacket[]>(
+                `SELECT School, leaderName, clubName, clubDesc, club_id 
+   FROM clubs 
+   WHERE club_id IN (${placeholders}) AND School = ? 
+   ORDER BY total DESC
+   LIMIT 20`,
+                [...clubIds, university]
+            );
             res.json({
                 success: true,
                 clubName: sortables.map(club => club.clubName),
@@ -624,7 +639,7 @@ router.put('/role', verifyToken, editRole)
 router.put('/club', verifyToken, editclub)
 router.post('/flair', verifyToken, addFlair)
 router.delete('/flair/:Flair/:ClubID', verifyToken, deleteFlair)
-router.get('/sort/:flairName', getClubByFlair);
+router.get('/sort/:flairName/:university', getClubByFlair);
 router.put('/flair', verifyToken, changePrimary)
 
 

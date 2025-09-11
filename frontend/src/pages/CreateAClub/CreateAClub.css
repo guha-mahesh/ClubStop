@@ -357,3 +357,14 @@
     margin-bottom: 1.5rem;
   }
 }
+
+.selectedFlair {
+  font-size: 1rem;
+  padding: 0rem 1rem;
+}
+
+.selectedBox {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}

@@ -8,11 +8,16 @@ import { useNavigate } from "react-router-dom";
 import {useAuth} from '../../contexts/AuthContexts'
 import linktree from '../../assets/linktree-logo-icon.svg'
 import bg from '../../assets/CreateClubBackground.png'
+import Flair from "../../components/Flair";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
 interface University{
   name: string;
+}
+
+interface Flair{
+  flair_name: string;
 }
 
 const CreateAClub: React.FC = () => {
@@ -21,17 +26,28 @@ const CreateAClub: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [instagram, setInstagram] = useState<string>("")
   const [linkTree, setLinkTree] = useState<string>("")
-
+  const [flairSrch, setFlairSrch] = useState<string>("")
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userRef = useRef<HTMLInputElement | null>(null);
   const {user, isAuthenticated, loading, school} = useAuth();
+  const [selected, setSelected] = useState("")
+  const [flairs, setFlairs] = useState<Flair[] | null>(null);
   const [clubId, setClubId]= useState("")
   
   useEffect(() => {
+    
+    const fetchFlairData = async () => {
+      console.log("fetching Flairs")
+      const res = await fetch(`${backendUrl}/api/flair`);
+      const data = await res.json();
+      if (data.success) setFlairs(data.flairs);
+    };
+    
     if (userRef.current) {
       userRef.current.focus();
     }
+    fetchFlairData();
   }, []);
 
   useEffect(() => {
@@ -57,7 +73,7 @@ const CreateAClub: React.FC = () => {
         const response = await fetch(`${backendUrl}/api/club`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-          body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: school, instagram: instagram, linkTree: linkTree }),
+          body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: school, instagram: instagram, linkTree: linkTree, primaryFlair: selected }),
         });
         const data = await response.json();
 
@@ -76,6 +92,13 @@ const CreateAClub: React.FC = () => {
       setErrorMessage("Error creating club. Please try again.");
     }
   };
+
+  const filteredFlairs = flairSrch.trim()
+    ? flairs?.filter((flair) =>
+        flair.flair_name.toLowerCase().includes(flairSrch.trim().toLowerCase())
+      ).slice(0,3)
+    : null;
+
 
   return (
     <>
@@ -131,7 +154,35 @@ const CreateAClub: React.FC = () => {
                   placeholder="Describe your club's purpose, activities, and what makes it special..."
                 />
               </div>
+              <div className="input-group">
+                <label htmlFor="flair" className="input-label">
+                  Primary Flair
+                </label>
+                <input
+                  id="flair"
+                  required
+                  value={flairSrch}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFlairSrch(e.target.value)
+                  }
+                  className = "text-input"
 
+                  placeholder="Search for the Flair that best matches your Club!"
+                />
+              </div>
+            <>
+  {filteredFlairs && filteredFlairs.length > 0 ? (
+    <div className="searchItems">
+      {filteredFlairs.map((flair, idx) => (
+        <div onClick = {()=>setSelected(flair.flair_name)}className = "searchItem" key={idx}>
+          {flair.flair_name}
+        </div>
+      ))}
+      
+    </div>
+  ) : null}
+</>
+{selected ? (<div className = "selectedBox"><h1 className = "selectedFlair">Selected:</h1> <Flair Flair ={selected} dlt = {false} primary = {true}></Flair></div>): (null)}
               <div className="social-links-section">
                 <h3 className="social-links-title">Connect Your Socials</h3>
                 <div className="social-links-grid">

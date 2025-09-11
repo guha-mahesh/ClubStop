@@ -1,0 +1,658 @@
+.user-page-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ea6666 0%, #ffffff 100%);
+    padding: 2rem;
+    position: relative;
+}
+
+.user-profile-wrapper {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-profile-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+}
+
+.profile-header {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.profile-image-section {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-username {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c44c32, #e74c3c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.profile-school {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #667eea;
+    margin: 0 0 1.5rem 0;
+}
+
+.profile-description {
+    font-size: 1.2rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+}
+
+.set-pfp-button {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.set-pfp-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.edit-profile-button {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #c44c32, #e74c3c);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-profile-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.edit-profile-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(196, 76, 50, 0.3);
+}
+
+.edit-profile-button:hover::before {
+    left: 100%;
+}
+
+.clubs-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.clubs-category {
+    margin-bottom: 3rem;
+}
+
+.clubs-category-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #334155;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.clubs-category-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #ea6666, #c44c32);
+    border-radius: 2px;
+}
+
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.club-item {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edit-profile-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideUp 0.6s ease-out;
+}
+
+.edit-profile-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.edit-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c44c32, #e74c3c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.edit-subtitle {
+    color: #64748b;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.8rem;
+}
+
+.text-input,
+.textarea-input {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #1e293b;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.text-input:focus,
+.textarea-input:focus {
+    outline: none;
+    border-color: #c44c32;
+    box-shadow: 0 0 0 3px rgba(196, 76, 50, 0.1);
+    transform: translateY(-1px);
+}
+
+.textarea-input {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.save-button {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(135deg, #c44c32, #e74c3c);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(196, 76, 50, 0.3);
+}
+
+.save-button:hover::before {
+    left: 100%;
+}
+
+.cancel-button {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    background: transparent;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #475569;
+    transform: translateY(-2px);
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 2rem;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(196, 76, 50, 0.1);
+    border-left-color: #c44c32;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .user-page-container {
+        padding: 1rem;
+    }
+
+    .user-profile-card {
+        padding: 2rem;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .profile-username {
+        font-size: 2.2rem;
+    }
+
+    .profile-school {
+        font-size: 1.2rem;
+    }
+
+    .profile-description {
+        font-size: 1.1rem;
+    }
+
+    .clubs-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .edit-profile-card {
+        padding: 2rem;
+    }
+
+    .edit-title {
+        font-size: 2rem;
+    }
+
+    .edit-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .user-profile-card,
+    .edit-profile-card {
+        padding: 1.5rem;
+    }
+
+    .profile-username {
+        font-size: 1.8rem;
+    }
+
+    .edit-title {
+        font-size: 1.8rem;
+    }
+
+    .clubs-category-title {
+        font-size: 1.6rem;
+    }
+}
+
+.upload-pfp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-image-wrapper {
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-image-wrapper.dragging {
+    transform: scale(1.02);
+}
+
+.profile-image-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow:
+        0 12px 30px rgba(196, 76, 50, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.profile-image-container:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 16px 40px rgba(196, 76, 50, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.profile-image-container:hover .image-overlay {
+    opacity: 1;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-align: center;
+}
+
+.camera-icon {
+    width: 32px;
+    height: 32px;
+    color: white;
+    opacity: 0.9;
+}
+
+.overlay-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+}
+
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-label::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.upload-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.upload-label:hover::before {
+    left: 100%;
+}
+
+.upload-instructions {
+    text-align: center;
+    color: #64748b;
+}
+
+.upload-instructions p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.25rem 0;
+}
+
+.upload-instructions span {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.profile-image-wrapper.dragging .profile-image-container {
+    border-color: #c44c32;
+    box-shadow:
+        0 16px 40px rgba(196, 76, 50, 0.4),
+        0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+.profile-image-wrapper.dragging .image-overlay {
+    opacity: 1;
+    background: rgba(196, 76, 50, 0.3);
+}
+
+.profile-image-wrapper.dragging .overlay-content {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .profile-image-container {
+        width: 150px;
+        height: 150px;
+    }
+
+    .camera-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .overlay-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-image-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .upload-label {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.85rem;
+    }
+
+    .camera-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.searchItems {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 0 10px 10px;
+
+    padding: .5rem 0rem;
+    outline: 1px solid black;
+
+
+}
+
+.searchItem {
+    padding: 1rem;
+    color: #ea6666;
+
+}
+
+.searchItem:hover {
+    background-color: #888d92
+}
+
+.universityInput input {
+    border-radius: 10px 10px 0 0;
+}
+
+.selectedSchool {
+    font-size: 1rem;
+    padding: .3rem 1rem;
+
+}
