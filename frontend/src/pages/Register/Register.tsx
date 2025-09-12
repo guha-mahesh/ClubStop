@@ -1,94 +1,79 @@
-
 import feather from "../../assets/FeatherIcon.png";
 import { useRef, useState, useEffect } from "react";
 import {
   faCheck,
   faTimes,
   faInfoCircle,
+  faUser,
+  faEnvelope,
+  faLock,
+  faUniversity,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContexts";
-
+import "./Register.css";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
-
-interface University{
+interface University {
   name: string;
 }
-
-
 
 const Register = () => {
   const navigate = useNavigate();
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef<HTMLParagraphElement | null>(null);
 
-  const [unis, setUnis] = useState<University[] | null>(null)
+  const [unis, setUnis] = useState<University[] | null>(null);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<University | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const [user, setUser] = useState<string>("");
   const [validName, setValidName] = useState<boolean>(false);
   const [userFocus, setUserFocus] = useState<boolean>(false);
-  const {login, isAuthenticated} = useAuth()
+  const { login, isAuthenticated } = useAuth();
 
   const [pwd, setPwd] = useState<string>("");
   const [validPwd, setValidPwd] = useState<boolean>(false);
   const [pwdFocus, setPwdFocus] = useState<boolean>(false);
 
-  const [email, setEmail] = useState("")
-
+  const [email, setEmail] = useState("");
 
   const [matchPwd, setMatchPwd] = useState<string>("");
   const [validMatch, setValidMatch] = useState<boolean>(false);
   const [matchFocus, setMatchFocus] = useState<boolean>(false);
-  
-  const [validEmail, setValidEmail] = useState(false)
+
+  const [validEmail, setValidEmail] = useState(false);
 
   const [errMsg, setErrMsg] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
-  
-  useEffect(()=>{
 
-    const fetchUniData = async ()=>{
-      const result = await fetch(`${backendUrl}/api/university`,
-        {method: 'GET',
+  useEffect(() => {
+    const fetchUniData = async () => {
+      const result = await fetch(`${backendUrl}/api/university`, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-      
-      }
-
-
-      )
+      });
 
       const data = await result.json();
 
-      if (data.success){
-        setUnis(data.unis)
-        console.log("success")
-      }else{
-        console.log(data.error)
+      if (data.success) {
+        setUnis(data.unis);
+        console.log("success");
+      } else {
+        console.log(data.error);
       }
-
-
-
-    }
+    };
     fetchUniData();
-
-
-
-  }, [])
-
-
-
+  }, []);
 
   useEffect(() => {
-
     if (userRef.current) {
       userRef.current.focus();
     }
@@ -98,7 +83,7 @@ const Register = () => {
     setValidName(USER_REGEX.test(user));
   }, [user]);
 
-    useEffect(() => {
+  useEffect(() => {
     setValidEmail(EMAIL_REGEX.test(email));
   }, [email]);
 
@@ -111,11 +96,9 @@ const Register = () => {
     setErrMsg("");
   }, [user, pwd, matchPwd]);
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("trying to register")
+    console.log("trying to register");
 
     const isUserValid = USER_REGEX.test(user);
     const isPwdValid = PWD_REGEX.test(pwd);
@@ -133,39 +116,32 @@ const Register = () => {
     setSuccess(false);
 
     try {
-      console.log("trying to register")
+      console.log("trying to register");
       const response = await fetch(`${backendUrl}/api/users`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: user, password: pwd, email: email, school: selected?.name}),
-    });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pwd, email: email, school: selected?.name }),
+      });
 
-    const data = await response.json()
-    console.log(data.success) 
+      const data = await response.json();
+      console.log(data.success);
 
-    if (data.success){
-    login({
-    token: data.token,
-    user: data.user,
-    school: data.school
-    
-  });
-      setUser("");
-      setPwd("");
-      setMatchPwd("");
-      setEmail("")
-      navigate("/");
-      setSuccess(true);
-     }
-     else{
-      console.log(data.error)
-      setErrMsg(data.error)
-     }
-
-
-      
-
-      
+      if (data.success) {
+        login({
+          token: data.token,
+          user: data.user,
+          school: data.school
+        });
+        setUser("");
+        setPwd("");
+        setMatchPwd("");
+        setEmail("");
+        navigate("/");
+        setSuccess(true);
+      } else {
+        console.log(data.error);
+        setErrMsg(data.error);
+      }
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -177,192 +153,240 @@ const Register = () => {
       if (errRef.current) errRef.current.focus();
     }
   };
-    const filteredUnis = unis?.filter(u => u.name.toLowerCase().startsWith(search.toLowerCase()))
-  .slice(0, 3);
+
+  const filteredUnis = unis?.filter(u => u.name.toLowerCase().startsWith(search.toLowerCase()))
+    .slice(0, 5);
+
+  const handleUniversitySelect = (uni: University) => {
+    setSelected(uni);
+    setSearch(uni.name);
+    setShowDropdown(false);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setShowDropdown(true);
+    if (!e.target.value) {
+      setSelected(null);
+    }
+  };
 
   return (
-    <>
-      <div className="allRegister">
-        <img className="featherIcon" src={feather} />
+    <div className="register-container">
+      <div className="background-decoration">
+        <img src={feather} alt="" />
+      </div>
+      
+      <div className="register-card">
         {success ? (
-          <section>
-            <h1>Success!</h1>
-            <p>
-              <a href="/Login">Sign In</a>
+          <div className="success-section">
+            <h1 className="success-title">Welcome Aboard! 🎉</h1>
+            <p className="success-description">
+              Your account has been created successfully. You're now part of the community!
             </p>
-          </section>
+            <button onClick={() => navigate("/login")} className="club-link-button">
+              Continue to Sign In
+            </button>
+          </div>
         ) : (
-          <section>
-            <p
-              ref={errRef}
-              className={errMsg ? "errmsg" : "offscreen"}
-              aria-live="assertive"
-            >
-              {errMsg}
-            </p>
-            <h1 className="registerHeading">Register</h1>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="username">
-                Username:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validName ? "valid" : "hide"}
+          <>
+            <div className="form-header">
+              <h1 className="form-title">Join the Community</h1>
+              <p className="form-subtitle">Create your account and start connecting</p>
+            </div>
+
+            {errMsg && (
+              <div ref={errRef} className="error-message" aria-live="assertive">
+                {errMsg}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="register-form">
+              <div className="input-group">
+                <label htmlFor="username" className="input-label">
+                  <FontAwesomeIcon icon={faUser} className="label-icon" />
+                  Username
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={`validation-icon ${validName ? "valid" : "hide"}`}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={`validation-icon ${validName || !user ? "hide" : "invalid"}`}
+                  />
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  ref={userRef}
+                  className="text-input"
+                  autoComplete="off"
+                  onChange={(e) => setUser(e.target.value)}
+                  value={user}
+                  required
+                  aria-invalid={validName ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  onFocus={() => setUserFocus(true)}
+                  onBlur={() => setUserFocus(false)}
+                  placeholder="Enter your username"
                 />
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  className={validName || !user ? "hide" : "invalid"}
+                {userFocus && user && !validName && (
+                  <div id="uidnote" className="instructions">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.
+                  </div>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="email" className="input-label">
+                  <FontAwesomeIcon icon={faEnvelope} className="label-icon" />
+                  Email Address
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={`validation-icon ${validEmail ? "valid" : "hide"}`}
+                  />
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="text-input"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  required
+                  placeholder="Enter your email"
                 />
-              </label>
-              <input
-                type="text"
-                id="username"
-                ref={userRef}
-                autoComplete="off"
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
-                required
-                aria-invalid={validName ? "false" : "true"}
-                aria-describedby="uidnote"
-                onFocus={() => setUserFocus(true)}
-                onBlur={() => setUserFocus(false)}
-              />
-              <p
-                id="uidnote"
-                className={
-                  userFocus && user && !validName ? "instructions" : "offscreen"
-                }
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="password" className="input-label">
+                  <FontAwesomeIcon icon={faLock} className="label-icon" />
+                  Password
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={`validation-icon ${validPwd ? "valid" : "hide"}`}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={`validation-icon ${validPwd || !pwd ? "hide" : "invalid"}`}
+                  />
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className="text-input"
+                  onChange={(e) => setPwd(e.target.value)}
+                  value={pwd}
+                  required
+                  aria-invalid={validPwd ? "false" : "true"}
+                  aria-describedby="pwdnote"
+                  onFocus={() => setPwdFocus(true)}
+                  onBlur={() => setPwdFocus(false)}
+                  placeholder="Create a strong password"
+                />
+                {pwdFocus && !validPwd && (
+                  <div id="pwdnote" className="instructions">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character (! @ # $ %).
+                  </div>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="confirm_pwd" className="input-label">
+                  <FontAwesomeIcon icon={faLock} className="label-icon" />
+                  Confirm Password
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={`validation-icon ${validMatch && matchPwd ? "valid" : "hide"}`}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={`validation-icon ${validMatch || !matchPwd ? "hide" : "invalid"}`}
+                  />
+                </label>
+                <input
+                  type="password"
+                  id="confirm_pwd"
+                  className="text-input"
+                  onChange={(e) => setMatchPwd(e.target.value)}
+                  value={matchPwd}
+                  required
+                  aria-invalid={validMatch ? "false" : "true"}
+                  aria-describedby="confirmnote"
+                  onFocus={() => setMatchFocus(true)}
+                  onBlur={() => setMatchFocus(false)}
+                  placeholder="Confirm your password"
+                />
+                {matchFocus && !validMatch && (
+                  <div id="confirmnote" className="instructions">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    Must match the first password input field.
+                  </div>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="school" className="input-label">
+                  <FontAwesomeIcon icon={faUniversity} className="label-icon" />
+                  University
+                </label>
+                <div className="university-search-container">
+                  <div className="search-input-wrapper">
+                    <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                    <input
+                      type="text"
+                      className="text-input university-search"
+                      placeholder="Search universities..."
+                      value={search}
+                      onChange={handleSearchChange}
+                      onFocus={() => setShowDropdown(true)}
+                    />
+                  </div>
+                  {showDropdown && filteredUnis && filteredUnis.length > 0 && (
+                    <div className="university-dropdown">
+                      {filteredUnis.map((uni, idx) => (
+                        <div
+                          key={idx}
+                          className="university-option"
+                          onClick={() => handleUniversitySelect(uni)}
+                        >
+                          {uni.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {selected && (
+                  <div className="selected-university">
+                    <FontAwesomeIcon icon={faCheck} className="selected-icon" />
+                    <span>{selected.name}</span>
+                  </div>
+                )}
+              </div>
+
+              <button 
+                type="submit"
+                className="submit-button"
+                disabled={!validName || !validPwd || !validMatch || !validEmail || !selected}
               >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                4 to 24 characters.
-                <br />
-                Must begin with a letter.
-                <br />
-                Letters, numbers, underscores, hyphens allowed.
-              </p>
-              <label htmlFor="email">
-                Email:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validEmail ? "valid" : "hide"}
-                />
-              </label>
-              <input
-                type="email"
-                id="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                required
-                aria-invalid={validMatch ? "false" : "true"}
-                aria-describedby="confirmnote"
-                onFocus={() => setMatchFocus(true)}
-                onBlur={() => setMatchFocus(false)}
-              />
-
-              <label htmlFor="password">
-                Password:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validPwd ? "valid" : "hide"}
-                />
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  className={validPwd || !pwd ? "hide" : "invalid"}
-                />
-              </label>
-              <input
-                type="password"
-                id="password"
-                onChange={(e) => setPwd(e.target.value)}
-                value={pwd}
-                required
-                aria-invalid={validPwd ? "false" : "true"}
-                aria-describedby="pwdnote"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
-              />
-              <p
-                id="pwdnote"
-                className={pwdFocus && !validPwd ? "instructions" : "offscreen"}
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                8 to 24 characters.
-                <br />
-                Must include uppercase and lowercase letters, a number, and a
-                special character.
-                <br />
-                Allowed special characters: ! @ # $ %
-              </p>
-
-              <label htmlFor="confirm_pwd">
-                Confirm Password:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validMatch && matchPwd ? "valid" : "hide"}
-                />
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  className={validMatch || !matchPwd ? "hide" : "invalid"}
-                />
-              </label>
-              <input
-                type="password"
-                id="confirm_pwd"
-                onChange={(e) => setMatchPwd(e.target.value)}
-                value={matchPwd}
-                required
-                aria-invalid={validMatch ? "false" : "true"}
-                aria-describedby="confirmnote"
-                onFocus={() => setMatchFocus(true)}
-                onBlur={() => setMatchFocus(false)}
-              />
-              <p
-                id="confirmnote"
-                className={
-                  matchFocus && !validMatch ? "instructions" : "offscreen"
-                }
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                Must match the first password input field.
-              </p>
-            <label htmlFor="school">
-                Select School:
-              </label>
-              <input
-              type="text"
-              placeholder="Search universities..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}/>
-               <ul>
-            {filteredUnis?.map((uni, idx) => (
-            <li key={idx} onClick={() => setSelected(uni)} style={{cursor: 'pointer'}}>
-            {uni.name}
-            </li>
-
-        ))}
-      </ul>
-      {selected && (
-        <div>
-          Selected: <strong>{selected.name}</strong>
-        </div>
-      )}
-
-
-              <button disabled={!validName || !validPwd || !validMatch}>
-                Sign Up
+                Create Account
               </button>
             </form>
-            <p>
-              Already registered?
-              <br />
-              <span className="line">
-                <a href="/Login">Sign In</a>
-              </span>
-            </p>
-          </section>
+
+            <div className="login-link-section">
+              <p className="login-text">Already have an account?</p>
+              <button 
+                onClick={() => navigate("/login")} 
+                className="login-link-button"
+              >
+                Sign In
+              </button>
+            </div>
+          </>
         )}
-        <img className="featherIcon" id="featherIcon2" src={feather} />
       </div>
-    </>
+    </div>
   );
 };
 

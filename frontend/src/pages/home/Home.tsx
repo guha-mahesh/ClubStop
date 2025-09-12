@@ -65,9 +65,12 @@ const Home = () => {
 
 
 
+
 />): (<div>loading....</div>)}
 
+
           </div>
+          {selectedSchool && (<button onClick = {()=>{setSelectedSchool("")}}>Search for Clubs at other schools</button>)}
         </div>
       </div>
       {selectedSchool?(
