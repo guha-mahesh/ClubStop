@@ -11,6 +11,7 @@ const DEFAULT_IMAGE_URL = "https://clubstop.s3.us-east-2.amazonaws.com/Screensho
 function UploadPfp({ onFileChange, IMAGE_URL = DEFAULT_IMAGE_URL, viewingOwn }: UploadPfpProps) {
   const [preview, setPreview] = useState<string | null>(IMAGE_URL);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -28,7 +29,9 @@ function UploadPfp({ onFileChange, IMAGE_URL = DEFAULT_IMAGE_URL, viewingOwn }: 
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(true);
+    if (viewingOwn) {
+      setIsDragging(true);
+    }
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
@@ -39,17 +42,28 @@ function UploadPfp({ onFileChange, IMAGE_URL = DEFAULT_IMAGE_URL, viewingOwn }: 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    processFile(file);
+    if (viewingOwn) {
+      const file = e.dataTransfer.files[0];
+      processFile(file);
+    }
+  };
+
+  const handleClick = () => {
+    if (viewingOwn) {
+      document.getElementById('profile-upload')?.click();
+    }
   };
 
   return (
     <div className="upload-pfp-container">
       <div 
-        className={`profile-image-wrapper ${isDragging ? 'dragging' : ''}`}
+        className={`profile-image-wrapper ${isDragging ? 'dragging' : ''} ${viewingOwn ? 'interactive' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        onClick={handleClick}
       >
         <div className="profile-image-container">
           <img 
@@ -57,36 +71,39 @@ function UploadPfp({ onFileChange, IMAGE_URL = DEFAULT_IMAGE_URL, viewingOwn }: 
             alt="Profile Preview" 
             className="profile-image"
           />
-          <div className="image-overlay">
-            <div className="overlay-content">
-              <svg className="camera-icon" viewBox="0 0 24 24" fill="none">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="12" cy="13" r="4" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span className="overlay-text">Change Photo</span>
+          
+          {viewingOwn && (
+            <div className={`image-overlay ${isHovering || isDragging ? 'visible' : ''}`}>
+              <div className="overlay-content">
+                <svg className="camera-icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="12" cy="13" r="4" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+                <span className="overlay-text">
+                  {isDragging ? 'Drop to Upload' : 'Change Photo'}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         
-        {viewingOwn ? (
-          <> <input 
-          type="file" 
-          accept="image/*" 
-          onChange={handleImageChange}
-          className="file-input"
-          id="profile-upload"
-        />
-        
-        <label htmlFor="profile-upload" className="upload-label">
-          Choose Image
-        </label>
-        </>): null}
+        {viewingOwn && (
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageChange}
+            className="file-input"
+            id="profile-upload"
+          />
+        )}
       </div>
       
-      {viewingOwn? (<div className="upload-instructions">
-        <p>Drag & drop or click to upload</p>
-        <span>JPG, PNG, or GIF (Max 5MB)</span>
-      </div>): null}
+      {viewingOwn && (
+        <div className="upload-instructions">
+          <p>Click, drag & drop to upload</p>
+          <span>JPG, PNG, or GIF (Max 5MB)</span>
+        </div>
+      )}
     </div>
   );
 }

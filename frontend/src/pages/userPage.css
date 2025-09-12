@@ -656,3 +656,185 @@
     padding: .3rem 1rem;
 
 }
+
+.upload-pfp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.profile-image-wrapper {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-image-wrapper.interactive {
+    cursor: pointer;
+}
+
+.profile-image-wrapper.interactive:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.profile-image-wrapper.dragging {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(79, 172, 254, 0.3);
+    border: 3px dashed #4facfe;
+}
+
+.profile-image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.profile-image-wrapper.interactive:hover .profile-image {
+    transform: scale(1.1);
+    filter: brightness(0.7);
+}
+
+.profile-image-wrapper.dragging .profile-image {
+    transform: scale(1.1);
+    filter: brightness(0.5);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.image-overlay.visible {
+    opacity: 1;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.camera-icon {
+    width: 28px;
+    height: 28px;
+    color: white;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.overlay-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+.upload-instructions {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.upload-instructions p {
+    margin: 0 0 0.2rem 0;
+    font-weight: 500;
+}
+
+.upload-instructions span {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+    .profile-image-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .camera-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .overlay-text {
+        font-size: 0.8rem;
+    }
+
+    .upload-instructions {
+        font-size: 0.8rem;
+    }
+
+    .upload-instructions span {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-image-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .camera-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .overlay-text {
+        font-size: 0.7rem;
+    }
+}
+
+.setPfpDiv {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Clubs from "../components/cards/clubs/ClubCard";
+import { FaCheck } from 'react-icons/fa'
 import UploadPfp from '../components/UploadPfp'
 import Navbar from '../components/layout/Navbar'
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
@@ -41,6 +42,7 @@ interface University{
     const [viewingOwn, setViewingOwn] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [edit, setEdit] = useState(false)
+    const [success, setSuccess] = useState(false)
 
     const [username, setUsername] = useState("")
     const [school, setSchool] = useState("")
@@ -135,6 +137,7 @@ interface University{
   }
   const data = await response.json();
   console.log("Upload successful:", data);
+  setSuccess(true)
 }else{navigate("/login")}
 
   }
@@ -196,6 +199,11 @@ const filteredUnis = uniSrch.trim()
                     {...(userData?.profilePic ? { IMAGE_URL: userData.profilePic } : {})} 
                   />
                   {viewingOwn && (
+
+
+
+                    <div className = "setPfpDiv">
+                      
                     <button 
                       className="set-pfp-button"
                       // @ts-ignore
@@ -204,6 +212,8 @@ const filteredUnis = uniSrch.trim()
                     >
                       Set as Profile Picture
                     </button>
+                    {success && (<div><FaCheck size= {30} color = {"green"}/></div>)}
+                    </div>
                   )}
                 </div>
                 
