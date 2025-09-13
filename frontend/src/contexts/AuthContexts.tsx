@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
 
     }
+     setLoading(false); 
     
 
   }, []);
