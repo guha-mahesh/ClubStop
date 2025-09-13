@@ -47,26 +47,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   
+useEffect(() => {
+  const userData = localStorage.getItem('user');
+  const schoolData = localStorage.getItem('school');
 
-  useEffect(() => {
-    
-    const userData = localStorage.getItem('user');
-    const schoolData = localStorage.getItem('school');
+  if (userData && schoolData) {
+    setUser(JSON.parse(userData));
+    setSchool(JSON.parse(schoolData));
+    setIsAuthenticated(true);
+  } else {
+    console.log("No user data found in localStorage");
+  }
 
-    if (userData && schoolData) {
-      setUser(JSON.parse(userData));
-      setSchool(JSON.parse(schoolData));
-      
-
-    } else {
-      console.log("No user data found in localStorage");
-      
-
-    }
-     setLoading(false); 
-    
-
-  }, []);
+  setLoading(false); 
+}, []);
 
   const login = (data: LoginResponse) => {
     
