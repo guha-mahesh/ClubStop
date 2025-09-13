@@ -17,6 +17,7 @@ const router = Router();
 
 
 async function createUser(req: Request, res: Response) {
+    console.log(isProduction)
     const { username, password, school, email } = req.body;
 
 
