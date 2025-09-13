@@ -9,7 +9,9 @@ export interface AuthRequest extends Request {
 
 const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
     console.log("Verifying token from cookie...")
-
+    console.log("All request headers:", req.headers);
+    console.log("Cookie header specifically:", req.headers.cookie);
+    console.log("Parsed cookies:", req.cookies);
 
     const token = req.cookies.jwt;
     console.log("Token:", token);
