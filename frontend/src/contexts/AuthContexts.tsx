@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
 
     if (!response.ok && retries > 0) {
-      await new Promise(resolve => setTimeout(resolve, 1300));
+      await new Promise(resolve => setTimeout(resolve, 3000));
       return checkAuth(retries - 1);
     }
 
