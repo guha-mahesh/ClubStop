@@ -64,7 +64,7 @@ const Login = () => {
         setSuccess(true);
 
       } else {
-        setErrMsg(data.error || "Invalid username or password");
+        setErrMsg(data.match || "Invalid username or password");
       }
     } catch (err: any) {
       if (!err?.response) {

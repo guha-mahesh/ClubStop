@@ -84,6 +84,7 @@ async function getUserData(username: string) {
 
         if (rows.length === 0) {
             return null;
+
         }
 
         return rows[0];
@@ -101,6 +102,7 @@ async function Login(req: Request, res: Response) {
     const { username, password } = req.body;
     console.log('Received:', { username, password });
     const user_data = await getUserData(username)
+
     if (user_data) {
         const hashed_pwd = user_data.password
         try {
@@ -134,7 +136,7 @@ async function Login(req: Request, res: Response) {
                 });
             }
             else {
-                res.json({ match: "incorrect password" })
+                res.json({ success: false, match: "incorrect password" })
             }
         }
         catch (err) {
@@ -142,6 +144,8 @@ async function Login(req: Request, res: Response) {
 
 
         }
+    } else {
+        res.json({ success: false, match: "no user" })
     }
 
 
