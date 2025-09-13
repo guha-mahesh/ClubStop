@@ -12,6 +12,7 @@ const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
 
 
     const token = req.cookies.jwt;
+    console.log("Token:", token);
 
     if (!token) {
         return res.status(401).json({
