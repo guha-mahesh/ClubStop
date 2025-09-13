@@ -62,7 +62,7 @@ const Login = () => {
           school: data.school
         });
         setSuccess(true);
-        setTimeout(() => navigate("/"), 1000);
+
       } else {
         setErrMsg(data.error || "Invalid username or password");
       }
