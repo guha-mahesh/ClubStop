@@ -16,7 +16,7 @@ interface AuthContextType {
   login: (data: LoginResponse) => void;
   logout: () => void;
   school: string | null;
-  checkAuth: () => Promise<void>;
+
 }
 
 interface LoginResponse {
@@ -109,7 +109,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     school,
     login,
     logout,
-    checkAuth,
   };
 
   return (
