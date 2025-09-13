@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
   const checkAuth = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${backendUrl}/api/verify`, {
         method: 'GET',
         credentials: 'include', 
@@ -90,6 +91,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       localStorage.removeItem('user');
       localStorage.removeItem('school');
     }
+    finally{
+      setLoading(false); 
+    }
   };
 
   useEffect(() => {
@@ -107,7 +111,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       checkAuth();
     }
     
-    setLoading(false);
+
   }, []);
 
   const login = (data: LoginResponse) => {
