@@ -46,55 +46,62 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [school, setSchool] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  
-  const checkAuth = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${backendUrl}/api/verify`, {
-        method: 'GET',
-        credentials: 'include', 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  const checkAuth = async (retries = 3) => {
+  try {
+    const response = await fetch(`${backendUrl}/api/verify`, {
+      method: 'GET',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.user) {
-          setIsAuthenticated(true);
-          setUser(data.user);
-          setSchool(data.school);
-          
-          localStorage.setItem('user', JSON.stringify(data.user));
-          localStorage.setItem('school', JSON.stringify(data.school));
-        } else {
-          
-          setIsAuthenticated(false);
-          setUser(null);
-          setSchool(null);
-          localStorage.removeItem('user');
-          localStorage.removeItem('school');
-        }
+    if (!response.ok && retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return checkAuth(retries - 1);
+    }
+
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success && data.user) {
+        setIsAuthenticated(true);
+        setUser(data.user);
+        setSchool(data.school);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('school', JSON.stringify(data.school));
       } else {
-        
         setIsAuthenticated(false);
         setUser(null);
         setSchool(null);
         localStorage.removeItem('user');
         localStorage.removeItem('school');
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
+    } else {
+      
       setIsAuthenticated(false);
       setUser(null);
       setSchool(null);
       localStorage.removeItem('user');
       localStorage.removeItem('school');
     }
-    finally{
-      setLoading(false); 
+
+  } catch (error) {
+    if (retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return checkAuth(retries - 1);
     }
-  };
+    
+    console.error('Auth check failed:', error);
+    setIsAuthenticated(false);
+    setUser(null);
+    setSchool(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('school');
+  } finally {
+    setLoading(false); 
+  }
+};
 
   useEffect(() => {
     
