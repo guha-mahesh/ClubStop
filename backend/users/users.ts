@@ -8,7 +8,7 @@ import verifyToken from '../middleware/auth';
 import { AuthRequest } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.PRODUCTION === 'true';
 
 
 
@@ -17,7 +17,7 @@ const router = Router();
 
 
 async function createUser(req: Request, res: Response) {
-    console.log(isProduction)
+    console.log("isProd", isProduction)
     const { username, password, school, email } = req.body;
 
 
