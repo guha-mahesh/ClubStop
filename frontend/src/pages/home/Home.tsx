@@ -17,9 +17,10 @@ const Home = () => {
     const [apis, setApis] = useState(["universities"])
 
     useEffect(() => {
+      console.log("isAuthenticated", isAuthenticated);
   if (!loading && school) {
     console.log("school changed", school);
-    console.log("isAuthenticated", isAuthenticated);
+    
     
 
     //@ts-ignore
