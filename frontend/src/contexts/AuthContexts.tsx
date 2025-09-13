@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [school, setSchool] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const checkAuth = async (retries = 3) => {
+  const checkAuth = async (retries = 2) => {
   try {
     const response = await fetch(`${backendUrl}/api/verify`, {
       method: 'GET',
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
 
     if (!response.ok && retries > 0) {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1300));
       return checkAuth(retries - 1);
     }
 
