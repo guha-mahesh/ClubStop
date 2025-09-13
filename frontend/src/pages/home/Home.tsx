@@ -19,13 +19,14 @@ const Home = () => {
     useEffect(() => {
   if (!loading && school) {
     console.log("school changed", school);
+    console.log("isAuthenticated", isAuthenticated);
     
 
     //@ts-ignore
     setSelectedSchool(school); 
     setApis(['flairs', 'clubs']);
   }
-}, [loading, school]);
+}, [loading, school, isAuthenticated]);
 
 useEffect(() => {
   console.log("Selected school:", selectedSchool);
