@@ -58,7 +58,8 @@ interface University{
         if(userID){
             const response = await fetch(`${backendUrl}/api/user/${userID}`,  {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json', 'Authorization':`Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json'},
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -124,8 +125,9 @@ interface University{
     const response = await fetch(`${backendUrl}/api/image`,  {
       method: 'POST',
        headers: {
-      "Authorization": `Bearer ${token}`,  
+      
     },
+    credentials: 'include',
     body: formData 
 
     });
@@ -154,8 +156,9 @@ if (user){
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    
   },
+  credentials: 'include',
   body: JSON.stringify({
     userId: user.id,
     username: username,

@@ -18,12 +18,18 @@ const Home = () => {
 
     useEffect(() => {
   if (!loading && school) {
+    console.log("school changed", school);
+    
 
     //@ts-ignore
     setSelectedSchool(school); 
     setApis(['flairs', 'clubs']);
   }
 }, [loading, school]);
+
+useEffect(() => {
+  console.log("Selected school:", selectedSchool);
+}, [selectedSchool]);
 
 
    

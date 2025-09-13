@@ -96,8 +96,9 @@ const EditClubPage = () => {
                 console.log(clubID)
                 const response = await fetch(`${backendUrl}/api/editclub/${clubID}`,{
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
-           }
+                    headers: { 'Content-Type': 'application/json', 
+           },
+           credentials: 'include',
 
                 })
                 const data = await response.json();
@@ -189,8 +190,9 @@ const handleEdit = async () =>{
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
+        credentials: 'include',
         body: JSON.stringify({
           clubID: clubID,
           name: name,
@@ -235,8 +237,9 @@ const handleFlairAdd = async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
+        credentials: 'include',
         body: JSON.stringify({
           ClubID: clubID,
           Flair: selected.flair_name,

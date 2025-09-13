@@ -8,7 +8,7 @@ import verifyToken from '../middleware/auth';
 import { AuthRequest } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
 
-
+const isProduction = process.env.NODE_ENV === 'production';
 
 
 
@@ -39,10 +39,18 @@ async function createUser(req: Request, res: Response) {
                 process.env.JWT_SECRET || 'your-secret-key',
                 { expiresIn: '24h' }
             );
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                secure: isProduction,
+                sameSite: isProduction ? 'none' : 'lax',
+                maxAge: 24 * 60 * 60 * 1000,
+
+                path: '/'
+            });
 
             res.json({
                 success: true,
-                token: token,
+
                 user: {
                     id: result.insertId,
                     username: username
@@ -105,9 +113,17 @@ async function Login(req: Request, res: Response) {
                     process.env.JWT_SECRET || 'your-secret-key',
                     { expiresIn: '24h' }
                 );
+                res.cookie('jwt', token, {
+                    httpOnly: true,
+                    secure: isProduction,
+                    sameSite: isProduction ? 'none' : 'lax',
+                    maxAge: 24 * 60 * 60 * 1000,
+
+                    path: '/'
+                });
                 res.json({
                     success: true,
-                    token: token,
+
                     user: {
                         id: user_data.users_id,
                         username: user_data.username
@@ -376,7 +392,92 @@ async function getFlairs(req: Request, res: Response) {
         console.log(err)
     }
 
+
 }
+async function verifyAuth(req: Request, res: Response) {
+    try {
+        const token = req.cookies.jwt;
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'No authentication token found'
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+
+        const user = await pool.execute<RowDataPacket[]>(
+            'SELECT users_id, username, School FROM users WHERE users_id = ?',
+            [decoded.userId]
+        ).then(([rows]) => rows[0]);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+
+
+
+        res.json({
+            success: true,
+            user: {
+                id: user.users_id,
+                username: user.username,
+            },
+            school: user.School
+        });
+
+    } catch (error: any) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(403).json({
+                success: false,
+                message: 'Invalid token'
+            });
+        }
+
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({
+                success: false,
+                message: 'Token expired'
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: 'Server error during authentication'
+        });
+    }
+}
+async function logout(req: Request, res: Response) {
+    try {
+        res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax',
+            path: '/'
+        });
+
+        res.json({
+            success: true,
+            message: 'Successfully logged out'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error during logout'
+        });
+    }
+}
+
+
+
+
+
+
 
 
 router.post('/users', createUser);
@@ -387,6 +488,9 @@ router.get('/user/:userId', fetchUserData)
 router.put('/user', verifyToken, editUserData)
 router.get('/university', getUniversities)
 router.get('/flair', getFlairs)
+router.get('/verify', verifyAuth)
+router.post('/logout', logout)
+
 
 
 //router.get('/users/:id', getUser);  

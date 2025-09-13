@@ -48,8 +48,9 @@ const EditMemberCard = ({userID, username, role, userrole, clubID="", onRoleChan
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
+        credentials: 'include',
         body: JSON.stringify({
           memberRole: selectedRole,
           clubID: clubID,

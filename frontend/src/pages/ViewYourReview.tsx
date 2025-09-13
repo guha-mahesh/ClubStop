@@ -82,7 +82,8 @@ const ViewYourReview = () => {
                 try{
                     const response = await fetch(`${backendUrl}/api/rate/${clubID}/${user.id}`, {
                         method: 'GET',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        headers: { 'Content-Type': 'application/json', },
+                        credentials: 'include',
                     });
 
                     const data = await response.json();
@@ -114,8 +115,9 @@ const ViewYourReview = () => {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    
   },
+  credentials: 'include',
   body: JSON.stringify({
     userId: user.id,
     clubId: clubID,
@@ -163,8 +165,9 @@ const response = await fetch(`${backendUrl}/api/rate/${clubID}/${user.id}`, {
   method: 'DELETE',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    
   },
+  credentials: 'include',
 });
 
     const data = await response.json();

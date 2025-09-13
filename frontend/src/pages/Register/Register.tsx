@@ -120,6 +120,7 @@ const Register = () => {
       const response = await fetch(`${backendUrl}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ username: user, password: pwd, email: email, school: selected?.name }),
       });
 
@@ -128,7 +129,6 @@ const Register = () => {
 
       if (data.success) {
         login({
-          token: data.token,
           user: data.user,
           school: data.school
         });

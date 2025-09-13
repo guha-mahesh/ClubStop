@@ -26,8 +26,9 @@ const handleDelete = async () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -54,8 +55,9 @@ const handlePrimary = async () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
+        credentials: 'include',
         body: JSON.stringify({
           newPrimary: Flair,
           clubID: ClubID

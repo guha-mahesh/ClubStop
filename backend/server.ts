@@ -7,6 +7,8 @@ import clubRoutes from './clubs/clubs'
 import rateRoutes from './ratings/ratings'
 import pictureRoutes from './pictures/upload'
 
+import cookieParser from 'cookie-parser';
+
 
 
 
@@ -16,7 +18,12 @@ dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://clubstop-frontend.onrender.com'],
+    credentials: true
+}));
+
+app.use(cookieParser());
 
 
 

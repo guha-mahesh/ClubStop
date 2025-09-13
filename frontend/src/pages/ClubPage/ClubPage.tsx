@@ -83,8 +83,9 @@ const ClubPage = () => {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            
            },
+           credentials: 'include',
         });
         
         const data = await response.json();
@@ -156,12 +157,13 @@ const ClubPage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          
         },
         body: JSON.stringify({
           userId: user.id,
           clubId: clubID,
         }),
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -201,8 +203,9 @@ const ClubPage = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            
           },
+          credentials: 'include',
           body: JSON.stringify({
             userId: user.id,
             clubId: clubID,

@@ -1,14 +1,13 @@
-
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 interface User {
   id: string;
   username: string;
 }
-interface School{
-  school: string;
-}
+
+
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -16,18 +15,18 @@ interface AuthContextType {
   loading: boolean;
   login: (data: LoginResponse) => void;
   logout: () => void;
-  school: School | null;
+  school: string | null;
+  checkAuth: () => Promise<void>;
 }
 
 interface LoginResponse {
-  token: string;
   user: User;
-  school: School;
+  school: string;
+
+  
 }
 
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -37,7 +36,6 @@ export const useAuth = () => {
   return context;
 };
 
-
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -45,42 +43,106 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [school, setSchool] = useState<School | null>(null)
+  const [school, setSchool] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  
+  const checkAuth = async () => {
+    try {
+      const response = await fetch(`${backendUrl}/api/verify`, {
+        method: 'GET',
+        credentials: 'include', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.user) {
+          setIsAuthenticated(true);
+          setUser(data.user);
+          setSchool(data.school);
+          
+          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('school', JSON.stringify(data.school));
+        } else {
+          
+          setIsAuthenticated(false);
+          setUser(null);
+          setSchool(null);
+          localStorage.removeItem('user');
+          localStorage.removeItem('school');
+        }
+      } else {
+        
+        setIsAuthenticated(false);
+        setUser(null);
+        setSchool(null);
+        localStorage.removeItem('user');
+        localStorage.removeItem('school');
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      setIsAuthenticated(false);
+      setUser(null);
+      setSchool(null);
+      localStorage.removeItem('user');
+      localStorage.removeItem('school');
+    }
+  };
 
   useEffect(() => {
     
-    const token = localStorage.getItem('authToken');
     const userData = localStorage.getItem('user');
-    const school = localStorage.getItem('school')
+    const schoolData = localStorage.getItem('school');
 
-
-    
-    if (token && userData && school) {
-      setIsAuthenticated(true);
+    if (userData && schoolData) {
       setUser(JSON.parse(userData));
-      setSchool(JSON.parse(school));
+      setSchool(JSON.parse(schoolData));
+      
+      checkAuth();
+    } else {
+      
+      checkAuth();
     }
     
     setLoading(false);
   }, []);
 
   const login = (data: LoginResponse) => {
-    localStorage.setItem('authToken', data.token);
+    
     localStorage.setItem('user', JSON.stringify(data.user));
     localStorage.setItem('school', JSON.stringify(data.school));
+    
     setIsAuthenticated(true);
     setUser(data.user);
-    setSchool(data.school)
+    setSchool(data.school);
   };
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
+  const logout = async () => {
+    try {
+      
+      await fetch(`${backendUrl}/api/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Logout request failed:', error);
+    }
+
+    
     localStorage.removeItem('user');
+    localStorage.removeItem('school');
     setIsAuthenticated(false);
-    window.location.reload()
     setUser(null);
+    setSchool(null);
+    
+    
+    window.location.reload();
   };
 
   const value: AuthContextType = {
@@ -89,7 +151,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loading,
     school,
     login,
-    logout
+    logout,
+    checkAuth,
   };
 
   return (

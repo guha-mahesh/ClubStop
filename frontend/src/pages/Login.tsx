@@ -50,6 +50,7 @@ const Login = () => {
       const response = await fetch(`${backendUrl}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ username: username, password: pwd }),
       });
       
@@ -57,7 +58,6 @@ const Login = () => {
       
       if (data.success) {
         login({
-          token: data.token,
           user: data.user,
           school: data.school
         });

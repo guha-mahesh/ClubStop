@@ -8,26 +8,27 @@ export interface AuthRequest extends Request {
 }
 
 const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("Verifying token...")
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    console.log("Verifying token from cookie...")
 
+
+    const token = req.cookies.jwt;
 
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
+        return res.status(401).json({
+            success: false,
+            message: 'Access denied. No token provided.'
+        });
     }
 
     try {
-
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-
-
-
         req.user = decoded;
         next();
     } catch (error) {
-        return res.status(403).json({ message: 'Invalid token.' });
+        return res.status(403).json({
+            success: false,
+            message: 'Invalid token.'
+        });
     }
 };
 

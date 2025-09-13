@@ -72,7 +72,8 @@ const CreateAClub: React.FC = () => {
       if (user){
         const response = await fetch(`${backendUrl}/api/club`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json', },
+          credentials: 'include',
           body: JSON.stringify({userId: user.id, clubName: clubName, clubDesc: clubDesc, school: school, instagram: instagram, linkTree: linkTree, primaryFlair: selected }),
         });
         const data = await response.json();
