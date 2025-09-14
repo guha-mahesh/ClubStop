@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import home from "../../../assets/react.svg";
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
 
-const picPath = import.meta.env.VITE_PATH || "/"
+const picPath = import.meta.env.VITE_PATH || ""
 
 interface Props {
   leader: string,
