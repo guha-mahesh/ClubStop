@@ -91,12 +91,12 @@ interface University{
         }
     }
      const fetchUniData = async () => {
-      console.log("fetching unis")
+
       const res = await fetch(`${backendUrl}/api/university`);
       const data = await res.json();
       if (data.success) {
         setUnis(data.unis);
-        console.log(data.unis)
+
       }
     };
     fetchData();

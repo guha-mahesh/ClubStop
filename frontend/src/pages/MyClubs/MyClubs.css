@@ -44,13 +44,6 @@ ul {
     margin-bottom: 2rem;
 }
 
-.club-item {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
 
 .club-date {
     font-size: 0.9rem;

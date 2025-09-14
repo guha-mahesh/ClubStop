@@ -216,6 +216,34 @@ const handleEdit = async () =>{
 
 }
 
+
+const handleDelete = async () =>{
+  const confirmed = window.confirm("Are you sure you want to delete this club? This cannot be undone.");
+  if (!confirmed) return;
+   
+
+      const response = await fetch(`${backendUrl}/api/club/${clubID}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        credentials: 'include',
+       
+      });
+      
+          const data = await response.json();
+      
+          if(data.success){
+            alert("Club deleted successfully ✅");
+          navigate("/");
+              
+          }else{
+              console.log(data.error)
+          }
+
+}
+
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "";
   const d = new Date(dateStr);
@@ -568,6 +596,9 @@ return (
    <br></br><br></br>
     <button type="button" className="edit-button primary endingButton" onClick={()=>navigate(`/club/${clubID}`)}>
           back to Club
+         </button>
+          <button type="button" className="edit-button primary endingButton" onClick={()=>handleDelete()}>
+          Delete Club
          </button>
  </div>
 );

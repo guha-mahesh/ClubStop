@@ -176,7 +176,7 @@ const MyClubs = () => {
                   <h2>{getSectionTitle()}:</h2>
                   <div className="clubs-grid">
                     {displayClubs.map((club) => (
-                      <div key={club.club_id} className="club-item">
+                      <div key={club.club_id} >
                         <Clubs 
                           id={club.club_id} 
                           ClubName={club.clubName} 

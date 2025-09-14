@@ -662,6 +662,70 @@ async function changePrimary(req: AuthRequest, res: Response) {
 }
 
 
+
+
+async function deleteClub(req: AuthRequest, res: Response) {
+    const { clubID } = req.params;
+    console.log("deleteClub Received:", { clubID });
+
+    try {
+        const [deleteClubDependencies1] = await pool.execute<ResultSetHeader>(
+            "DELETE FROM clubMember WHERE club_id = ?",
+            [clubID]
+        );
+        if (deleteClubDependencies1.affectedRows == 0) {
+            return res.json({
+                success: false,
+                error: "couldn't delete club members",
+            });
+        }
+
+        const [deleteClubDependencies2] = await pool.execute<ResultSetHeader>(
+            "DELETE FROM rating WHERE club_id = ?",
+            [clubID]
+        );
+        if (deleteClubDependencies2.affectedRows == 0) {
+            return res.json({
+                success: false,
+                error: "couldn't delete ratings",
+            });
+        }
+
+        const [deleteClubDependencies3] = await pool.execute<ResultSetHeader>(
+            "DELETE FROM clubFlair WHERE club_id = ?",
+            [clubID]
+        );
+        if (deleteClubDependencies3.affectedRows == 0) {
+            return res.json({
+                success: false,
+                error: "couldn't delete flairs",
+            });
+        }
+
+        const [deleteClubResult] = await pool.execute<ResultSetHeader>(
+            "DELETE FROM clubs WHERE club_id = ?",
+            [clubID]
+        );
+        if (deleteClubResult.affectedRows != 0) {
+            return res.json({
+                success: true,
+                message: "Club deleted successfully",
+            });
+        } else {
+            return res.json({
+                success: false,
+                error: "couldn't delete club",
+            });
+        }
+    } catch (err: any) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            error: err.message || err,
+        });
+    }
+}
+
 router.post('/club', verifyToken, createClub);
 router.get('/club/:clubId', getClub);
 router.get('/editclub/:clubId', verifyToken, geteditClub)
@@ -671,6 +735,7 @@ router.post('/flair', verifyToken, addFlair)
 router.delete('/flair/:Flair/:ClubID', verifyToken, deleteFlair)
 router.get('/sort/:flairName/:university', getClubByFlair);
 router.put('/flair', verifyToken, changePrimary)
+router.delete('/club/:clubID', verifyToken, deleteClub);
 
 
 

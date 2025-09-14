@@ -11,6 +11,7 @@ interface props{
     dlt?: boolean;
     chngprm?: boolean;
     primary: boolean;
+
 }
 
 const Flair = ({Flair, ClubID = "", dlt = true, chngprm = false, primary}: props) => {
