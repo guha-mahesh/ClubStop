@@ -233,6 +233,163 @@ const ClubPage = () => {
     }
   };
 
+
+
+
+  const rating = ( <div className="rating-form">
+          <button className="back-button" onClick={() => setRate(false)}>
+            Back
+          </button>
+          <form className="rating-form-body" onSubmit={handleSubmit}>
+            <div className="rating-input-group">
+              <label htmlFor="camaraderie" className="rating-label">
+                Camaraderie
+              </label>
+              <input
+                id="camaraderie"
+                className="rating-slider"
+                type="range"
+                min="1"
+                max="100"
+                value={camaraderie}
+                onChange={(e) => setCamaraderie(e.target.value)}
+                required
+              />
+              <input
+                className="rating-number"
+                type="number"
+                min="1"
+                max="100"
+                value={camaraderie}
+                onChange={(e) => setCamaraderie(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="rating-input-group">
+              <label htmlFor="ascendancy" className="rating-label">
+                Ascendancy
+              </label>
+              <input
+                id="ascendancy"
+                className="rating-slider"
+                type="range"
+                min="1"
+                max="100"
+                value={ascendancy}
+                onChange={(e) => setAscendancy(e.target.value)}
+                required
+              />
+              <input
+                className="rating-number"
+                type="number"
+                min="1"
+                max="100"
+                value={ascendancy}
+                onChange={(e) => setAscendancy(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="rating-input-group">
+              <label htmlFor="prestige" className="rating-label">
+                Prestige
+              </label>
+              <input
+                id="prestige"
+                className="rating-slider"
+                type="range"
+                min="1"
+                max="100"
+                value={prestige}
+                onChange={(e) => setPrestige(e.target.value)}
+                required
+              />
+              <input
+                className="rating-number"
+                type="number"
+                min="1"
+                max="100"
+                value={prestige}
+                onChange={(e) => setPrestige(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="rating-input-group">
+              <label htmlFor="obligation" className="rating-label">
+                Obligation
+              </label>
+              <input
+                id="obligation"
+                className="rating-slider"
+                type="range"
+                min="1"
+                max="100"
+                value={obligation}
+                onChange={(e) => setObligation(e.target.value)}
+                required
+              />
+              <input
+                className="rating-number"
+                type="number"
+                min="1"
+                max="100"
+                value={obligation}
+                onChange={(e) => setObligation(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="rating-input-group">
+              <label htmlFor="legacy" className="rating-label">
+                Legacy
+              </label>
+              <input
+                id="legacy"
+                className="rating-slider"
+                type="range"
+                min="1"
+                max="100"
+                value={legacy}
+                onChange={(e) => setLegacy(e.target.value)}
+                required
+              />
+              <input
+                className="rating-number"
+                type="number"
+                min="1"
+                max="100"
+                value={legacy}
+                onChange={(e) => setLegacy(e.target.value)}
+                required
+              />
+            </div>
+            <div className = "rating-input-group">
+              <label htmlFor ="Review" className = "rating-label">
+                Review Here
+              </label>
+              <textarea
+                id = "review"
+                value={review}
+                onChange ={(e)=>{setReview(e.target.value)}}>
+              </textarea>
+            </div>
+
+            <button className="submit-rating-button" type="submit">
+              Submit
+            </button>
+          </form>
+        </div>)
+
+
+
+
+
+
+
+
+
   return (
     <>
       <Navbar />
@@ -392,153 +549,7 @@ const ClubPage = () => {
         
 
 
-      ) : (
-        <div className="rating-form">
-          <button className="back-button" onClick={() => setRate(false)}>
-            Back
-          </button>
-          <form className="rating-form-body" onSubmit={handleSubmit}>
-            <div className="rating-input-group">
-              <label htmlFor="camaraderie" className="rating-label">
-                Camaraderie
-              </label>
-              <input
-                id="camaraderie"
-                className="rating-slider"
-                type="range"
-                min="1"
-                max="100"
-                value={camaraderie}
-                onChange={(e) => setCamaraderie(e.target.value)}
-                required
-              />
-              <input
-                className="rating-number"
-                type="number"
-                min="1"
-                max="100"
-                value={camaraderie}
-                onChange={(e) => setCamaraderie(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="rating-input-group">
-              <label htmlFor="ascendancy" className="rating-label">
-                Ascendancy
-              </label>
-              <input
-                id="ascendancy"
-                className="rating-slider"
-                type="range"
-                min="1"
-                max="100"
-                value={ascendancy}
-                onChange={(e) => setAscendancy(e.target.value)}
-                required
-              />
-              <input
-                className="rating-number"
-                type="number"
-                min="1"
-                max="100"
-                value={ascendancy}
-                onChange={(e) => setAscendancy(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="rating-input-group">
-              <label htmlFor="prestige" className="rating-label">
-                Prestige
-              </label>
-              <input
-                id="prestige"
-                className="rating-slider"
-                type="range"
-                min="1"
-                max="100"
-                value={prestige}
-                onChange={(e) => setPrestige(e.target.value)}
-                required
-              />
-              <input
-                className="rating-number"
-                type="number"
-                min="1"
-                max="100"
-                value={prestige}
-                onChange={(e) => setPrestige(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="rating-input-group">
-              <label htmlFor="obligation" className="rating-label">
-                Obligation
-              </label>
-              <input
-                id="obligation"
-                className="rating-slider"
-                type="range"
-                min="1"
-                max="100"
-                value={obligation}
-                onChange={(e) => setObligation(e.target.value)}
-                required
-              />
-              <input
-                className="rating-number"
-                type="number"
-                min="1"
-                max="100"
-                value={obligation}
-                onChange={(e) => setObligation(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="rating-input-group">
-              <label htmlFor="legacy" className="rating-label">
-                Legacy
-              </label>
-              <input
-                id="legacy"
-                className="rating-slider"
-                type="range"
-                min="1"
-                max="100"
-                value={legacy}
-                onChange={(e) => setLegacy(e.target.value)}
-                required
-              />
-              <input
-                className="rating-number"
-                type="number"
-                min="1"
-                max="100"
-                value={legacy}
-                onChange={(e) => setLegacy(e.target.value)}
-                required
-              />
-            </div>
-            <div className = "rating-input-group">
-              <label htmlFor ="Review" className = "rating-label">
-                Review Here
-              </label>
-              <textarea
-                id = "review"
-                value={review}
-                onChange ={(e)=>{setReview(e.target.value)}}>
-              </textarea>
-            </div>
-
-            <button className="submit-rating-button" type="submit">
-              Submit
-            </button>
-          </form>
-        </div>
-      )}
+      ) : (rating)}
     </>
   );
 };

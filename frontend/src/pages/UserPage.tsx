@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Clubs from "../components/cards/clubs/ClubCard";
-import { FaCheck } from 'react-icons/fa'
+import { FaCheck, FaExternalLinkAlt, FaInstagram, FaGlobe, FaLinkedin, FaTwitter, FaGithub, FaYoutube } from 'react-icons/fa'
 import UploadPfp from '../components/UploadPfp'
 import Navbar from '../components/layout/Navbar'
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://clubstop.onrender.com';
@@ -17,6 +17,10 @@ const UserPage = () => {
         userDesc: string;
         email: string;
         profilePic: string;
+        link1: string;
+        link2: string;
+        link3: string;
+
     }
 
     interface Club{
@@ -44,10 +48,15 @@ interface University{
     const [edit, setEdit] = useState(false)
     const [success, setSuccess] = useState(false)
 
+    const [focused, setFocused] = useState(false);
+
     const [username, setUsername] = useState("")
     const [school, setSchool] = useState("")
     const [unis, setUnis] = useState<University[] | null>(null);
     const[desc, setDesc] = useState("")
+    const [link1, setLink1] = useState("")
+    const [link2, setLink2] = useState("")
+    const [link3, setLink3] = useState("")
     const [uniSrch, setUniSrch] = useState("")
     
 
@@ -100,6 +109,9 @@ interface University{
         setDesc(userData.userDesc)
         setUsername(userData.username)
         setSchool(userData.School)
+        setLink1(userData.link1)
+        setLink2(userData.link2)
+        setLink3(userData.link3)
     }
 
     }, [userData])
@@ -163,7 +175,10 @@ if (user){
     userId: user.id,
     username: username,
     school: school,
-    desc: desc
+    desc: desc,
+    link1: link1,
+    link2: link2,
+    link3: link3
 
   }),
 });
@@ -181,6 +196,46 @@ if (user){
     }
 }
     }
+
+    
+    const getLinkIcon = (url: string) => {
+      const domain = url.toLowerCase();
+      if (domain.includes('instagram')) return <FaInstagram />;
+      if (domain.includes('linkedin')) return <FaLinkedin />;
+      if (domain.includes('twitter') || domain.includes('x.com')) return <FaTwitter />;
+      if (domain.includes('github')) return <FaGithub />;
+      if (domain.includes('youtube')) return <FaYoutube />;
+      return <FaGlobe />;
+    };
+
+    
+    const getLinkDisplayName = (url: string) => {
+      try {
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname.replace('www.', '');
+        
+        
+        if (domain.includes('instagram')) return 'Instagram';
+        if (domain.includes('linkedin')) return 'LinkedIn';
+        if (domain.includes('twitter')) return 'Twitter';
+        if (domain.includes('x.com')) return 'X (Twitter)';
+        if (domain.includes('github')) return 'GitHub';
+        if (domain.includes('youtube')) return 'YouTube';
+        
+        
+        return domain.charAt(0).toUpperCase() + domain.slice(1);
+      } catch {
+        return 'Link';
+      }
+    };
+
+    
+    const validLinks = [
+      { url: link1, label: 'Link 1' },
+      { url: link2, label: 'Link 2' },
+      { url: link3, label: 'Link 3' }
+    ].filter(link => link.url && link.url.trim() !== '');
+
 const filteredUnis = uniSrch.trim()
     ? unis?.filter((uni) =>
         uni.name.toLowerCase().includes(uniSrch.trim().toLowerCase())
@@ -202,20 +257,15 @@ const filteredUnis = uniSrch.trim()
                     {...(userData?.profilePic ? { IMAGE_URL: userData.profilePic } : {})} 
                   />
                   {viewingOwn && (
-
-
-
                     <div className = "setPfpDiv">
-                      
-                    <button 
-                      className="set-pfp-button"
-                      // @ts-ignore
-
-                      onClick={() => handleSet(selectedFile)}
-                    >
-                      Set as Profile Picture
-                    </button>
-                    {success && (<div><FaCheck size= {30} color = {"green"}/></div>)}
+                      <button 
+                        className="set-pfp-button"
+                        //@ts-ignore
+                        onClick={() => handleSet(selectedFile)}
+                      >
+                        Set as Profile Picture
+                      </button>
+                      {success && (<div><FaCheck size= {30} color = {"green"}/></div>)}
                     </div>
                   )}
                 </div>
@@ -224,6 +274,32 @@ const filteredUnis = uniSrch.trim()
                   <h1 className="profile-username">{username}</h1>
                   <h3 className="profile-school">{school}</h3>
                   <p className="profile-description">{desc}</p>
+                  
+                  {/* Links Section */}
+                  {validLinks.length > 0 && (
+                    <div className="profile-links">
+                      <h4 className="links-title">Links</h4>
+                      <div className="links-container">
+                        {validLinks.map((linkItem, index) => (
+                          <a
+                            key={index}
+                            href={linkItem.url.startsWith('http') ? linkItem.url : `https://${linkItem.url}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="profile-link"
+                          >
+                            <span className="link-icon">
+                              {getLinkIcon(linkItem.url)}
+                            </span>
+                            <span className="link-text">
+                              {getLinkDisplayName(linkItem.url)}
+                            </span>
+                            <FaExternalLinkAlt className="external-icon" />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   
                   {viewingOwn && (
                     <button 
@@ -303,15 +379,20 @@ const filteredUnis = uniSrch.trim()
                     value={uniSrch}
                     onChange={(e) => setUniSrch(e.target.value)}
                     placeholder="Enter your school"
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                   />
-  <div className = "searchItems">
+  <div className={
+        focused ? "university-dropdown active" : "university-dropdown inactive"
+      }>
                 {filteredUnis ? (
   filteredUnis.map((uni, index) => (
-    <div onClick = {()=>setSchool(uni.name)}className = "searchItem"key={index}>{uni.name} </div>
+    <div onMouseDown = {()=>setSchool(uni.name)}className = "searchItem"key={index}>{uni.name} </div>
   ))
 ) : null}
-{school ? (<h1 className = "selectedSchool">Selected School: {school}</h1>):(null)}
+
 </div>
+{school ? (<h1 className = "selectedSchool">Selected School: {school}</h1>):(null)}
 
                 </div>
                
@@ -325,6 +406,36 @@ const filteredUnis = uniSrch.trim()
                     placeholder="Tell us about yourself"
                   />
                 </div>
+                   
+               <div className="input-group">
+  <label className="input-label">Link1</label>
+  <input
+    className="text-input"
+    value={link1}
+    onChange={(e) => setLink1(e.target.value)} 
+    placeholder="https://example.com"
+  />
+</div>
+   
+<div className="input-group">
+  <label className="input-label">Link2</label>
+  <input
+    className="text-input"
+    value={link2}
+    onChange={(e) => setLink2(e.target.value)} 
+    placeholder="https://instagram.com/yourclub"
+  />
+</div>
+   
+<div className="input-group">
+  <label className="input-label">Link3</label>
+  <input
+    className="text-input"
+    value={link3}
+    onChange={(e) => setLink3(e.target.value)} 
+    placeholder="https://portfolio.com"
+  />
+</div>
                 
                 <div className="edit-buttons">
                   <button type="submit" className="save-button">

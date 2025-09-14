@@ -10,8 +10,11 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     School VARCHAR(100) NOT NULL DEFAULT 'No School Reported',
     email VARCHAR(320) NOT NULL UNIQUE,
-    userDesc VARCHAR(500) DEFAULT 'Set Description',
-    profilePic VARCHAR(100)
+    userDesc VARCHAR(500) DEFAULT '',
+    profilePic VARCHAR(100),
+    link1 VARCHAR(255) DEFAULT '',
+    link2 VARCHAR(255) DEFAULT '',
+    link3 VARCHAR(255) DEFAULT ''
 
 
 );

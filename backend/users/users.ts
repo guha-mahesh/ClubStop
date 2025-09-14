@@ -310,13 +310,21 @@ async function fetchUserData(req: Request, res: Response) {
 
 
 async function editUserData(req: AuthRequest, res: Response) {
-    const { userId, username, school, desc } = req.body;
+    const { userId, username, school, desc, link1, link2, link3 } = req.body;
     console.log("Received editUser", { username, school, desc })
 
     try {
         const [editrows] = await pool.execute<ResultSetHeader>(
-            'UPDATE users SET username=?, userDesc=?, School=? WHERE users_id=?',
-            [username, desc, school, userId]
+            'UPDATE users SET username=?, userDesc=?, School=?, link1 = ?, link2 = ?, link3 = ? WHERE users_id=?',
+            [
+                username ?? null,
+                desc ?? null,
+                school ?? null,
+                link1 ?? null,
+                link2 ?? null,
+                link3 ?? null,
+                userId
+            ]
         );
 
         if (editrows) {
@@ -376,7 +384,7 @@ async function getUniversities(req: Request, res: Response) {
 
 
 async function getFlairs(req: Request, res: Response) {
-    console.log("getting flairs")
+
     try {
         const [flairRows] = await pool.execute<RowDataPacket[]>('SELECT flair_name FROM club_flairs')
 

@@ -1,15 +1,14 @@
-
-
-.allClubs{
+.allClubs {
     display: flex;
     gap: 50vh;
     justify-content: center;
     margin: 3vh;
-    margin-top: 100px; /* Add margin to account for fixed Navbar */
+    margin-top: 100px;
+    /* Add margin to account for fixed Navbar */
 }
 
 ul {
-    list-style-type: none; 
+    list-style-type: none;
 }
 
 .allClubs span {
@@ -97,7 +96,7 @@ ul {
         margin: 2vh;
         margin-top: 100px;
     }
-    
+
     .clubs-grid {
         grid-template-columns: 1fr;
         gap: 1rem;

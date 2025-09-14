@@ -158,6 +158,18 @@ async function createClub(req: AuthRequest, res: Response) {
             });
         }
 
+        const [flairResult] = await pool.execute<ResultSetHeader>(
+            'INSERT INTO clubFlair (club_id, flairName) VALUES (?, ?)',
+            [clubResult.insertId, primaryFlair]
+        );
+
+        if (!flairResult) {
+            return res.json({
+                success: false,
+                error: "couldn't add primary flair to club"
+            });
+        }
+
         res.json({
             success: true,
             clubId: clubResult.insertId
@@ -311,7 +323,7 @@ async function getClub(req: Request, res: Response) {
 
 async function geteditClub(req: AuthRequest, res: Response) {
     const clubID = req.params.clubId;
-    console.log("EditClub Received", { clubID });
+
 
 
     try {
@@ -450,6 +462,7 @@ async function addFlair(req: AuthRequest, res: Response) {
         if (count.length < 5) {
 
             if (count.length === 0) {
+                console.log("Setting primary")
                 const [primary] = await pool.execute<ResultSetHeader>(
                     'UPDATE clubs SET primaryFlair = ? WHERE club_id = ?',
                     [Flair, ClubID]
@@ -571,7 +584,7 @@ async function getClubByFlair(req: Request, res: Response) {
             const placeholders = clubIds.map(() => '?').join(',');
 
             const [sortables] = await pool.execute<RowDataPacket[]>(
-                `SELECT School, leaderName, clubName, clubDesc, club_id 
+                `SELECT *
    FROM clubs 
    WHERE club_id IN (${placeholders}) AND School = ? 
    ORDER BY total DESC
@@ -580,11 +593,7 @@ async function getClubByFlair(req: Request, res: Response) {
             );
             res.json({
                 success: true,
-                clubName: sortables.map(club => club.clubName),
-                School: sortables.map(club => club.School),
-                leaderName: sortables.map(club => club.leaderName),
-                clubDesc: sortables.map(club => club.clubDesc),
-                club_id: sortables.map(club => club.club_id),
+                clubData: sortables,
             });
         }
     } catch (err) {
@@ -607,6 +616,27 @@ async function changePrimary(req: AuthRequest, res: Response) {
         const [updateCurrentPrimary] = await pool.execute<ResultSetHeader>('UPDATE clubs SET primaryFlair = ? WHERE club_id = ?', [newPrimary, clubID]);
 
         if (updateCurrentPrimary.affectedRows != 0) {
+            const flairNum = categoryMap.get(newPrimary);
+            const png = flairNum ? numberMap[flairNum] : null;
+            if (png) {
+                const [updateCurrentPrimaryPfP] = await pool.execute<ResultSetHeader>('UPDATE clubs SET flairPic = ? WHERE club_id = ?', [png, clubID]);
+                if (updateCurrentPrimaryPfP.affectedRows == 0) {
+                    res.json({
+                        success: false,
+                        error: "didn't update primary pic"
+                    })
+                }
+
+
+            } else {
+                res.json({
+                    success: false,
+                    error: "couldn't find png"
+                })
+            }
+
+
+
             res.json({
                 success: true
             })

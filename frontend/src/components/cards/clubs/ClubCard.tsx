@@ -71,7 +71,7 @@ function Clubs({ leader, ClubName, ClubDescription, School, id = "" }: Props) {
             </div>
           </div>
           <div className="clubPhotoContainer">
-            <img className="clubPhoto" src={`${picPath}ClubIcons/${flairPic}`} alt="Club" />
+            <img className="clubPhoto" src={`${picPath}/ClubIcons/${flairPic}`} alt="Club" />
           </div>
         </section>
       </div>

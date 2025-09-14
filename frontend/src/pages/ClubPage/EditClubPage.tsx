@@ -78,7 +78,7 @@ const EditClubPage = () => {
     
           if (data.success){
             setOptions(data.flairs)
-            console.log("success")
+
 
           }else{
             console.log(data.error)
@@ -93,7 +93,7 @@ const EditClubPage = () => {
         const token = localStorage.getItem("authToken")
         const fetchClubData = async ()=>{
             if (user){
-                console.log(clubID)
+
                 const response = await fetch(`${backendUrl}/api/editclub/${clubID}`,{
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json', 
@@ -135,14 +135,14 @@ const EditClubPage = () => {
   setLinktree(data.clubData.linktree || "");
 
   if (data.otherFlairs) {
-  console.log(data.otherFlairs)
+
   setFlairs(data.otherFlairs);
 
 }else{
   console.log(data)
 }
 if (data.clubData.primaryFlair){
-  console.log(data.clubData.primaryFlair)
+
   setPrimaryFlair(data.clubData.primaryFlair)
 }else{
   console.log("None Found")
@@ -230,6 +230,7 @@ const convertToSQLTimestamp = (dateStr: string) => {
 
 const handleFlairAdd = async () => {
   const token = localStorage.getItem("authToken");
+  console.log("Adding flair")
 
   try {
     if (user && selected) {
@@ -250,11 +251,12 @@ const handleFlairAdd = async () => {
 
       if (data.success) {
         console.log("Flair added successfully:", data.result);
+        window.location.reload()
       } else {
         console.log("Server error:", data.error);
       }
 
-      window.location.reload();
+
     }
   } catch (err) {
     console.log("Request failed:", err);
