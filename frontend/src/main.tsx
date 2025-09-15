@@ -14,6 +14,7 @@ import "./pages/CreateAClub/CreateAClub.css";
 import './components/Flair.css'
 import './pages/ClubPage/Edit.css'
 import './pages/userPage.css'
+import './components/Review.css'
 
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

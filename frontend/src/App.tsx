@@ -12,7 +12,7 @@ import ViewYourReview from "./pages/ViewYourReview";
 import UserPage from "./pages/UserPage";
 import EditClubPage from "./pages/ClubPage/EditClubPage";
 import FlairSort from "./pages/FlairSort";
-
+import ViewRatings from "./pages/ViewRatings";
 
 function App() {
   return (
@@ -41,6 +41,10 @@ function App() {
              <Route
             path="/sortFlair/:university/:flairName"
             element={<FlairSort></FlairSort>}
+          />
+          <Route
+            path="/rating/:clubID/:clubName"
+            element={<ViewRatings></ViewRatings>}
           />
         </Routes>
       </Router>

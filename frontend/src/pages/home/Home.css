@@ -12,12 +12,13 @@ html,
 body {
     margin: 0;
     padding: 0;
-    background-color: #f8fafc;
+
 }
 
 body {
     margin: 0;
-    padding: 0;
+    padding-top: 1px;
+
     font-family: 'Inter', sans-serif;
     color: #1e293b;
     background: linear-gradient(135deg, #ea6666 0%, #a24b76 100%);

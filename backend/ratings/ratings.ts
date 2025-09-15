@@ -8,6 +8,7 @@ import { RowDataPacket } from 'mysql2';
 
 
 
+
 const router = Router();
 async function getRating(req: Request, res: Response) {
     const userId = req.params.userId;
@@ -203,17 +204,62 @@ async function deleteRate(req: AuthRequest, res: Response) {
 
     }
 
+} async function getAllRatings(req: Request, res: Response) {
+    const clubId = req.params.clubId;
+
+    try {
+        const [results] = await pool.execute<RowDataPacket[]>(
+            'SELECT * FROM rating WHERE club_id = ?',
+            [clubId]
+        );
+
+        if (results.length === 0) {
+            res.json({
+                success: false,
+                error: "No ratings for this club"
+            });
+            return;
+        }
+
+        const userIds = results.map(r => r.users_id);
+
+        const placeholders = userIds.map(() => '?').join(',');
+        const [userRows] = await pool.execute<RowDataPacket[]>(
+            `SELECT users_id, username, profilePic FROM users WHERE users_id IN (${placeholders})`,
+            userIds
+        );
+        const userMap: Record<number, { username: string, profilePic: string | null }> = {};
+        userRows.forEach(u => {
+            userMap[u.users_id] = {
+                username: u.username,
+                profilePic: u.profilePic
+            };
+        });
+
+        const merged = results.map(r => ({
+            ...r,
+            username: userMap[r.users_id]?.username || 'Unknown',
+            profilePic: userMap[r.users_id]?.profilePic || null
+        }));
+
+
+        res.json({
+            success: true,
+            ratings: merged
+        });
+    } catch (err) {
+        console.log(err);
+        res.json({
+            success: false,
+            error: err
+        });
+    }
 }
-
-
-
-
-
 router.get('/rate/:clubId/:userId', verifyToken, getRating)
 router.post('/rate', verifyToken, rateClub);
 router.put('/rate', verifyToken, editRating);
 router.delete('/rate/:clubId/:userId', verifyToken, deleteRate)
-
+router.get('/ratings/:clubId', getAllRatings)
 
 
 

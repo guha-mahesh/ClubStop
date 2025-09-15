@@ -531,12 +531,14 @@ const ClubPage = () => {
                 {
                   <> 
                   <h1>Primary Flair</h1>
-                  <Flair Flair = {primaryFlair} ClubID={clubID} primary = {true}/> 
+                  <Flair Flair = {primaryFlair} ClubID={clubID} primary = {true} dlt = {false}/> 
                   </>
                   }
 
               {flairs ? ( flairs.map((flair, idx) => <Flair primary = {false} key={idx} dlt = {false} Flair = {flair} ClubID={clubID} />)) : null}
               </>}
+
+              <div><button onClick = {()=>navigate(`/rating/${clubID}/${clubData?.clubName}`)}>View all ratings</button></div>
 
 
             </div>): <h1>Loading...</h1>}

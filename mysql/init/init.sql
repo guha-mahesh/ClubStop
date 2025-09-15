@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS clubMember (
 
 CREATE TABLE IF NOT EXISTS rating (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     users_id INT,
     club_id INT,
     camaraderie DOUBLE NOT NULL CHECK (camaraderie >= 0 AND camaraderie <= 100) DEFAULT 0,
