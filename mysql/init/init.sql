@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS clubs (
     club_id INT AUTO_INCREMENT PRIMARY KEY,
     clubName VARCHAR(50) NOT NULL,
     clubDesc VARCHAR(500),
-    School VARCHAR(30) NOT NULL DEFAULT '',
+    School VARCHAR(100) NOT NULL DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     leader VARCHAR(50),
     leaderName VARCHAR(30),
@@ -36,8 +36,9 @@ CREATE TABLE IF NOT EXISTS clubs (
     obligation DOUBLE NOT NULL CHECK (obligation >= 0 AND obligation <= 100) DEFAULT 0,
     legacy DOUBLE NOT NULL CHECK (legacy >= 0 AND legacy <= 100) DEFAULT 0,
     total DOUBLE NOT NULL CHECK (total >= 0 AND total <= 100) DEFAULT 0,
-    instagram VARCHAR(50) NOT NULL DEFAULT '',
-    linktree VARCHAR(50) NOT NULL DEFAULT ''
+    link1 VARCHAR(255) DEFAULT '',
+    link2 VARCHAR(255) DEFAULT '',
+    link3 VARCHAR(255) DEFAULT ''
 
 );
 

@@ -33,6 +33,8 @@ interface clubData{
   legacy: number;
   total: number;
   leader: number;
+  linkTree: string;
+  instagram: string;  
   leaderName: string;
 }
 

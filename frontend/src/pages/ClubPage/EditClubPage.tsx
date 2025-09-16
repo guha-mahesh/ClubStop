@@ -30,8 +30,9 @@ const EditClubPage = () => {
     const [members, setMembers] = useState<Member[] | null>(null)
     const [desc, setDesc] = useState("")
     const [name, setName] = useState("")
-    const [instagram, setInstagram] = useState("")
-    const [linktree, setLinktree] = useState("")
+    const [link1, setlink1] = useState("")
+    const [link2, setlink2] = useState("")
+    const [link3, setlink3] = useState("")
     const [founded, setFounded] = useState("")
     const [edit, setEdit] = useState(false)
     const [flairs, setFlairs] = useState<string[] | null>(null)
@@ -131,8 +132,9 @@ const EditClubPage = () => {
   setMembers(sortedMembers);
   setDesc(data.clubData.clubDesc);
   setName(data.clubData.clubName);
-  setInstagram(data.clubData.instagram || "");
-  setLinktree(data.clubData.linktree || "");
+  setlink1(data.clubData.link1 || "");
+  setlink2(data.clubData.link2 || "");
+  setlink3(data.clubData.link3 || "");
 
   if (data.otherFlairs) {
 
@@ -198,8 +200,9 @@ const handleEdit = async () =>{
           name: name,
           description: desc,
           founded: sqlTimestamp,
-          instagram: instagram,
-          linktree: linktree
+          link1: link1,
+          link2: link2,
+          link3: link3,
 
       
         }),
@@ -221,7 +224,7 @@ const handleDelete = async () =>{
   const confirmed = window.confirm("Are you sure you want to delete this club? This cannot be undone.");
   if (!confirmed) return;
    
-
+    console.log("deleting")
       const response = await fetch(`${backendUrl}/api/club/${clubID}`, {
         method: 'DELETE',
         headers: {
@@ -332,23 +335,33 @@ return (
            </div>
            
            <div className="form-group">
-             <label className="form-label">Instagram</label>
+             <label className="form-label">link 1</label>
              <input
                className="form-input disabled"
-               value={instagram}
-               onChange={(e) => setInstagram(e.target.value)}
-               placeholder="Instagram"
+               value={link1}
+               onChange={(e) => setlink1(e.target.value)}
+               placeholder="link 1"
                disabled
              />
            </div>
            
            <div className="form-group">
-             <label className="form-label">Linktree</label>
+             <label className="form-label">link 2</label>
              <input
                className="form-input disabled"
-               value={linktree}
-               onChange={(e) => setLinktree(e.target.value)}
-               placeholder="Linktree"
+               value={link2}
+               onChange={(e) => setlink2(e.target.value)}
+               placeholder="link 2"
+               disabled
+             />
+           </div>
+           <div className="form-group">
+             <label className="form-label">link 3</label>
+             <input
+               className="form-input disabled"
+               value={link3}
+               onChange={(e) => setlink3(e.target.value)}
+               placeholder="link 2"
                disabled
              />
            </div>
@@ -358,6 +371,7 @@ return (
          </button>
        </div>
      ) : (
+
        <div className="club-details-edit">
          <form className="club-form edit-mode" onSubmit={e => { e.preventDefault(); handleEdit(); }}>
            <div className="form-group">
@@ -393,24 +407,34 @@ return (
            </div>
            
            <div className="form-group">
-             <label className="form-label">Instagram</label>
-             <input
-               className="form-input"
-               value={instagram}
-               onChange={(e) => setInstagram(e.target.value)}
-               placeholder="Instagram"
-             />
-           </div>
-           
-           <div className="form-group">
-             <label className="form-label">Linktree</label>
-             <input
-               className="form-input"
-               value={linktree}
-               onChange={(e) => setLinktree(e.target.value)}
-               placeholder="Linktree"
-             />
-           </div>
+  <label className="form-label">Link 1</label>
+  <input
+    className="form-input"
+    value={link1}
+    onChange={(e) => setlink1(e.target.value)}
+    placeholder="Link 1"
+  />
+</div>
+
+<div className="form-group">
+  <label className="form-label">Link 2</label>
+  <input
+    className="form-input"
+    value={link2}
+    onChange={(e) => setlink2(e.target.value)}
+    placeholder="Link 2"
+  />
+</div>
+
+<div className="form-group">
+  <label className="form-label">Link 3</label>
+  <input
+    className="form-input"
+    value={link3}
+    onChange={(e) => setlink3(e.target.value)}
+    placeholder="Link 3"
+  />
+</div>
            
            <div className="form-actions">
              <button type="submit" className="save-button primary">Save Changes</button>

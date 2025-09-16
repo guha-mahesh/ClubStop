@@ -107,31 +107,34 @@ async function getUsernameFromId(id: string) {
         console.error("Couldn't find User :", error);
         return null;
     }
-}
-async function createClub(req: AuthRequest, res: Response) {
-    const { userId, clubName, clubDesc, school, instagram, linkTree, primaryFlair } = req.body;
+
+} async function createClub(req: AuthRequest, res: Response) {
+    const { userId, clubName, clubDesc, school, link1, link2, link3, primaryFlair } = req.body;
+    console.log("createClub Received:", { userId, clubName, clubDesc, school, link1, link2, link3, primaryFlair });
 
     const flairNum = categoryMap.get(primaryFlair);
     const png = flairNum ? numberMap[flairNum] : null;
-    console.log(png)
+    console.log(png);
 
     try {
         const username = await getUsernameFromId(userId);
 
-        const baseFields = ['clubName', 'clubDesc', 'School', 'leader', 'leaderName', 'primaryFlair', 'flairPic'];
-        const baseValues = [clubName, clubDesc, school, userId, username, primaryFlair, png];
+        const fields = ['clubName', 'clubDesc', 'School', 'leader', 'leaderName', 'primaryFlair', 'flairPic'];
+        const values = [clubName, clubDesc, school, userId, username, primaryFlair, png];
 
-        const fields = [...baseFields];
-        const values = [...baseValues];
-
-        if (instagram) {
-            fields.push('instagram');
-            values.push(instagram);
+        if (link1) {
+            fields.push('link1');
+            values.push(link1);
         }
 
-        if (linkTree) {
-            fields.push('linktree');
-            values.push(linkTree);
+        if (link2) {
+            fields.push('link2');
+            values.push(link2);
+        }
+
+        if (link3) {
+            fields.push('link3');
+            values.push(link3);
         }
 
         const placeholders = fields.map(() => '?').join(', ');
@@ -140,10 +143,7 @@ async function createClub(req: AuthRequest, res: Response) {
         const [clubResult] = await pool.execute<ResultSetHeader>(query, values);
 
         if (!clubResult?.insertId) {
-            return res.json({
-                success: false,
-                error: "Couldn't create Club"
-            });
+            return res.json({ success: false, error: "Couldn't create Club" });
         }
 
         const [userResult] = await pool.execute<ResultSetHeader>(
@@ -152,10 +152,7 @@ async function createClub(req: AuthRequest, res: Response) {
         );
 
         if (!userResult) {
-            return res.json({
-                success: false,
-                error: "couldn't handle users club creation"
-            });
+            return res.json({ success: false, error: "Couldn't handle user's club creation" });
         }
 
         const [flairResult] = await pool.execute<ResultSetHeader>(
@@ -164,16 +161,10 @@ async function createClub(req: AuthRequest, res: Response) {
         );
 
         if (!flairResult) {
-            return res.json({
-                success: false,
-                error: "couldn't add primary flair to club"
-            });
+            return res.json({ success: false, error: "Couldn't add primary flair to club" });
         }
 
-        res.json({
-            success: true,
-            clubId: clubResult.insertId
-        });
+        res.json({ success: true, clubId: clubResult.insertId });
 
     } catch (err) {
         console.log(err);
@@ -420,12 +411,12 @@ async function editRole(req: AuthRequest, res: Response) {
 }
 
 async function editclub(req: AuthRequest, res: Response) {
-    const { clubID, name, description, founded, instagram, linktree } = req.body;
+    const { clubID, name, description, founded, link1, link2, link3 } = req.body;
     console.log("editclubfr received:", { clubID, name, description, founded })
     try {
         const [editrows] = await pool.execute<ResultSetHeader>(
-            'UPDATE clubs SET clubName = ?, clubDesc = ?, created_at = ?, instagram = ?, linktree = ? WHERE club_id = ?',
-            [name, description, founded, instagram, linktree, clubID]
+            'UPDATE clubs SET clubName = ?, clubDesc = ?, created_at = ?, link1 = ?, link2 = ?, link3 = ? WHERE club_id = ?',
+            [name, description, founded, link1, link2, link3, clubID]
         );
         if (editrows) {
             res.json({
@@ -669,27 +660,20 @@ async function deleteClub(req: AuthRequest, res: Response) {
     console.log("deleteClub Received:", { clubID });
 
     try {
+        console.log("Deleting club dependencies...");
         const [deleteClubDependencies1] = await pool.execute<ResultSetHeader>(
             "DELETE FROM clubMember WHERE club_id = ?",
             [clubID]
         );
         if (deleteClubDependencies1.affectedRows == 0) {
+
             return res.json({
                 success: false,
                 error: "couldn't delete club members",
             });
         }
 
-        const [deleteClubDependencies2] = await pool.execute<ResultSetHeader>(
-            "DELETE FROM rating WHERE club_id = ?",
-            [clubID]
-        );
-        if (deleteClubDependencies2.affectedRows == 0) {
-            return res.json({
-                success: false,
-                error: "couldn't delete ratings",
-            });
-        }
+
 
         const [deleteClubDependencies3] = await pool.execute<ResultSetHeader>(
             "DELETE FROM clubFlair WHERE club_id = ?",
